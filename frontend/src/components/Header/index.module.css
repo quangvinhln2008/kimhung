@@ -1,0 +1,19 @@
+.trigger{
+  padding: 0 24px;
+  font-size: 18px;
+  line-height: 64px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.headerBreacrumb{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+@media only screen and (max-width: 420px) {
+  .headerBreadcrumbItem {
+    display: none;
+  }
+}

@@ -1,0 +1,18 @@
+.logo{
+  height: 40px;
+  margin: 16px;
+  background: #14468c;
+}
+.version{
+  color: #fff;
+  height: 40px;
+  margin: 16px;
+  background: #001529;
+  text-align: center;
+}
+
+@media only screen and (max-width: 420px) {
+  .version {
+    display: none;
+  }
+}
