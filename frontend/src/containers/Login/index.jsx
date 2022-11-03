@@ -23,7 +23,7 @@ const Login = () =>{
 
   async function submitLogin(data){
       return await axios
-      .post('http://localhost:3001/user/login', {id: data.id, password: data.password})
+      .post('http://192.168.123.17:3002/user/login', {id: data.id, password: data.password})
       .then((res) => {
         console.log('res', res)
         setCookie('id', res.data.id, {expires})

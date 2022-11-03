@@ -14,7 +14,7 @@ const tonDauKyRouter = require('./routes/tonDauKyRouter')
 const phieuNhapRouter = require('./routes/phieuNhapRouter')
 const phieuXuatRouter = require('./routes/phieuXuatRouter')
  
-const port = process.env.PORT === 'production' ? (dotenv.PORT || 80) : 3001;
+const port = process.env.PORT === 'production' ? (dotenv.PORT || 80) : 3002;
 var app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

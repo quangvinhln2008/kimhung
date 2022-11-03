@@ -54,7 +54,7 @@ const NhanVien = () =>{
 
   async function loadNhanVien(){
     return await axios
-      .get('http://localhost:3001/NhanVien')
+      .get('http://192.168.123.17:3002/NhanVien')
       .then((res) => {
         const result = {
           status: res.data.status,
@@ -74,7 +74,7 @@ const NhanVien = () =>{
   async function GetNhanVienEdit(MaNhanVien){
     setEditMode(true)
     return await axios
-      .get(`http://localhost:3001/NhanVien/${MaNhanVien}`)
+      .get(`http://192.168.123.17:3002/NhanVien/${MaNhanVien}`)
       .then((res) => {
         const result = {
           status: res.status,
@@ -93,7 +93,7 @@ const NhanVien = () =>{
 
   async function CreateNhanVien(values){
     return await axios
-      .post('http://localhost:3001/NhanVien/create', {
+      .post('http://192.168.123.17:3002/NhanVien/create', {
         MaNhanVien: values.MaNhanVien, 
         TenNhanVien: values.TenNhanVien, 
         DienThoai : values.DienThoai, 
@@ -121,7 +121,7 @@ const NhanVien = () =>{
   async function UpdateNhanVien(values){
     console.log('run update')
     return await axios
-      .post(`http://localhost:3001/NhanVien/${dataEdit?.MaNhanVien}`, {
+      .post(`http://192.168.123.17:3002/NhanVien/${dataEdit?.MaNhanVien}`, {
         MaNhanVien: values.MaNhanVien, 
         TenNhanVien: values.TenNhanVien, 
         DienThoai : values.DienThoai, 
@@ -148,7 +148,7 @@ const NhanVien = () =>{
 
   async function DeleteNhanVien(MaNhanVien){
     return await axios
-      .post(`http://localhost:3001/NhanVien/delete/${MaNhanVien}`)
+      .post(`http://192.168.123.17:3002/NhanVien/delete/${MaNhanVien}`)
       .then((res) => {
         const result = {
           status: res.status,

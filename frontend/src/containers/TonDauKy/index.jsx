@@ -73,7 +73,7 @@ const TonDauKy = () =>{
 
   async function loadTonDauKy(){
     return await axios
-      .get('http://localhost:3001/TonDauKy')
+      .get('http://192.168.123.17:3002/TonDauKy')
       .then((res) => {
         const result = {
           status: res.data.status,
@@ -96,7 +96,7 @@ const TonDauKy = () =>{
     console.log('id', MaTonDauKy)
     setEditMode(true)
     return await axios
-      .get(`http://localhost:3001/TonDauKy/${MaTonDauKy}`)
+      .get(`http://192.168.123.17:3002/TonDauKy/${MaTonDauKy}`)
       .then((res) => {
         const result = {
           status: res.status,
@@ -115,7 +115,7 @@ const TonDauKy = () =>{
 
   async function CreateTonDauKy(values){
     return await axios
-      .post('http://localhost:3001/TonDauKy/create', {
+      .post('http://192.168.123.17:3002/TonDauKy/create', {
         NgayCt: values.NgayCt, 
         MaKichThuoc: values.MaKichThuoc, 
         MaKho: values.MaKho, 
@@ -142,7 +142,7 @@ const TonDauKy = () =>{
   async function UpdateTonDauKy(values){
     console.log('run update')
     return await axios
-      .post(`http://localhost:3001/TonDauKy/${dataEdit?.Id}`, {
+      .post(`http://192.168.123.17:3002/TonDauKy/${dataEdit?.Id}`, {
         NgayCt: values.NgayCt.format('YYYY-MM-DD'), 
         MaKichThuoc: values.MaKichThuoc, 
         MaKho: values.MaKho, 
@@ -168,7 +168,7 @@ const TonDauKy = () =>{
 
   async function DeleteTonDauKy(MaTonDauKy){
     return await axios
-      .post(`http://localhost:3001/TonDauKy/delete/${MaTonDauKy}`)
+      .post(`http://192.168.123.17:3002/TonDauKy/delete/${MaTonDauKy}`)
       .then((res) => {
         const result = {
           status: res.status,

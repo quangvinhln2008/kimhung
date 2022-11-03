@@ -1,5 +1,5 @@
 const sql = require('mssql')
-const port = process.env.PORT === 'production' ? (dotenv.PORT || 80) : 3001;
+const port = process.env.PORT === 'production' ? (dotenv.PORT || 80) : 3002;
 
 const dotenv = require('dotenv');
 dotenv.config();

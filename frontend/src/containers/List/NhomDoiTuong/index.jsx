@@ -45,7 +45,7 @@ const NhomDoiTuong = () =>{
 
   async function loadNhomDoiTuong(){
     return await axios
-      .get('http://localhost:3001/nhomdoituong')
+      .get('http://192.168.123.17:3002/nhomdoituong')
       .then((res) => {
         const result = {
           status: res.data.status,
@@ -64,7 +64,7 @@ const NhomDoiTuong = () =>{
   async function GetNhomDoiTuongEdit(MaNhomDoiTuong){
     setEditMode(true)
     return await axios
-      .get(`http://localhost:3001/nhomdoituong/${MaNhomDoiTuong}`)
+      .get(`http://192.168.123.17:3002/nhomdoituong/${MaNhomDoiTuong}`)
       .then((res) => {
         const result = {
           status: res.status,
@@ -84,7 +84,7 @@ const NhomDoiTuong = () =>{
   async function CreateNhomDoiTuong(values){
     
     return await axios
-      .post('http://localhost:3001/nhomdoituong/create', {TenNhomDoiTuong: values.TenNhomDoiTuong})
+      .post('http://192.168.123.17:3002/nhomdoituong/create', {TenNhomDoiTuong: values.TenNhomDoiTuong})
       .then((res) => {
         const result = {
           status: res.status,
@@ -105,7 +105,7 @@ const NhomDoiTuong = () =>{
   async function UpdateNhomDoiTuong(values){
     console.log('run update')
     return await axios
-      .post(`http://localhost:3001/NhomDoiTuong/${dataEdit?.MaNhomDoiTuong}`, {TenNhomDoiTuong: values.TenNhomDoiTuong})
+      .post(`http://192.168.123.17:3002/NhomDoiTuong/${dataEdit?.MaNhomDoiTuong}`, {TenNhomDoiTuong: values.TenNhomDoiTuong})
       .then((res) => {
         const result = {
           status: res.status,
@@ -125,7 +125,7 @@ const NhomDoiTuong = () =>{
 
   async function DeleteNhomDoiTuong(MaNhomDoiTuong){
     return await axios
-      .post(`http://localhost:3001/nhomdoituong/delete/${MaNhomDoiTuong}`)
+      .post(`http://192.168.123.17:3002/nhomdoituong/delete/${MaNhomDoiTuong}`)
       .then((res) => {
         const result = {
           status: res.status,
