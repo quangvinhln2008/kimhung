@@ -4,9 +4,10 @@ const jwt = require("jsonwebtoken");
 
 async function create(req, res) {
   try{
-    const MaLoaiHinhSach = uuidv4()
-    const TenLoaiHinhSach = req.body.TenLoaiHinhSach
-
+    const id = uuidv4()
+    const MaKho = req.body.MaKho
+    const TenKho = req.body.TenKho
+    const DiaChiKho = req.body.DiaChiKho
     // //Check authorized
     // var roles
     // jwt.verify(token, 'tracuu', (err, decoded) => {
@@ -21,12 +22,13 @@ async function create(req, res) {
     //     message: 'Không có quyền truy cập!'
     //   })
     // } 
-
     const pool = await poolPromise
     await pool.request()
-    .input('MaLoaiHinhSach', MaLoaiHinhSach)
-    .input('TenLoaiHinhSach', TenLoaiHinhSach)
-    .execute('sp_CreateLoaiHinhSach', (err, result)=>{
+    .input('id', id)
+    .input('MaKho', MaKho)
+    .input('TenKho', TenKho)
+    .input('DiaChiKho', DiaChiKho)
+    .execute('sp_CreateKho', (err, result)=>{
       if (err) {
           res.status(500).send({ message: err });
           return;
@@ -44,13 +46,17 @@ async function create(req, res) {
 async function update(req, res) {
   try{
       const {id} = req.params
-      const TenLoaiHinhSach = req.body.TenLoaiHinhSach
+      const MaKho = req.body.MaKho
+      const TenKho = req.body.TenKho
+      const DiaChiKho = req.body.DiaChiKho
 
       const pool = await poolPromise
       await pool.request()
-      .input('MaLoaiHinhSach', id)
-      .input('TenLoaiHinhSach', TenLoaiHinhSach)
-      .execute('sp_UpdateLoaiHinhSach', (err, result)=>{
+      .input('id', id)
+      .input('MaKho', MaKho)
+      .input('TenKho', TenKho)
+      .input('DiaChiKho', DiaChiKho)
+      .execute('sp_UpdateKho', (err, result)=>{
         if (err) {
             res.status(500).send({ message: err });
             return;
@@ -65,13 +71,13 @@ async function update(req, res) {
   }
 }
 
-async function deleteLoaiHinhSach(req, res) {
+async function deleteKho(req, res) {
   try{
     const {id} = req.params
       const pool = await poolPromise
       await pool.request()
-      .input('MaLoaiHinhSach', id)
-      .execute('sp_DeleteLoaiHinhSach', (err, result)=>{
+      .input('MaKho', id)
+      .execute('sp_DeleteKho', (err, result)=>{
         if (err) {
             res.status(500).send({ message: err });
             return;
@@ -85,11 +91,11 @@ async function deleteLoaiHinhSach(req, res) {
     res.status(500).send(error.message)
   }
 }
-async function getLoaiHinhSach(req, res) {
+async function getKho(req, res) {
   try{
       const pool = await poolPromise
       await pool.request()
-      .execute('sp_GetLoaiHinhSach', (err, result)=>{
+      .execute('sp_GetKho', (err, result)=>{
         if (err) {
             res.status(500).send({ message: err });
             return;
@@ -104,13 +110,13 @@ async function getLoaiHinhSach(req, res) {
   }
 }
 
-async function getLoaiHinhSachById(req, res) {
+async function getKhoById(req, res) {
   try{
     const {id} = req.params
       const pool = await poolPromise
       await pool.request()
-      .input('MaLoaiHinhSach', id)
-      .execute('sp_GetLoaiHinhSachById', (err, result)=>{
+      .input('id', id)
+      .execute('sp_GetKhoById', (err, result)=>{
         if (err) {
             res.status(500).send({ message: err });
             return;
@@ -129,7 +135,7 @@ async function getLoaiHinhSachById(req, res) {
 module.exports = {
   create,
   update,
-  deleteLoaiHinhSach,
-  getLoaiHinhSachById,
-  getLoaiHinhSach
+  deleteKho,
+  getKhoById,
+  getKho
 }

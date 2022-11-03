@@ -3,11 +3,11 @@ const cors = require('cors');
 
 const authRouter = require('./routes/authRouter');
 const nhomDoiTuongRouter = require('./routes/nhomDoiTuongRouter');
-const loaiHinhSachRouter = require('./routes/loaiHinhSachRouter');
-const coSoRouter = require('./routes/coSoRouter');
-const hocKyRouter = require('./routes/hocKyRouter');
+const nhomVatTuRouter = require('./routes/nhomVatTuRouterRouter');
+const khoRouter = require('./routes/khoRouter');
+const kichThuocRouter = require('./routes/kichThuocRouter');
 const doiTuongRouter = require('./routes/doiTuongRouter');
-const sachRouter = require('./routes/sachRouter');
+const vatTuRouter = require('./routes/vatTuRouter');
 const nhanVienRouter = require('./routes/nhanVienRouter');
 const tonDauKyRouter = require('./routes/tonDauKyRouter')
 
@@ -29,11 +29,11 @@ app.listen(process.env.PORT || port , (err) => {
 //user login router in /routes/loginRouter.js
 app.use('/user/', authRouter)
 app.use('/nhomdoituong/', nhomDoiTuongRouter)
-app.use('/loaihinhsach/', loaiHinhSachRouter)
-app.use('/coso/', coSoRouter)
-app.use('/hocky/', hocKyRouter)
+app.use('/nhomvattu/', nhomVatTuRouter)
+app.use('/kho/', khoRouter)
+app.use('/kichThuoc/', kichThuocRouter)
 app.use('/doituong/', doiTuongRouter)
-app.use('/sach/', sachRouter)
+app.use('/vatTu/', vatTuRouter)
 app.use('/nhanvien/', nhanVienRouter)
 app.use('/tondauky/', tonDauKyRouter)
 app.use('/phieunhap/', phieuNhapRouter)

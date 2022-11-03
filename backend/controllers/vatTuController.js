@@ -1,15 +1,15 @@
 const {sql, poolPromise } = require('../config/db.js')
 const { v4: uuidv4 } = require('uuid');
 const jwt = require("jsonwebtoken");
-const moment = require("moment")
 
 async function create(req, res) {
   try{
-    const MaHocKy = uuidv4()
-    const TenHocKy = req.body.TenHocKy
-    const TuNgay = req.body.TuNgay
-    const DenNgay = req.body.DenNgay
-
+    const id = uuidv4()
+    const MaVatTu = req.body.MaVatTu
+    const TenVatTu = req.body.TenVatTu
+    const MaNhomVatTu = req.body.MaNhomVatTu
+    const GiaBan = req.body.GiaBan
+    
     // //Check authorized
     // var roles
     // jwt.verify(token, 'tracuu', (err, decoded) => {
@@ -27,11 +27,12 @@ async function create(req, res) {
 
     const pool = await poolPromise
     await pool.request()
-    .input('MaHocKy', MaHocKy)
-    .input('TenHocKy', TenHocKy)
-    .input('TuNgay', TuNgay)
-    .input('DenNgay', DenNgay)
-    .execute('sp_CreateHocKy', (err, result)=>{
+    .input('id', id)
+    .input('MaVatTu', MaVatTu)
+    .input('TenVatTu', TenVatTu)
+    .input('MaNhomVatTu', MaNhomVatTu)
+    .input('GiaBan', GiaBan)
+    .execute('sp_CreateVatTu', (err, result)=>{
       if (err) {
           res.status(500).send({ message: err });
           return;
@@ -49,17 +50,22 @@ async function create(req, res) {
 async function update(req, res) {
   try{
       const {id} = req.params
-      const TenHocKy = req.body.TenHocKy
-    const TuNgay = req.body.TuNgay
-    const DenNgay = req.body.DenNgay
+      const MaVatTu = req.body.MaVatTu
+      const TenVatTu = req.body.TenVatTu
+      const MaNhomVatTu = req.body.MaNhomVatTu
+      const NamXuatBan = req.body.NamXuatBan
+      const DienGiaiVatTu = req.body.DienGiaiVatTu
+      const Barcode = req.body.Barcode
+      const GiaBan = req.body.GiaBan
 
       const pool = await poolPromise
       await pool.request()
-      .input('MaHocKy', id)
-      .input('TenHocKy', TenHocKy)
-      .input('TuNgay', TuNgay)
-      .input('DenNgay', DenNgay)
-      .execute('sp_UpdateHocKy', (err, result)=>{
+      .input('id', id)
+      .input('MaVatTu', MaVatTu)
+      .input('TenVatTu', TenVatTu)
+      .input('MaNhomVatTu', MaNhomVatTu)
+      .input('GiaBan', GiaBan)
+      .execute('sp_UpdateVatTu', (err, result)=>{
         if (err) {
             res.status(500).send({ message: err });
             return;
@@ -74,13 +80,13 @@ async function update(req, res) {
   }
 }
 
-async function deleteHocKy(req, res) {
+async function deleteVatTu(req, res) {
   try{
     const {id} = req.params
       const pool = await poolPromise
       await pool.request()
-      .input('MaHocKy', id)
-      .execute('sp_DeleteHocKy', (err, result)=>{
+      .input('id', id)
+      .execute('sp_DeleteVatTu', (err, result)=>{
         if (err) {
             res.status(500).send({ message: err });
             return;
@@ -94,11 +100,11 @@ async function deleteHocKy(req, res) {
     res.status(500).send(error.message)
   }
 }
-async function getHocKy(req, res) {
+async function getVatTu(req, res) {
   try{
       const pool = await poolPromise
       await pool.request()
-      .execute('sp_GetHocKy', (err, result)=>{
+      .execute('sp_GetVatTu', (err, result)=>{
         if (err) {
             res.status(500).send({ message: err });
             return;
@@ -113,27 +119,18 @@ async function getHocKy(req, res) {
   }
 }
 
-function responseHocKyToFE(HocKy){
-  console.log(HocKy)
-  return{
-    MaHocKy:HocKy.MaHocKy,
-    TenHocKy:HocKy.TenHocKy,
-    TuNgay: moment(HocKy.TuNgay).format("YYYY-MM-DD"),
-    DenNgay: moment(HocKy.DenNgay).format("YYYY-MM-DD")
-  }
-}
-async function getHocKyById(req, res) {
+async function getVatTuById(req, res) {
   try{
     const {id} = req.params
       const pool = await poolPromise
       await pool.request()
-      .input('MaHocKy', id)
-      .execute('sp_GetHocKyById', (err, result)=>{
+      .input('id', id)
+      .execute('sp_GetVatTuById', (err, result)=>{
         if (err) {
             res.status(500).send({ message: err });
             return;
           }
-          
+
           return res.status(200).send({
             result
           });
@@ -147,7 +144,7 @@ async function getHocKyById(req, res) {
 module.exports = {
   create,
   update,
-  deleteHocKy,
-  getHocKyById,
-  getHocKy
+  deleteVatTu,
+  getVatTuById,
+  getVatTu
 }

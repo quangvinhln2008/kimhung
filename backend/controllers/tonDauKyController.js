@@ -7,8 +7,8 @@ async function create(req, res) {
     const id = uuidv4()
     const NgayCt = req.body.NgayCt
     const MaSach = req.body.MaSach
-    const MaLoaiHinhSach = req.body.MaLoaiHinhSach
-    const MaCoSo = req.body.MaCoSo
+    const MaKichThuoc = req.body.MaKichThuoc
+    const MaKho = req.body.MaKho
     const SoLuongTon = req.body.SoLuongTon
     const DonGiaTon = req.body.DonGiaTon
     
@@ -31,9 +31,9 @@ async function create(req, res) {
     await pool.request()
     .input('Id', id)
     .input('NgayCt', NgayCt)
-    .input('MaCoSo', MaCoSo)
+    .input('MaKho', MaKho)
     .input('MaSach', MaSach)
-    .input('MaLoaiHinhSach', MaLoaiHinhSach)
+    .input('MaKichThuoc', MaKichThuoc)
     .input('SoLuongTon', SoLuongTon)
     .input('DonGiaTon', DonGiaTon)
     .execute('sp_CreateTonDauKy', (err, result)=>{
@@ -56,8 +56,8 @@ async function update(req, res) {
       const {id} = req.params
       const NgayCt = req.body.NgayCt
       const MaSach = req.body.MaSach
-      const MaLoaiHinhSach = req.body.MaLoaiHinhSach
-      const MaCoSo = req.body.MaCoSo
+      const MaKichThuoc = req.body.MaKichThuoc
+      const MaKho = req.body.MaKho
       const SoLuongTon = req.body.SoLuongTon
       const DonGiaTon = req.body.DonGiaTon
 
@@ -65,9 +65,9 @@ async function update(req, res) {
       await pool.request()
       .input('Id', id)
       .input('NgayCt', NgayCt)
-      .input('MaCoSo', MaCoSo)
+      .input('MaKho', MaKho)
       .input('MaSach', MaSach)
-      .input('MaLoaiHinhSach', MaLoaiHinhSach)
+      .input('MaKichThuoc', MaKichThuoc)
       .input('SoLuongTon', SoLuongTon)
       .input('DonGiaTon', DonGiaTon)
       .execute('sp_UpdateTonDauKy', (err, result)=>{

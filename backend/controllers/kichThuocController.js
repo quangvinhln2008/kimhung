@@ -1,12 +1,14 @@
 const {sql, poolPromise } = require('../config/db.js')
 const { v4: uuidv4 } = require('uuid');
 const jwt = require("jsonwebtoken");
+const moment = require("moment")
 
 async function create(req, res) {
   try{
-    const MaCoSo = uuidv4()
-    const TenCoSo = req.body.TenCoSo
-    const DiaChiCoSo = req.body.DiaChiCoSo
+    const id = uuidv4()
+    const MaKichThuoc = req.body.MaKichThuoc
+    const TenKichThuoc = req.body.TenKichThuoc
+
     // //Check authorized
     // var roles
     // jwt.verify(token, 'tracuu', (err, decoded) => {
@@ -21,12 +23,13 @@ async function create(req, res) {
     //     message: 'Không có quyền truy cập!'
     //   })
     // } 
+
     const pool = await poolPromise
     await pool.request()
-    .input('MaCoSo', MaCoSo)
-    .input('TenCoSo', TenCoSo)
-    .input('DiaChiCoSo', DiaChiCoSo)
-    .execute('sp_CreateCoSo', (err, result)=>{
+    .input('id', id)
+    .input('MaKichThuoc', MaKichThuoc)
+    .input('TenKichThuoc', TenKichThuoc)
+    .execute('sp_CreateKichThuoc', (err, result)=>{
       if (err) {
           res.status(500).send({ message: err });
           return;
@@ -44,15 +47,15 @@ async function create(req, res) {
 async function update(req, res) {
   try{
       const {id} = req.params
-      const TenCoSo = req.body.TenCoSo
-      const DiaChiCoSo = req.body.DiaChiCoSo
+      const TenKichThuoc = req.body.TenKichThuoc
+      const MaKichThuoc = req.body.MaKichThuoc
 
       const pool = await poolPromise
       await pool.request()
-      .input('MaCoSo', id)
-      .input('TenCoSo', TenCoSo)
-      .input('DiaChiCoSo', DiaChiCoSo)
-      .execute('sp_UpdateCoSo', (err, result)=>{
+      .input('id', id)
+      .input('MaKichThuoc', MaKichThuoc)
+      .input('TenKichThuoc', TenKichThuoc)
+      .execute('sp_UpdateKichThuoc', (err, result)=>{
         if (err) {
             res.status(500).send({ message: err });
             return;
@@ -67,13 +70,13 @@ async function update(req, res) {
   }
 }
 
-async function deleteCoSo(req, res) {
+async function deleteKichThuoc(req, res) {
   try{
     const {id} = req.params
       const pool = await poolPromise
       await pool.request()
-      .input('MaCoSo', id)
-      .execute('sp_DeleteCoSo', (err, result)=>{
+      .input('id', id)
+      .execute('sp_DeleteKichThuoc', (err, result)=>{
         if (err) {
             res.status(500).send({ message: err });
             return;
@@ -87,11 +90,11 @@ async function deleteCoSo(req, res) {
     res.status(500).send(error.message)
   }
 }
-async function getCoSo(req, res) {
+async function getKichThuoc(req, res) {
   try{
       const pool = await poolPromise
       await pool.request()
-      .execute('sp_GetCoSo', (err, result)=>{
+      .execute('sp_GetKichThuoc', (err, result)=>{
         if (err) {
             res.status(500).send({ message: err });
             return;
@@ -106,18 +109,18 @@ async function getCoSo(req, res) {
   }
 }
 
-async function getCoSoById(req, res) {
+async function getKichThuocById(req, res) {
   try{
     const {id} = req.params
       const pool = await poolPromise
       await pool.request()
-      .input('MaCoSo', id)
-      .execute('sp_GetCoSoById', (err, result)=>{
+      .input('id', id)
+      .execute('sp_GetKichThuocById', (err, result)=>{
         if (err) {
             res.status(500).send({ message: err });
             return;
           }
-
+          
           return res.status(200).send({
             result
           });
@@ -131,7 +134,7 @@ async function getCoSoById(req, res) {
 module.exports = {
   create,
   update,
-  deleteCoSo,
-  getCoSoById,
-  getCoSo
+  deleteKichThuoc,
+  getKichThuocById,
+  getKichThuoc
 }

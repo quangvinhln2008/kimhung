@@ -2,11 +2,11 @@ const {sql, poolPromise } = require('../config/db.js')
 const { v4: uuidv4 } = require('uuid');
 const jwt = require("jsonwebtoken");
 
-async function create(req, res) {
+async function creKichThuocate(req, res) {
   try{
     const MaNhanVien = req.body.MaNhanVien
     const TenNhanVien = req.body.TenNhanVien
-    const MaCoSo = req.body.MaCoSo
+    const MaKho = req.body.MaKho
     const TenDangNhap = req.body.TenDangNhap
     const MatKhauDangNhap = req.body.MatKhauDangNhap
     const Role = req.body.Role
@@ -30,7 +30,7 @@ async function create(req, res) {
     await pool.request()
     .input('MaNhanVien', MaNhanVien)
     .input('TenNhanVien', TenNhanVien)
-    .input('MaCoSo', MaCoSo)
+    .input('MaKho', MaKho)
     .input('TenDangNhap', TenDangNhap)
     .input('MatKhauDangNhap', MatKhauDangNhap)
     .input('Role', Role)
@@ -53,7 +53,7 @@ async function update(req, res) {
   try{
       const {id} = req.params
       const TenNhanVien = req.body.TenNhanVien
-      const MaCoSo = req.body.MaCoSo
+      const MaKho = req.body.MaKho
       const TenDangNhap = req.body.TenDangNhap
       const MatKhauDangNhap = req.body.MatKhauDangNhap
       const Role = req.body.Role
@@ -62,7 +62,7 @@ async function update(req, res) {
       await pool.request()
       .input('MaNhanVien', id)
       .input('TenNhanVien', TenNhanVien)
-      .input('MaCoSo', MaCoSo)
+      .input('MaKho', MaKho)
       .input('TenDangNhap', TenDangNhap)
       .input('MatKhauDangNhap', MatKhauDangNhap)
       .input('Role', Role)

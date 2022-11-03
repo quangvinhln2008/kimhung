@@ -4,14 +4,10 @@ const jwt = require("jsonwebtoken");
 
 async function create(req, res) {
   try{
-    const MaSach = uuidv4()
-    const TenSach = req.body.TenSach
-    const MaDoiTuong = req.body.MaDoiTuong
-    const NamXuatBan = req.body.NamXuatBan
-    const DienGiaiSach = req.body.DienGiaiSach
-    const Barcode = req.body.Barcode
-    const GiaBan = req.body.GiaBan
-    
+    const id = uuidv4()
+    const MaNhomVatTu = req.body.MaNhomVatTu
+    const TenNhomVatTu = req.body.TenNhomVatTu
+
     // //Check authorized
     // var roles
     // jwt.verify(token, 'tracuu', (err, decoded) => {
@@ -29,14 +25,10 @@ async function create(req, res) {
 
     const pool = await poolPromise
     await pool.request()
-    .input('MaSach', MaSach)
-    .input('TenSach', TenSach)
-    .input('MaDoiTuong', MaDoiTuong)
-    .input('NamXuatBan', NamXuatBan)
-    .input('DienGiaiSach', DienGiaiSach)
-    .input('Barcode', Barcode)
-    .input('GiaBan', GiaBan)
-    .execute('sp_CreateSach', (err, result)=>{
+    .input('id', id)
+    .input('MaNhomVatTu', MaNhomVatTu)
+    .input('TenNhomVatTu', TenNhomVatTu)
+    .execute('sp_CreateNhomVt', (err, result)=>{
       if (err) {
           res.status(500).send({ message: err });
           return;
@@ -54,23 +46,15 @@ async function create(req, res) {
 async function update(req, res) {
   try{
       const {id} = req.params
-      const TenSach = req.body.TenSach
-      const MaDoiTuong = req.body.MaDoiTuong
-      const NamXuatBan = req.body.NamXuatBan
-      const DienGiaiSach = req.body.DienGiaiSach
-      const Barcode = req.body.Barcode
-      const GiaBan = req.body.GiaBan
+      const MaNhomVatTu = req.body.MaNhomVatTu
+      const TenNhomVatTu = req.body.TenNhomVatTu
 
       const pool = await poolPromise
       await pool.request()
-      .input('MaSach', id)
-      .input('TenSach', TenSach)
-      .input('MaDoiTuong', MaDoiTuong)
-      .input('NamXuatBan', NamXuatBan)
-      .input('DienGiaiSach', DienGiaiSach)
-      .input('Barcode', Barcode)
-      .input('GiaBan', GiaBan)
-      .execute('sp_UpdateSach', (err, result)=>{
+      .input('id', id)
+      .input('MaNhomVatTu', MaNhomVatTu)
+      .input('TenNhomVatTu', TenNhomVatTu)
+      .execute('sp_UpdateNhomVt', (err, result)=>{
         if (err) {
             res.status(500).send({ message: err });
             return;
@@ -85,13 +69,13 @@ async function update(req, res) {
   }
 }
 
-async function deleteSach(req, res) {
+async function deleteNhomVatTu(req, res) {
   try{
     const {id} = req.params
       const pool = await poolPromise
       await pool.request()
-      .input('MaSach', id)
-      .execute('sp_DeleteSach', (err, result)=>{
+      .input('id', id)
+      .execute('sp_DeleteNhomVt', (err, result)=>{
         if (err) {
             res.status(500).send({ message: err });
             return;
@@ -105,11 +89,11 @@ async function deleteSach(req, res) {
     res.status(500).send(error.message)
   }
 }
-async function getSach(req, res) {
+async function getNhomVatTu(req, res) {
   try{
       const pool = await poolPromise
       await pool.request()
-      .execute('sp_GetSach', (err, result)=>{
+      .execute('sp_GetNhomVt', (err, result)=>{
         if (err) {
             res.status(500).send({ message: err });
             return;
@@ -124,13 +108,13 @@ async function getSach(req, res) {
   }
 }
 
-async function getSachById(req, res) {
+async function getNhomVatTuById(req, res) {
   try{
     const {id} = req.params
       const pool = await poolPromise
       await pool.request()
-      .input('MaSach', id)
-      .execute('sp_GetSachById', (err, result)=>{
+      .input('id', id)
+      .execute('sp_GetNhomVtById', (err, result)=>{
         if (err) {
             res.status(500).send({ message: err });
             return;
@@ -149,7 +133,7 @@ async function getSachById(req, res) {
 module.exports = {
   create,
   update,
-  deleteSach,
-  getSachById,
-  getSach
+  deleteNhomVatTu,
+  getNhomVatTuById,
+  getNhomVatTu
 }

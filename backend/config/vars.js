@@ -1,6 +1,6 @@
 module.exports ={
   jwtConfig:{
-    secret: 'learningresourcecenter',
+    secret: 'kimhung',
     expire: 2592000
   }
 }
