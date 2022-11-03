@@ -9,7 +9,7 @@ const { Title } = Typography;
 const { Option } = Select;
 const { TextArea } = Input;
 
-const Sach = () =>{
+const VatTu = () =>{
   
   const [form] = Form.useForm();
   const [data, setData] = useState()
@@ -26,7 +26,7 @@ const Sach = () =>{
   }
   
   useEffect(()=>{
-    loadSach()
+    loadVatTu()
   },[refresh])
 
   useEffect(()=>{
@@ -34,11 +34,10 @@ const Sach = () =>{
     setOption(dataDoiTuong?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
 
     form.setFieldsValue({
-        TenSach: dataEdit?.TenSach,
-        MaDoiTuong: dataEdit?.MaDoiTuong,
-        NamXuatBan: dataEdit?.NamXuatBan,
-        Barcode : dataEdit?.Barcode,
-        GiaBan : dataEdit?.GiaBan
+      MaVatTu: dataEdit?.MaVatTu,  
+      TenVatTu: dataEdit?.TenVatTu,
+      MaNhomVatTu: dataEdit?.MaNhomVatTu,
+      GiaBan : dataEdit?.GiaBan
     })
   }, [dataEdit])
 
@@ -52,17 +51,16 @@ const Sach = () =>{
 
     setOption(dataDoiTuong?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
     form.setFieldsValue({
-      TenSach: "",
-      MaDoiTuong: "",
-      NamXuatBan: "",
-      Barcode : "",
+      MaVatTu: "",
+      TenVatTu: "",
+      MaNhomVatTu: "",
       GiaBan : 0
     })
   }
 
-  async function loadSach(){
+  async function loadVatTu(){
     return await axios
-      .get('http://localhost:3001/Sach')
+      .get('http://localhost:3001/vattu')
       .then((res) => {
         const result = {
           status: res.data.status,
@@ -80,10 +78,10 @@ const Sach = () =>{
       })
   }
 
-  async function GetSachEdit(MaSach){
+  async function GetVatTuEdit(MaVatTu){
     setEditMode(true)
     return await axios
-      .get(`http://localhost:3001/Sach/${MaSach}`)
+      .get(`http://localhost:3001/vattu/${MaVatTu}`)
       .then((res) => {
         const result = {
           status: res.status,
@@ -100,15 +98,13 @@ const Sach = () =>{
       })
   };
 
-  async function CreateSach(values){
+  async function CreateVatTu(values){
     return await axios
-      .post('http://localhost:3001/Sach/create', {
-        TenSach: values.TenSach, 
-        MaDoiTuong: values.MaDoiTuong, 
-        NamXuatBan: values.NamXuatBan, 
-        Barcode: values.Barcode, 
-        GiaBan: values.GiaBan,
-        DienGiaiSach : values.DienGiaiSach
+      .post('http://localhost:3001/VatTu/create', {
+        MaVatTu: values.MaVatTu,
+        TenVatTu: values.TenVatTu, 
+        MaNhomVatTu: values.MaNhomVatTu, 
+        GiaBan: values.GiaBan
       })
       .then((res) => {
         const result = {
@@ -127,16 +123,14 @@ const Sach = () =>{
       })
   };
 
-  async function UpdateSach(values){
+  async function UpdateVatTu(values){
     console.log('run update')
     return await axios
-      .post(`http://localhost:3001/Sach/${dataEdit?.MaSach}`, {
-        TenSach: values.TenSach, 
-        MaDoiTuong: values.MaDoiTuong, 
-        NamXuatBan: values.NamXuatBan, 
-        Barcode: values.Barcode, 
-        GiaBan: values.GiaBan,
-        DienGiaiSach: values.DienGiaiSach
+      .post(`http://localhost:3001/vattu/${dataEdit?.Id}`, {
+        MaVatTu: values.MaVatTu,
+        TenVatTu: values.TenVatTu, 
+        MaNhomVatTu: values.MaNhomVatTu, 
+        GiaBan: values.GiaBan
       })
       .then((res) => {
         const result = {
@@ -155,9 +149,9 @@ const Sach = () =>{
       })
   };
 
-  async function DeleteSach(MaSach){
+  async function DeleteVatTu(MaVatTu){
     return await axios
-      .post(`http://localhost:3001/Sach/delete/${MaSach}`)
+      .post(`http://localhost:3001/vattu/delete/${MaVatTu}`)
       .then((res) => {
         const result = {
           status: res.status,
@@ -177,23 +171,22 @@ const Sach = () =>{
 
   const columns = [
     {
-      title: 'Tên sách',
-      dataIndex: 'TenSach',
-      key: 'TenSach',
+      title: 'Nhóm vật tư',
+      dataIndex: 'TenNhomVatTu',
+      key: 'TenNhomVatTu',
     },
     {
-      title: 'NXB/ Nhà in',
-      dataIndex: 'TenDoiTuong',
-      key: 'TenDoiTuong',
+      title: 'Mã vật tư',
+      dataIndex: 'MaVatTu',
+      key: 'MaVatTu',
     },
     {
-      title: 'Năm xuất bản',
-      dataIndex: 'NamXuatBan',
-      key: 'NamXuatBan',
-      align:'center'
+      title: 'Tên vật tư',
+      dataIndex: 'TenVatTu',
+      key: 'TenVatTu',
     },
     {
-      title: 'Giá phát hành',
+      title: 'Giá bán',
       dataIndex: 'GiaBan',
       align:'right',
       key: 'GiaBan',
@@ -203,7 +196,7 @@ const Sach = () =>{
       key: 'Is_Deleted',
       dataIndex: 'Is_Deleted',
       render: (_, record) => (                   
-          <Tag color={record.Is_Deleted ? 'volcano' :'green'} key={record.MaCoSo}>
+          <Tag color={record.Is_Deleted ? 'volcano' :'green'} key={record.Id}>
             {record.Is_Deleted ? 'DELETED': 'ACTIVE'}
           </Tag>         
       )
@@ -214,17 +207,17 @@ const Sach = () =>{
       render: (_, record) => (
         <>
           <Space size="middle">
-            {!record.Is_Deleted && <Button key={record.MaSach} type="link" onClick= {() =>{GetSachEdit(record.MaSach)}}>Cập nhật</Button>}
+            {!record.Is_Deleted && <Button key={record.Id} type="link" onClick= {() =>{GetVatTuEdit(record.Id)}}>Cập nhật</Button>}
           </Space>
           <Space size="middle">
           {!record.Is_Deleted && <>
               <Popconfirm
-                title="Bạn có chắc xóa sách không?"
-                onConfirm={()=>{DeleteSach(record.MaSach)}}
+                title="Bạn có chắc xóa vật tư không?"
+                onConfirm={()=>{DeleteVatTu(record.Id)}}
                 okText="Yes"
                 cancelText="No"
               >
-                <Button key={record.MaSach} type="link" danger >Xóa</Button>
+                <Button key={record.Id} type="link" danger >Xóa</Button>
               </Popconfirm>
             </>}
           </Space>
@@ -236,7 +229,7 @@ const Sach = () =>{
 
   return(
     <>
-      <Title level={3}>Sách</Title>
+      <Title level={3}>Vật tư</Title>
       <Divider />
       <VStack justifyContent={"start"} alignItems="start">
         <Space align="left" style={{ marginBottom: 16 }}>
@@ -265,7 +258,7 @@ const Sach = () =>{
       {/* Modal thêm mới */}
       <Modal 
         open={openModalContact}
-        title={!editMode ? "Thêm mới sách" : "Cập nhật sách"}
+        title={!editMode ? "Thêm mới vật tư" : "Cập nhật vật tư"}
         // onOk={submitChangeEmail}
         onCancel={toogleModalFormContact}
         footer={null}
@@ -278,28 +271,16 @@ const Sach = () =>{
           wrapperCol={{
             span: 20,
           }}
-          onFinish={!editMode? CreateSach: UpdateSach}
+          onFinish={!editMode? CreateVatTu: UpdateVatTu}
         >
-          <Form.Item
-            label="Tên sách: "
-            name="TenSach"
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng nhập tên sách!'
-              },
-            ]}
-          >
-          <Input  />
-          </Form.Item>
           
           <Form.Item
-            label="Nhà xuất bản/ Nhà in: "
-            name="MaDoiTuong"
+            label="Nhóm vật tư: "
+            name="MaNhomVatTu"
             rules={[
               {
                 required: true,
-                message: 'Vui lòng chọn NXB!'
+                message: 'Vui lòng chọn nhóm vật tư!'
               },
             ]}
           >
@@ -316,38 +297,36 @@ const Sach = () =>{
             </Select>
           </Form.Item>
           <Form.Item
-            label="Năm xuất bản: "
-            name="NamXuatBan"
-            
-          >
-          <Input  />
-          </Form.Item>
-          <Form.Item
-            label="Diễn giải: "
-            name="DienGiaiSach"
-            
-          >
-          <TextArea rows={2} />
-          </Form.Item>
-          <Form.Item
-            label="Barcode: "
-            name="Barcode"
+            label="Mã vật tư: "
+            name="MaVatTu"
             rules={[
               {
                 required: true,
-                message: 'Vui lòng nhập Barcode!'
+                message: 'Vui lòng nhập mã vật tư!'
               },
             ]}
           >
           <Input  />
           </Form.Item>
           <Form.Item
-            label="Giá phát hành: "
+            label="Tên vật tư: "
+            name="TenVatTu"
+            rules={[
+              {
+                required: true,
+                message: 'Vui lòng nhập tên vật tư!'
+              },
+            ]}
+          >
+          <Input  />
+          </Form.Item>
+          <Form.Item
+            label="Giá bán:"
             name="GiaBan"
             rules={[
               {
                 required: true,
-                message: 'Vui lòng nhập giá phát hành!'
+                message: 'Vui lòng nhập giá bán!'
               },
             ]}
           >
@@ -371,4 +350,4 @@ const Sach = () =>{
   )
 }
 
-export default Sach;
+export default VatTu;

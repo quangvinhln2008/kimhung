@@ -6,8 +6,8 @@ import { SearchOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import {VStack, HStack} from  '@chakra-ui/react';
 
 const { Title } = Typography;
+const NhomVatTu = () =>{
 
-const CoSo = () =>{
   const [form] = Form.useForm();
   const [data, setData] = useState()
   const [editMode, setEditMode] = useState(false)
@@ -15,15 +15,20 @@ const CoSo = () =>{
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(false)
   const [openModalContact, setOpenModalContact] = useState(false)
+
+  function toogleModalFormContact(){
+    setOpenModalContact(!openModalContact)
+  }
+
  
   useEffect(()=>{
-    loadCoSo()
+    loadNhomVatTu()
   },[refresh])
 
   useEffect(()=>{
     form.setFieldsValue({
-        TenCoSo: dataEdit?.TenCoSo,
-        DiaChiCoSo: dataEdit?.DiaChiCoSo
+      MaNhomVatTu: dataEdit?.MaNhomVatTu,  
+      TenNhomVatTu: dataEdit?.TenNhomVatTu
     })
   }, [dataEdit])
 
@@ -36,14 +41,14 @@ const CoSo = () =>{
     setOpenModalContact(!openModalContact)
 
     form.setFieldsValue({
-      TenCoSo: "",
-      DiaChiCoSo: ""
+      MaNhomVatTu: "",
+      TenNhomVatTu: "",
     })
   }
 
-  async function loadCoSo(){
+  async function loadNhomVatTu(){
     return await axios
-      .get('http://localhost:3001/coso')
+      .get('http://localhost:3001/NhomVatTu')
       .then((res) => {
         const result = {
           status: res.data.status,
@@ -59,10 +64,10 @@ const CoSo = () =>{
       })
   }
 
-  async function GetCoSoEdit(MaCoSo){
+  async function GetNhomVatTuEdit(MaNhomVatTu){
     setEditMode(true)
     return await axios
-      .get(`http://localhost:3001/coso/${MaCoSo}`)
+      .get(`http://localhost:3001/NhomVatTu/${MaNhomVatTu}`)
       .then((res) => {
         const result = {
           status: res.status,
@@ -79,10 +84,10 @@ const CoSo = () =>{
       })
   };
 
-  async function CreateCoSo(values){
+  async function CreateNhomVatTu(values){
     
     return await axios
-      .post('http://localhost:3001/coso/create', {TenCoSo: values.TenCoSo, DiaChiCoSo: values.DiaChiCoSo})
+      .post('http://localhost:3001/NhomVatTu/create', {MaNhomVatTu: values.MaNhomVatTu,TenNhomVatTu: values.TenNhomVatTu, DiaChiNhomVatTu: values.DiaChiNhomVatTu})
       .then((res) => {
         const result = {
           status: res.status,
@@ -100,10 +105,10 @@ const CoSo = () =>{
       })
   };
 
-  async function UpdateCoSo(values){
+  async function UpdateNhomVatTu(values){
     console.log('run update')
     return await axios
-      .post(`http://localhost:3001/coso/${dataEdit?.MaCoSo}`, {TenCoSo: values.TenCoSo, DiaChiCoSo: values.DiaChiCoSo})
+      .post(`http://localhost:3001/NhomVatTu/${dataEdit?.MaNhomVatTu}`, {MaNhomVatTu: values.MaNhomVatTu, TenNhomVatTu: values.TenNhomVatTu, DiaChiNhomVatTu: values.DiaChiNhomVatTu})
       .then((res) => {
         const result = {
           status: res.status,
@@ -121,9 +126,9 @@ const CoSo = () =>{
       })
   };
 
-  async function DeleteCoSo(MaCoSo){
+  async function DeleteNhomVatTu(MaNhomVatTu){
     return await axios
-      .post(`http://localhost:3001/coso/delete/${MaCoSo}`)
+      .post(`http://localhost:3001/NhomVatTu/delete/${MaNhomVatTu}`)
       .then((res) => {
         const result = {
           status: res.status,
@@ -142,14 +147,14 @@ const CoSo = () =>{
 
   const columns = [
     {
-      title: 'Tên cơ sở thư viện',
-      dataIndex: 'TenCoSo',
-      key: 'TenCoSo',
+      title: 'Mã nhóm vật tư',
+      dataIndex: 'MaNhomVatTu',
+      key: 'MaNhomVatTu',
     },
     {
-      title: 'Địa chỉ',
-      dataIndex: 'DiaChiCoSo',
-      key: 'DiaChiCoSo',
+      title: 'Tên nhóm vật tư',
+      dataIndex: 'TenNhomVatTu',
+      key: 'TenNhomVatTu',
     },
     {
       title: 'Tình trạng',
@@ -167,17 +172,17 @@ const CoSo = () =>{
       render: (_, record) => (
         <>
           <Space size="middle">
-            {!record.Is_Deleted && <Button key={record.MaCoSo} type="link" onClick= {() =>{GetCoSoEdit(record.MaCoSo)}}>Cập nhật</Button>}
+            {!record.Is_Deleted && <Button key={record.id} type="link" onClick= {() =>{GetNhomVatTuEdit(record.id)}}>Cập nhật</Button>}
           </Space>
           <Space size="middle">
           {!record.Is_Deleted && <>
               <Popconfirm
-                title="Bạn có chắc xóa cơ sở không?"
-                onConfirm={()=>{DeleteCoSo(record.MaCoSo)}}
+                title="Bạn có chắc xóa nhóm vật tư không?"
+                onConfirm={()=>{DeleteNhomVatTu(record.id)}}
                 okText="Yes"
                 cancelText="No"
               >
-                <Button key={record.MaCoSo} type="link" danger >Xóa</Button>
+                <Button key={record.id} type="link" danger >Xóa</Button>
               </Popconfirm>
             </>}
           </Space>
@@ -189,15 +194,15 @@ const CoSo = () =>{
 
   return(
     <>
-      <Title level={3}>Cơ sở thư viện</Title>
+      <Title level={3}>Nhóm vật tư</Title>
       <Divider />
       <VStack justifyContent={"start"} alignItems="start">
-        <Space align="left" style={{ marginBottom: 16 }}>
-          <Button  onClick={openCreateMode}  type="primary" icon={<PlusCircleOutlined />}>
-              Thêm mới
-            </Button>
-          </Space>
-          <Divider />
+      <Space align="left" style={{ marginBottom: 16 }}>
+        <Button  onClick={openCreateMode}  type="primary" icon={<PlusCircleOutlined />}>
+            Thêm mới
+          </Button>
+        </Space>
+        <Divider />
           {loading ? 
             <>
               <Spin tip="Loading..." spinning={loading}>
@@ -212,38 +217,44 @@ const CoSo = () =>{
               <Table columns={columns} dataSource={data} />}
       </VStack>
 
-      {/* Modal form */}
+      {/* Modal thêm mới */}
       <Modal
         open={openModalContact}
-        title={!editMode ? "Thêm mới cơ sở thư viện" : "Cập nhật cơ sở thư viện"}
+        title={!editMode ? "Thêm mới nhóm vật tư" : "Cập nhật nhóm vật tư"}
         onCancel={toogleModalFormContact}
         footer={null}
       >
       <Form form={form} 
           name="control-hooks"
           labelCol={{
-            span: 6,
+            span: 8,
           }}
           wrapperCol={{
             span: 20,
           }}
-          onFinish={!editMode? CreateCoSo: UpdateCoSo}
+          onFinish={!editMode? CreateNhomVatTu: UpdateNhomVatTu}
         >
           <Form.Item
-            label="Tên cơ sở: "
-            name="TenCoSo"
+            label="Mã nhóm vật tư: "
+            name="MaNhomVatTu"
             rules={[
               {
                 required: true,
-                message: 'Vui lòng nhập tên cơ sở!'
+                message: 'Vui lòng nhập mã nhóm vật tư!'
               },
             ]}
           >
           <Input  />
           </Form.Item>
           <Form.Item
-            label="Địa chỉ cơ sở: "
-            name="DiaChiCoSo"            
+            label="Tên nhóm vật tư: "
+            name="TenNhomVatTu"
+            rules={[
+              {
+                required: true,
+                message: 'Vui lòng nhập tên nhóm vật tư!'
+              },
+            ]}
           >
           <Input  />
           </Form.Item>
@@ -258,4 +269,4 @@ const CoSo = () =>{
   )
 }
 
-export default CoSo;
+export default NhomVatTu;

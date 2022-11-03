@@ -58,8 +58,8 @@ const PhieuXuat = () =>{
   function getMaCt (type)
   {
     switch (type.toLowerCase()) {
-      case 'xuatcoso':
-        return setMaCt("XCS");
+      case 'xuatban':
+        return setMaCt("XB");
       case 'xuatphathanh':
         return setMaCt("XPH");
       case 'xuatkygui':
@@ -84,8 +84,8 @@ const PhieuXuat = () =>{
   function getTitle (type)
   {
     switch (type.toLowerCase()) {
-      case 'xuatcoso':
-        return setTitle("xuất cơ sở");
+      case 'xuatban':
+        return setTitle("xuất bán");
       case 'xuatphathanh':
         return setTitle("xuất phát hành");
       case 'xuatkygui':

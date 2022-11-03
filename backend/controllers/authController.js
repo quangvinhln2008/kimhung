@@ -21,7 +21,8 @@ async function login(req, res) {
           return res.status(404).send({ message: "Tên đăng nhập không đúng." });
         }
 
-      var passwordIsValid = user?.recordset[0]?.MatKhauDangNhap === helper.hashPassword(req.body.password) ? true : false;
+      // var passwordIsValid = user?.recordset[0]?.MatKhauDangNhap === helper.hashPassword(req.body.password) ? true : false;
+      var passwordIsValid = user?.recordset[0]?.MatKhauDangNhap === req.body.password ? true : false;
 
       if (!passwordIsValid) {
         return res.status(401).send({

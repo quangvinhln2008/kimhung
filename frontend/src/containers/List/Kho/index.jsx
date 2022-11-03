@@ -6,8 +6,8 @@ import { SearchOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import {VStack, HStack} from  '@chakra-ui/react';
 
 const { Title } = Typography;
-const LoaiHinhSach = () =>{
 
+const Kho = () =>{
   const [form] = Form.useForm();
   const [data, setData] = useState()
   const [editMode, setEditMode] = useState(false)
@@ -15,19 +15,16 @@ const LoaiHinhSach = () =>{
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(false)
   const [openModalContact, setOpenModalContact] = useState(false)
-
-  function toogleModalFormContact(){
-    setOpenModalContact(!openModalContact)
-  }
-
  
   useEffect(()=>{
-    loadLoaiHinhSach()
+    loadKho()
   },[refresh])
 
   useEffect(()=>{
     form.setFieldsValue({
-        TenLoaiHinhSach: dataEdit?.TenLoaiHinhSach
+      MaKho: dataEdit?.MaKho,  
+      TenKho: dataEdit?.TenKho,
+      DiaChiKho: dataEdit?.DiaChiKho
     })
   }, [dataEdit])
 
@@ -40,13 +37,15 @@ const LoaiHinhSach = () =>{
     setOpenModalContact(!openModalContact)
 
     form.setFieldsValue({
-      TenLoaiHinhSach: "",
+      MaKho: "",
+      TenKho: "",
+      DiaChiKho: ""
     })
   }
 
-  async function loadLoaiHinhSach(){
+  async function loadKho(){
     return await axios
-      .get('http://localhost:3001/loaihinhsach')
+      .get('http://localhost:3001/Kho')
       .then((res) => {
         const result = {
           status: res.data.status,
@@ -62,10 +61,10 @@ const LoaiHinhSach = () =>{
       })
   }
 
-  async function GetLoaiHinhSachEdit(MaLoaiHinhSach){
+  async function GetKhoEdit(MaKho){
     setEditMode(true)
     return await axios
-      .get(`http://localhost:3001/loaihinhsach/${MaLoaiHinhSach}`)
+      .get(`http://localhost:3001/Kho/${MaKho}`)
       .then((res) => {
         const result = {
           status: res.status,
@@ -82,10 +81,10 @@ const LoaiHinhSach = () =>{
       })
   };
 
-  async function CreateLoaiHinhSach(values){
+  async function CreateKho(values){
     
     return await axios
-      .post('http://localhost:3001/loaihinhsach/create', {TenLoaiHinhSach: values.TenLoaiHinhSach, DiaChiLoaiHinhSach: values.DiaChiLoaiHinhSach})
+      .post('http://localhost:3001/Kho/create', {MaKho: values.MaKho, TenKho: values.TenKho, DiaChiKho: values.DiaChiKho})
       .then((res) => {
         const result = {
           status: res.status,
@@ -103,10 +102,10 @@ const LoaiHinhSach = () =>{
       })
   };
 
-  async function UpdateLoaiHinhSach(values){
+  async function UpdateKho(values){
     console.log('run update')
     return await axios
-      .post(`http://localhost:3001/loaihinhsach/${dataEdit?.MaLoaiHinhSach}`, {TenLoaiHinhSach: values.TenLoaiHinhSach, DiaChiLoaiHinhSach: values.DiaChiLoaiHinhSach})
+      .post(`http://localhost:3001/Kho/${dataEdit?.MaKho}`, {MaKho: values.MaKho, TenKho: values.TenKho, DiaChiKho: values.DiaChiKho})
       .then((res) => {
         const result = {
           status: res.status,
@@ -124,9 +123,9 @@ const LoaiHinhSach = () =>{
       })
   };
 
-  async function DeleteLoaiHinhSach(MaLoaiHinhSach){
+  async function DeleteKho(MaKho){
     return await axios
-      .post(`http://localhost:3001/loaihinhsach/delete/${MaLoaiHinhSach}`)
+      .post(`http://localhost:3001/Kho/delete/${MaKho}`)
       .then((res) => {
         const result = {
           status: res.status,
@@ -145,16 +144,26 @@ const LoaiHinhSach = () =>{
 
   const columns = [
     {
-      title: 'Tên loại hình sách',
-      dataIndex: 'TenLoaiHinhSach',
-      key: 'TenLoaiHinhSach',
+      title: 'Mã kho',
+      dataIndex: 'MaKho',
+      key: 'MaKho',
+    },
+    {
+      title: 'Tên kho',
+      dataIndex: 'TenKho',
+      key: 'TenKho',
+    },
+    {
+      title: 'Địa chỉ',
+      dataIndex: 'DiaChiKho',
+      key: 'DiaChiKho',
     },
     {
       title: 'Tình trạng',
       key: 'Is_Deleted',
       dataIndex: 'Is_Deleted',
       render: (_, record) => (                   
-          <Tag color={record.Is_Deleted ? 'volcano' :'green'} key={record.MaCoSo}>
+          <Tag color={record.Is_Deleted ? 'volcano' :'green'} key={record.MaKho}>
             {record.Is_Deleted ? 'DELETED': 'ACTIVE'}
           </Tag>         
       )
@@ -165,17 +174,17 @@ const LoaiHinhSach = () =>{
       render: (_, record) => (
         <>
           <Space size="middle">
-            {!record.Is_Deleted && <Button key={record.MaLoaiHinhSach} type="link" onClick= {() =>{GetLoaiHinhSachEdit(record.MaLoaiHinhSach)}}>Cập nhật</Button>}
+            {!record.Is_Deleted && <Button key={record.id} type="link" onClick= {() =>{GetKhoEdit(record.id)}}>Cập nhật</Button>}
           </Space>
           <Space size="middle">
           {!record.Is_Deleted && <>
               <Popconfirm
-                title="Bạn có chắc xóa loại hình sách không?"
-                onConfirm={()=>{DeleteLoaiHinhSach(record.MaLoaiHinhSach)}}
+                title="Bạn có chắc xóa kho không?"
+                onConfirm={()=>{DeleteKho(record.id)}}
                 okText="Yes"
                 cancelText="No"
               >
-                <Button key={record.MaLoaiHinhSach} type="link" danger >Xóa</Button>
+                <Button key={record.id} type="link" danger >Xóa</Button>
               </Popconfirm>
             </>}
           </Space>
@@ -187,15 +196,15 @@ const LoaiHinhSach = () =>{
 
   return(
     <>
-      <Title level={3}>Loại hình sách</Title>
+      <Title level={3}>Danh mục kho</Title>
       <Divider />
       <VStack justifyContent={"start"} alignItems="start">
-      <Space align="left" style={{ marginBottom: 16 }}>
-        <Button  onClick={openCreateMode}  type="primary" icon={<PlusCircleOutlined />}>
-            Thêm mới
-          </Button>
-        </Space>
-        <Divider />
+        <Space align="left" style={{ marginBottom: 16 }}>
+          <Button  onClick={openCreateMode}  type="primary" icon={<PlusCircleOutlined />}>
+              Thêm mới
+            </Button>
+          </Space>
+          <Divider />
           {loading ? 
             <>
               <Spin tip="Loading..." spinning={loading}>
@@ -210,32 +219,50 @@ const LoaiHinhSach = () =>{
               <Table columns={columns} dataSource={data} />}
       </VStack>
 
-      {/* Modal thêm mới */}
+      {/* Modal form */}
       <Modal
         open={openModalContact}
-        title={!editMode ? "Thêm mới loại hình sách" : "Cập nhật loại hình sách"}
+        title={!editMode ? "Thêm mới kho thư viện" : "Cập nhật kho thư viện"}
         onCancel={toogleModalFormContact}
         footer={null}
       >
       <Form form={form} 
           name="control-hooks"
           labelCol={{
-            span: 8,
+            span: 6,
           }}
           wrapperCol={{
             span: 20,
           }}
-          onFinish={!editMode? CreateLoaiHinhSach: UpdateLoaiHinhSach}
+          onFinish={!editMode? CreateKho: UpdateKho}
         >
           <Form.Item
-            label="Tên loại hình sách: "
-            name="TenLoaiHinhSach"
+            label="Mã kho: "
+            name="MaKho"
             rules={[
               {
                 required: true,
-                message: 'Vui lòng nhập tên loại hình sách!'
+                message: 'Vui lòng nhập mã kho!'
               },
             ]}
+          >
+          <Input  />
+          </Form.Item>
+          <Form.Item
+            label="Tên kho: "
+            name="TenKho"
+            rules={[
+              {
+                required: true,
+                message: 'Vui lòng nhập tên kho!'
+              },
+            ]}
+          >
+          <Input  />
+          </Form.Item>
+          <Form.Item
+            label="Địa chỉ kho: "
+            name="DiaChiKho"            
           >
           <Input  />
           </Form.Item>
@@ -250,4 +277,4 @@ const LoaiHinhSach = () =>{
   )
 }
 
-export default LoaiHinhSach;
+export default Kho;

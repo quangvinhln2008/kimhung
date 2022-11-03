@@ -2,7 +2,7 @@ const {sql, poolPromise } = require('../config/db.js')
 const { v4: uuidv4 } = require('uuid');
 const jwt = require("jsonwebtoken");
 
-async function creKichThuocate(req, res) {
+async function create(req, res) {
   try{
     const MaNhanVien = req.body.MaNhanVien
     const TenNhanVien = req.body.TenNhanVien

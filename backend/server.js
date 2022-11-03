@@ -3,7 +3,7 @@ const cors = require('cors');
 
 const authRouter = require('./routes/authRouter');
 const nhomDoiTuongRouter = require('./routes/nhomDoiTuongRouter');
-const nhomVatTuRouter = require('./routes/nhomVatTuRouterRouter');
+const nhomVatTuRouter = require('./routes/nhomVatTuRouter');
 const khoRouter = require('./routes/khoRouter');
 const kichThuocRouter = require('./routes/kichThuocRouter');
 const doiTuongRouter = require('./routes/doiTuongRouter');

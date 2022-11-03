@@ -26,7 +26,7 @@ const NhanVien = () =>{
         MaNhanVien: dataEdit?.MaNhanVien,
         TenNhanVien: dataEdit?.TenNhanVien,
         DienThoai: dataEdit?.DienThoai,
-        MaCoSo: dataEdit?.MaCoSo,
+        MaKho: dataEdit?.MaKho,
         TenDangNhap: dataEdit?.TenDangNhap,
         MatKhauDangNhap: dataEdit?.MatKhauDangNhap,
         Role: dataEdit?.Role,
@@ -45,7 +45,7 @@ const NhanVien = () =>{
       MaNhanVien: "",
         TenNhanVien: "",
         DienThoai: "",
-        MaCoSo: "",
+        MaKho: "",
         TenDangNhap: "",
         MatKhauDangNhap: "",
         Role: "",
@@ -97,7 +97,7 @@ const NhanVien = () =>{
         MaNhanVien: values.MaNhanVien, 
         TenNhanVien: values.TenNhanVien, 
         DienThoai : values.DienThoai, 
-        MaCoSo : values.MaCoSo, 
+        MaKho : values.MaKho, 
         TenDangNhap: values.TenDangNhap, 
         MatKhauDangNhap: values.MatKhauDangNhap, 
         Role: values.Role })
@@ -125,7 +125,7 @@ const NhanVien = () =>{
         MaNhanVien: values.MaNhanVien, 
         TenNhanVien: values.TenNhanVien, 
         DienThoai : values.DienThoai, 
-        MaCoSo : values.MaCoSo, 
+        MaKho : values.MaKho, 
         TenDangNhap: values.TenDangNhap, 
         MatKhauDangNhap: values.MatKhauDangNhap, 
         Role: values.Role })
@@ -176,16 +176,11 @@ const NhanVien = () =>{
       key: 'TenNhanVien',
     },
     {
-      title: 'Cơ sở',
-      dataIndex: 'TenCoSo',
-      key: 'TenCoSo',
-    },
-    {
       title: 'Quyền truy cập',
       dataIndex: 'Role',
       key: 'Role',
       render: (_, record) => (                   
-        <Tag color={record.Role.toLowerCase() === 'user' ? 'volcano' :'green'} key={record.MaCoSo}>
+        <Tag color={record.Role.toLowerCase() === 'user' ? 'volcano' :'green'} key={record.MaKho}>
           {record.Role.toUpperCase()}
         </Tag>         
     )
@@ -195,7 +190,7 @@ const NhanVien = () =>{
       key: 'Is_Deleted',
       dataIndex: 'Is_Deleted',
       render: (_, record) => (                   
-          <Tag color={record.Is_Deleted ? 'volcano' :'green'} key={record.MaCoSo}>
+          <Tag color={record.Is_Deleted ? 'volcano' :'green'} key={record.MaKho}>
             {record.Is_Deleted ? 'DELETED': 'ACTIVE'}
           </Tag>         
       )
@@ -307,12 +302,12 @@ const NhanVien = () =>{
           <Input  />
           </Form.Item>
           <Form.Item
-            label="Cơ sở: "
-            name="MaCoSo"
+            label="Kho: "
+            name="MaKho"
             rules={[
               {
                 required: true,
-                message: 'Vui lòng chọn cơ sở!'
+                message: 'Vui lòng chọn kho!'
               },
             ]}
           >

@@ -21,11 +21,11 @@ import Dashboard from './containers/Dashboard';
 import TonDauKy from './containers/TonDauKy';
 
 import NhomDoiTuong from './containers/List/NhomDoiTuong';
-import LoaiHinhSach from './containers/List/LoaiHinhSach';
-import CoSo from './containers/List/CoSo';
-import HocKy from './containers/List/HocKy';
+import NhomVatTu from './containers/List/NhomVatTu';
+import Kho from './containers/List/Kho';
+import KichThuoc from './containers/List/KichThuoc';
 import DoiTuong from './containers/List/DoiTuong';
-import Sach from './containers/List/Sach';
+import VatTu from './containers/List/VatTu';
 import NhanVien from './containers/List/NhanVien';
 
 import PhieuNhap from './containers/PhieuNhap';
@@ -41,11 +41,11 @@ const App = (props) => {
         <Route path='/login' element ={<Login />}/>
           <Route path='/' element ={<LayoutApp component ={<Dashboard />} />}/>
           <Route path='nhomdoituong' element ={<LayoutApp component ={<NhomDoiTuong />} />}/>
-          <Route path='loaisach' element ={<LayoutApp component ={<LoaiHinhSach />} />}/>
-          <Route path='coso' element ={<LayoutApp component ={<CoSo />} />}/>
-          <Route path='hocky' element ={<LayoutApp component ={<HocKy />} />}/>
+          <Route path='nhomvattu' element ={<LayoutApp component ={<NhomVatTu />} />}/>
+          <Route path='kho' element ={<LayoutApp component ={<Kho />} />}/>
+          <Route path='kichthuoc' element ={<LayoutApp component ={<KichThuoc />} />}/>
           <Route path='doituong' element ={<LayoutApp component ={<DoiTuong />} />}/>
-          <Route path='sach' element ={<LayoutApp component ={<Sach />} />}/>
+          <Route path='vattu' element ={<LayoutApp component ={<VatTu />} />}/>
           <Route path='nhanvien' element ={<LayoutApp component ={<NhanVien />} />}/>
           <Route path='tondauky' element ={<LayoutApp component ={<TonDauKy />} />}/>
           <Route path='phieunhap' element ={<LayoutApp component ={<PhieuNhap />} />} />

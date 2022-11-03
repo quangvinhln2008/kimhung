@@ -6,7 +6,7 @@ async function create(req, res) {
   try{
     const id = uuidv4()
     const NgayCt = req.body.NgayCt
-    const MaSach = req.body.MaSach
+    const MaVatTu = req.body.MaVatTu
     const MaKichThuoc = req.body.MaKichThuoc
     const MaKho = req.body.MaKho
     const SoLuongTon = req.body.SoLuongTon
@@ -32,7 +32,7 @@ async function create(req, res) {
     .input('Id', id)
     .input('NgayCt', NgayCt)
     .input('MaKho', MaKho)
-    .input('MaSach', MaSach)
+    .input('MaVatTu', MaVatTu)
     .input('MaKichThuoc', MaKichThuoc)
     .input('SoLuongTon', SoLuongTon)
     .input('DonGiaTon', DonGiaTon)
@@ -55,7 +55,7 @@ async function update(req, res) {
   try{
       const {id} = req.params
       const NgayCt = req.body.NgayCt
-      const MaSach = req.body.MaSach
+      const MaVatTu = req.body.MaVatTu
       const MaKichThuoc = req.body.MaKichThuoc
       const MaKho = req.body.MaKho
       const SoLuongTon = req.body.SoLuongTon
@@ -66,7 +66,7 @@ async function update(req, res) {
       .input('Id', id)
       .input('NgayCt', NgayCt)
       .input('MaKho', MaKho)
-      .input('MaSach', MaSach)
+      .input('MaVatTu', MaVatTu)
       .input('MaKichThuoc', MaKichThuoc)
       .input('SoLuongTon', SoLuongTon)
       .input('DonGiaTon', DonGiaTon)

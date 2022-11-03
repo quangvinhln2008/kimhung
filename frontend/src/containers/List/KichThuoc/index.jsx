@@ -7,7 +7,7 @@ import { SearchOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import {VStack, HStack} from  '@chakra-ui/react';
 
 const { Title } = Typography;
-const HocKy = () =>{
+const KichThuoc = () =>{
   
   const [form] = Form.useForm();
   const [data, setData] = useState()
@@ -18,15 +18,14 @@ const HocKy = () =>{
   const [openModalContact, setOpenModalContact] = useState(false)
   
   useEffect(()=>{
-    loadHocKy()
+    loadKichThuoc()
   },[refresh])
   
 useEffect(()=>{
     
     form.setFieldsValue({
-        TenHocKy: dataEdit?.TenHocKy,
-        TuNgay: moment(dataEdit?.TuNgay, 'YYYY/MM/DD'),
-        DenNgay: moment(dataEdit?.DenNgay, 'YYYY/MM/DD')
+      MaKichThuoc: dataEdit?.MaKichThuoc,  
+      TenKichThuoc: dataEdit?.TenKichThuoc
     })
   }, [dataEdit])
 
@@ -39,15 +38,14 @@ useEffect(()=>{
     setOpenModalContact(!openModalContact)
 
     form.setFieldsValue({
-      TenHocKy: "",
-      TuNgay: "",
-      DenNgay: ""
+      MaKichThuoc: "",
+      TenKichThuoc: "",
     })
   }
 
-  async function loadHocKy(){
+  async function loadKichThuoc(){
     return await axios
-      .get('http://localhost:3001/hocky')
+      .get('http://localhost:3001/KichThuoc')
       .then((res) => {
         const result = {
           status: res.data.status,
@@ -63,11 +61,11 @@ useEffect(()=>{
       })
   }
 
-  async function GetHocKyEdit(MaHocKy){
+  async function GetKichThuocEdit(MaKichThuoc){
     
     setEditMode(true)
     return await axios
-      .get(`http://localhost:3001/hocky/${MaHocKy}`)
+      .get(`http://localhost:3001/KichThuoc/${MaKichThuoc}`)
       .then((res) => {
         const result = {
           status: res.status,
@@ -85,10 +83,10 @@ useEffect(()=>{
       })
   };
 
-  async function CreateHocKy(values){
+  async function CreateKichThuoc(values){
     console.log('values', values)
     return await axios
-      .post('http://localhost:3001/hocky/create', {TenHocKy: values.TenHocKy, TuNgay: values.TuNgay, DenNgay: values.DenNgay})
+      .post('http://localhost:3001/KichThuoc/create', {MaKichThuoc: values.MaKichThuoc,TenKichThuoc: values.TenKichThuoc})
       .then((res) => {
         const result = {
           status: res.status,
@@ -106,10 +104,10 @@ useEffect(()=>{
       })
   };
 
-  async function UpdateHocKy(values){
+  async function UpdateKichThuoc(values){
     console.log('run update')
     return await axios
-      .post(`http://localhost:3001/hocky/${dataEdit?.MaHocKy}`, {TenHocKy: values.TenHocKy, TuNgay: values.TuNgay.format('YYYY-MM-DD'), DenNgay: values.DenNgay.format('YYYY-MM-DD')})
+      .post(`http://localhost:3001/KichThuoc/${dataEdit?.id}`, {MaKichThuoc: values.MaKichThuoc, TenKichThuoc: values.TenKichThuoc})
       .then((res) => {
         const result = {
           status: res.status,
@@ -127,9 +125,9 @@ useEffect(()=>{
       })
   };
 
-  async function DeleteHocKy(MaHocKy){
+  async function DeleteKichThuoc(MaKichThuoc){
     return await axios
-      .post(`http://localhost:3001/hocky/delete/${MaHocKy}`)
+      .post(`http://localhost:3001/KichThuoc/delete/${MaKichThuoc}`)
       .then((res) => {
         const result = {
           status: res.status,
@@ -148,18 +146,14 @@ useEffect(()=>{
 
   const columns = [
     {
-      title: 'Học kỳ',
-      dataIndex: 'TenHocKy',
-      key: 'TenHocKy',
+      title: 'Mã kích thước',
+      dataIndex: 'MaKichThuoc',
+      key: 'MaKichThuoc',
     },
     {
-      title: 'Từ ngày',
-      dataIndex: 'TuNgay',
-      key: 'TuNgay',
-    },{
-      title: 'Đến ngày',
-      dataIndex: 'DenNgay',
-      key: 'DenNgay',
+      title: 'Tên kích thước',
+      dataIndex: 'TenKichThuoc',
+      key: 'TenKichThuoc',
     },
     {
       title: 'Tình trạng',
@@ -177,17 +171,17 @@ useEffect(()=>{
       render: (_, record) => (
         <>
           <Space size="middle">
-            {!record.Is_Deleted && <Button key={record.MaCoSo} type="link" onClick= {() =>{GetHocKyEdit(record.MaHocKy)}}>Cập nhật</Button>}
+            {!record.Is_Deleted && <Button key={record.id} type="link" onClick= {() =>{GetKichThuocEdit(record.id)}}>Cập nhật</Button>}
           </Space>
           <Space size="middle">
           {!record.Is_Deleted && <>
               <Popconfirm
-                title="Bạn có chắc xóa học kỳ không?"
-                onConfirm={()=>{DeleteHocKy(record.MaHocKy)}}
+                title="Bạn có chắc xóa kích thước không?"
+                onConfirm={()=>{DeleteKichThuoc(record.id)}}
                 okText="Yes"
                 cancelText="No"
               >
-                <Button key={record.MaHocKy} type="link" danger >Xóa</Button>
+                <Button key={record.id} type="link" danger >Xóa</Button>
               </Popconfirm>
             </>}
           </Space>
@@ -199,7 +193,7 @@ useEffect(()=>{
 
   return(
     <>
-      <Title level={3}>Học kỳ</Title>
+      <Title level={3}>Kích thước</Title>
       <Divider />
       <VStack justifyContent={"start"} alignItems="start">
       <Space align="left" style={{ marginBottom: 16 }}>
@@ -225,7 +219,7 @@ useEffect(()=>{
       {/* Modal thêm mới */}
       <Modal
         open={openModalContact}
-        title={!editMode ? "Thêm mới học kỳ" : "Cập nhật học kỳ"}
+        title={!editMode ? "Thêm mới kích thước" : "Cập nhật kích thước"}
         onCancel={toogleModalFormContact}
         footer={null}
       >
@@ -237,43 +231,31 @@ useEffect(()=>{
           wrapperCol={{
             span: 18,
           }}
-          onFinish={!editMode? CreateHocKy: UpdateHocKy}
-        >
+          onFinish={!editMode? CreateKichThuoc: UpdateKichThuoc}
+        > 
           <Form.Item
-            label="Học kỳ: "
-            name="TenHocKy"
+          label="Mã kích thước: "
+          name="MaKichThuoc"
+          rules={[
+            {
+              required: true,
+              message: 'Vui lòng nhập mã kích thước!'
+            },
+          ]}
+        >
+        <Input  />
+        </Form.Item>
+          <Form.Item
+            label="Tên kích thước: "
+            name="TenKichThuoc"
             rules={[
               {
                 required: true,
-                message: 'Vui lòng nhập tên học kỳ!'
+                message: 'Vui lòng nhập tên kích thước!'
               },
             ]}
           >
           <Input  />
-          </Form.Item>
-          <Form.Item
-            label="Từ ngày: "
-            name="TuNgay"
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng nhập ngày bắt đầu học kỳ!'
-              },
-            ]}
-          >
-            <DatePicker format={"DD-MM-YYYY"}   />
-          </Form.Item>
-          <Form.Item
-            label="Đến ngày: "
-            name="DenNgay"
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng nhập ngày kết thúc học kỳ!'
-              },
-            ]}
-          >
-            <DatePicker format={"DD-MM-YYYY"} />
           </Form.Item>
           <HStack justifyContent="end">
             <Button key="back" onClick={toogleModalFormContact}>Thoát</Button>
@@ -285,4 +267,4 @@ useEffect(()=>{
   )
 }
 
-export default HocKy;
+export default KichThuoc;

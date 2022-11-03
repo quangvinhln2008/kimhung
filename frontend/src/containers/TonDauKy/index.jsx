@@ -15,15 +15,15 @@ const TonDauKy = () =>{
   const [data, setData] = useState()
   const [editMode, setEditMode] = useState(false)
   const [dataEdit, setDataEdit] = useState()
-  const [dataSach, setDataSach] = useState()
-  const [dataCoSo, setDataCoSo] = useState()
-  const [dataLoaiHinhSach, setDataLoaiHinhSach] = useState()
+  const [dataVatTu, setDataVatTu] = useState()
+  const [dataKho, setDataKho] = useState()
+  const [dataKichThuoc, setDataKichThuoc] = useState()
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(false)
   const [openModalContact, setOpenModalContact] = useState(false)
-  const [optionsSach, setOptionSach] = useState()
-  const [optionsLoaiHinhSach, setOptionLoaiHinhSach] = useState()
-  const [optionsCoSo, setOptionCoSo] = useState()
+  const [optionsVatTu, setOptionVatTu] = useState()
+  const [optionsKichThuoc, setOptionKichThuoc] = useState()
+  const [optionsKho, setOptionKho] = useState()
 
   function toogleModalFormContact(){
     setOpenModalContact(!openModalContact)
@@ -35,15 +35,15 @@ const TonDauKy = () =>{
 
   useEffect(()=>{
     
-    setOptionSach(dataSach?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
-    setOptionCoSo(dataCoSo?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
-    setOptionLoaiHinhSach(dataLoaiHinhSach?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
+    setOptionVatTu(dataVatTu?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
+    setOptionKho(dataKho?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
+    setOptionKichThuoc(dataKichThuoc?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
 
     form.setFieldsValue({
         NgayCt: moment(dataEdit?.NgayCt, 'YYYY/MM/DD'),
-        MaSach: dataEdit?.MaSach,
-        MaLoaiHinhSach: dataEdit?.MaLoaiHinhSach,
-        MaCoSo : dataEdit?.MaCoSo,
+        MaVatTu: dataEdit?.MaVatTu,
+        MaKichThuoc: dataEdit?.MaKichThuoc,
+        MaKho : dataEdit?.MaKho,
         SoLuongTon : dataEdit?.SoLuongTon,
         DonGiaTon: dataEdit?.DonGiaTon
     })
@@ -57,15 +57,15 @@ const TonDauKy = () =>{
     setEditMode(false)
     setOpenModalContact(!openModalContact)
 
-    setOptionSach(dataSach?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
-    setOptionCoSo(dataCoSo?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
-    setOptionLoaiHinhSach(dataLoaiHinhSach?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
+    setOptionVatTu(dataVatTu?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
+    setOptionKho(dataKho?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
+    setOptionKichThuoc(dataKichThuoc?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
 
     form.setFieldsValue({
         NgayCt: "",
-        MaSach: "",
-        MaLoaiHinhSach: "",
-        MaCoSo : "",
+        MaVatTu: "",
+        MaKichThuoc: "",
+        MaKho : "",
         SoLuongTon : "",
         DonGiaTon: ""
     })
@@ -80,9 +80,9 @@ const TonDauKy = () =>{
           data: res.data.result.recordsets,
         }
         setData(result.data[0])
-        setDataCoSo(result.data[1])
-        setDataLoaiHinhSach(result.data[2])
-        setDataSach(result.data[3])
+        setDataKho(result.data[1])
+        setDataKichThuoc(result.data[2])
+        setDataVatTu(result.data[3])
         setLoading(false)
         return(result)
       })
@@ -117,9 +117,9 @@ const TonDauKy = () =>{
     return await axios
       .post('http://localhost:3001/TonDauKy/create', {
         NgayCt: values.NgayCt, 
-        MaLoaiHinhSach: values.MaLoaiHinhSach, 
-        MaCoSo: values.MaCoSo, 
-        MaSach: values.MaSach, 
+        MaKichThuoc: values.MaKichThuoc, 
+        MaKho: values.MaKho, 
+        MaVatTu: values.MaVatTu, 
         SoLuongTon: values.SoLuongTon, 
         DonGiaTon: values.DonGiaTon})
       .then((res) => {
@@ -144,9 +144,9 @@ const TonDauKy = () =>{
     return await axios
       .post(`http://localhost:3001/TonDauKy/${dataEdit?.Id}`, {
         NgayCt: values.NgayCt.format('YYYY-MM-DD'), 
-        MaLoaiHinhSach: values.MaLoaiHinhSach, 
-        MaCoSo: values.MaCoSo, 
-        MaSach: values.MaSach, 
+        MaKichThuoc: values.MaKichThuoc, 
+        MaKho: values.MaKho, 
+        MaVatTu: values.MaVatTu, 
         SoLuongTon: values.SoLuongTon, 
         DonGiaTon: values.DonGiaTon})
       .then((res) => {
@@ -192,19 +192,19 @@ const TonDauKy = () =>{
       key: 'NgayCt',
     },
     {
-      title: 'Cơ sở',
-      dataIndex: 'TenCoSo',
-      key: 'TenCoSo',
+      title: 'Kho',
+      dataIndex: 'TenKho',
+      key: 'TenKho',
     },
     {
-      title: 'Loại hình sách',
-      dataIndex: 'TenLoaiHinhSach',
-      key: 'TenLoaiHinhSach',
+      title: 'Kích thước',
+      dataIndex: 'TenKichThuoc',
+      key: 'TenKichThuoc',
     },
     {
-      title: 'Tên sách',
-      dataIndex: 'TenSach',
-      key: 'TenSach',
+      title: 'Tên vật tư',
+      dataIndex: 'TenVatTu',
+      key: 'TenVatTu',
     },
     {
       title: 'Số lượng tồn',
@@ -243,7 +243,7 @@ const TonDauKy = () =>{
 
   return(
     <>
-      <Title level={3}>Tồn kho sách đầu kỳ</Title>
+      <Title level={3}>Tồn kho vật tư đầu kỳ</Title>
       <Divider />
       <VStack justifyContent={"start"} alignItems="start">
         <Space align="left" style={{ marginBottom: 16 }}>
@@ -300,12 +300,12 @@ const TonDauKy = () =>{
           </Form.Item>
           
           <Form.Item
-            label="Cơ sở thư viện: "
-            name="MaCoSo"
+            label="Kho: "
+            name="MaKho"
             rules={[
               {
                 required: true,
-                message: 'Vui lòng chọn cơ sở thư viện!'
+                message: 'Vui lòng chọn kho thư viện!'
               },
             ]}
           >
@@ -318,16 +318,16 @@ const TonDauKy = () =>{
               }
 
               >
-                {optionsCoSo}
+                {optionsKho}
               </Select>
           </Form.Item>
           <Form.Item
-            label="Loại hình sách: "
-            name="MaLoaiHinhSach"
+            label="Kích thước: "
+            name="MaKichThuoc"
             rules={[
               {
                 required: true,
-                message: 'Vui lòng chọn loại hình sách!'
+                message: 'Vui lòng chọn Kích thước!'
               },
             ]}
           >
@@ -340,16 +340,16 @@ const TonDauKy = () =>{
               }
 
               >
-                {optionsLoaiHinhSach}
+                {optionsKichThuoc}
               </Select>
           </Form.Item>
           <Form.Item
-            label="Tên sách: "
-            name="MaSach"
+            label="Tên vật tư: "
+            name="MaVatTu"
             rules={[
               {
                 required: true,
-                message: 'Vui lòng chọn tên sách!'
+                message: 'Vui lòng chọn tên vật tư!'
               },
             ]}
           >
@@ -362,7 +362,7 @@ const TonDauKy = () =>{
               }
 
               >
-                {optionsSach}
+                {optionsVatTu}
               </Select>
           </Form.Item>
           <Form.Item

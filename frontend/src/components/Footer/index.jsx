@@ -5,11 +5,11 @@ const Footer =() =>{
   return(
     <footer className={styles.footer}>
           <a
-            href="https://thuvien.ufm.edu.vn/"
+            href="#"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Copyright:{' '} © 2022 Trung tâm học liệu - Trường Đại học Tài chính-Marketing
+            Copyright:{' '} © 2022 Công ty TNHH Kim Hưng
           </a>
         </footer>
   )

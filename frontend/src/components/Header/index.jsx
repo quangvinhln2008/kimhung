@@ -55,7 +55,7 @@ const HeaderApp = (props) => {
   const items = [
     getItem(`Xin chào, ${cookies.TenNhanVien}`, 'sub1',null, [
       getItem(<Link href={'/profile'}><a >Trang cá nhân</a></Link>, '1', <UserOutlined />),
-      getItem(<a onClick={logout}>Đăng xuất</a>, '2', <LogoutOutlined />),
+      getItem(<Link to to={'/login'}>Đăng xuất</Link>, '2', <LogoutOutlined />),
     ])
   ];
   
@@ -89,28 +89,28 @@ const HeaderApp = (props) => {
                 Nhóm đối tượng
                   </Breadcrumb.Item>
               }
-              {pathname==='/coso' && <Breadcrumb.Item fontSize="18px">
-                Cơ sở thư viện
+              {pathname==='/kho' && <Breadcrumb.Item fontSize="18px">
+                Danh mục kho
                   </Breadcrumb.Item>
                 }
-              {pathname==='/loaisach' && <Breadcrumb.Item fontSize="18px">
-                Loại hình sách
+              {pathname==='/nhomvattu' && <Breadcrumb.Item fontSize="18px">
+                Danh mục nhóm vật tư
                 </Breadcrumb.Item>
               }
               {pathname==='/doituong' && <Breadcrumb.Item fontSize="18px">
                 Đối tượng
                 </Breadcrumb.Item>
               }
-              {pathname==='/hocky' && <Breadcrumb.Item fontSize="18px">
-                Học kỳ
+              {pathname==='/kichthuoc' && <Breadcrumb.Item fontSize="18px">
+                Danh mục kích thước
                 </Breadcrumb.Item>
               }
               {pathname==='/nhanvien' && <Breadcrumb.Item fontSize="18px">
                 Nhân viên
                 </Breadcrumb.Item>
               }
-              {pathname==='/sach' && <Breadcrumb.Item fontSize="18px">
-                Sách
+              {pathname==='/vattu' && <Breadcrumb.Item fontSize="18px">
+                Danh mục vật tư
                 </Breadcrumb.Item>
               }
                {pathname==='/tondauky' && <Breadcrumb.Item fontSize="18px">
