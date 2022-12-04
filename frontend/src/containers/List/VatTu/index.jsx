@@ -60,7 +60,7 @@ const VatTu = () =>{
 
   async function loadVatTu(){
     return await axios
-      .get('http://192.168.123.17:3002/vattu')
+      .get('http://localhost:3002/vattu')
       .then((res) => {
         const result = {
           status: res.data.status,
@@ -81,7 +81,7 @@ const VatTu = () =>{
   async function GetVatTuEdit(MaVatTu){
     setEditMode(true)
     return await axios
-      .get(`http://192.168.123.17:3002/vattu/${MaVatTu}`)
+      .get(`http://localhost:3002/vattu/${MaVatTu}`)
       .then((res) => {
         const result = {
           status: res.status,
@@ -100,7 +100,7 @@ const VatTu = () =>{
 
   async function CreateVatTu(values){
     return await axios
-      .post('http://192.168.123.17:3002/VatTu/create', {
+      .post('http://localhost:3002/VatTu/create', {
         MaVatTu: values.MaVatTu,
         TenVatTu: values.TenVatTu, 
         MaNhomVatTu: values.MaNhomVatTu, 
@@ -126,7 +126,7 @@ const VatTu = () =>{
   async function UpdateVatTu(values){
     console.log('run update')
     return await axios
-      .post(`http://192.168.123.17:3002/vattu/${dataEdit?.Id}`, {
+      .post(`http://localhost:3002/vattu/${dataEdit?.Id}`, {
         MaVatTu: values.MaVatTu,
         TenVatTu: values.TenVatTu, 
         MaNhomVatTu: values.MaNhomVatTu, 
@@ -151,7 +151,7 @@ const VatTu = () =>{
 
   async function DeleteVatTu(MaVatTu){
     return await axios
-      .post(`http://192.168.123.17:3002/vattu/delete/${MaVatTu}`)
+      .post(`http://localhost:3002/vattu/delete/${MaVatTu}`)
       .then((res) => {
         const result = {
           status: res.status,

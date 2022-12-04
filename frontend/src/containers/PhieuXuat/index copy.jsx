@@ -149,7 +149,7 @@ const PhieuNhap = () =>{
 
   async function loadPhieuNhap(){
     return await axios
-      .get('http://192.168.123.17:3002/PhieuNhap')
+      .get('http://localhost:3002/PhieuNhap')
       .then((res) => {
         const result = {
           status: res.data.status,
@@ -173,7 +173,7 @@ const PhieuNhap = () =>{
   async function GetPhieuNhapEdit(MaPhieuNhap){
     setEditMode(true)
     return await axios
-      .get(`http://192.168.123.17:3002/PhieuNhap/${MaPhieuNhap}`)
+      .get(`http://localhost:3002/PhieuNhap/${MaPhieuNhap}`)
       .then((res) => {
         const result = {
           status: res.status,
@@ -192,7 +192,7 @@ const PhieuNhap = () =>{
 
   async function CreatePhieuNhap(values){
     return await axios
-      .post('http://192.168.123.17:3002/PhieuNhap/create', {
+      .post('http://localhost:3002/PhieuNhap/create', {
         Ident: Ident,
         NgayCt: values.NgayCt,
         MaCt: maCt,
@@ -237,7 +237,7 @@ useEffect(()=>{
   async function UpdatePhieuNhap(values){
     console.log('run update')
     return await axios
-      .post(`http://192.168.123.17:3002/PhieuNhap/${dataEdit?.Id}`, {
+      .post(`http://localhost:3002/PhieuNhap/${dataEdit?.Id}`, {
         NgayCt: values.NgayCt.format('YYYY-MM-DD'), 
         SoCt: values.SoCt, 
         MaLoaiHinhSach: values.MaLoaiHinhSach, 
@@ -268,7 +268,7 @@ useEffect(()=>{
 
   async function DeletePhieuNhap(MaPhieuNhap){
     return await axios
-      .post(`http://192.168.123.17:3002/PhieuNhap/delete/${MaPhieuNhap}`)
+      .post(`http://localhost:3002/PhieuNhap/delete/${MaPhieuNhap}`)
       .then((res) => {
         const result = {
           status: res.status,
