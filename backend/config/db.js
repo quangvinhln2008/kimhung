@@ -8,7 +8,7 @@ dotenv.config();
 const config = {
     user: 'sa',
     password: 'P@ssWord',
-    server:'192.168.123.17', 
+    server:'localhost', 
     database: 'kimhung',
     port: 1433,
     options: {
