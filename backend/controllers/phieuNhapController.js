@@ -23,11 +23,9 @@ async function create(req, res) {
     const LoaiCt = req.body.LoaiCt
     const SoCt = req.body.SoCt
     const MaNhanVien = req.body.MaNhanVien
-    const MaSach = req.body.MaSach
-    const MaLoaiHinhSach = req.body.MaLoaiHinhSach
-    const MaCoSo = req.body.MaCoSo
+    const MaVatTu = req.body.MaVatTu
+    const MaKho = req.body.MaKho
     const MaDoiTuong = req.body.MaDoiTuong
-    const HTThanhToan = req.body.HTThanhToan
     const DienGiai = req.body.DienGiai
     const ctPhieuNhap = req.body.ctPhieuNhap
     const CreatedBy = req.body.MaNhanVien
@@ -49,13 +47,13 @@ async function create(req, res) {
 
     const pool = await poolPromise
     const ctPhieuNhapTable = new sql.Table()
-    ctPhieuNhapTable.columns.add('MaSach', sql.VarChar(50));
+    ctPhieuNhapTable.columns.add('MaVatTu', sql.VarChar(50));
     ctPhieuNhapTable.columns.add('SoLuongNhap', sql.Money);
     ctPhieuNhapTable.columns.add('DonGiaNhap', sql.Money);
 
     ctPhieuNhap.forEach(detail => {
       ctPhieuNhapTable.rows.add(
-        detail.MaSach,
+        detail.MaVatTu,
         detail.SoLuongNhap,
         detail.DonGiaNhap
       )
@@ -69,10 +67,8 @@ async function create(req, res) {
     .input('LoaiCt', LoaiCt)
     .input('SoCt', SoCt)
     .input('MaNhanVien', MaNhanVien)
-    .input('MaCoSo', MaCoSo)
-    .input('MaLoaiHinhSach', MaLoaiHinhSach)
+    .input('MaKho', MaKho)
     .input('MaDoiTuong', MaDoiTuong)
-    .input('HTThanhToan', HTThanhToan)
     .input('DienGiai', DienGiai)
     .input('ctPhieuNhap', ctPhieuNhapTable)
     .input('CreatedBy', CreatedBy)
@@ -100,25 +96,23 @@ async function update(req, res) {
       const SoCt = req.body.SoCt
       const LoaiCt = req.body.LoaiCt
       const MaNhanVien = req.body.MaNhanVien
-      const MaSach = req.body.MaSach
-      const MaLoaiHinhSach = req.body.MaLoaiHinhSach
-      const MaCoSo = req.body.MaCoSo
+      const MaVatTu = req.body.MaVatTu
+      const MaKho = req.body.MaKho
       const MaDoiTuong = req.body.MaDoiTuong
-      const HTThanhToan = req.body.HTThanhToan
       const DienGiai = req.body.DienGiai      
       const ctPhieuNhap = req.body.ctPhieuNhap      
-    const CreatedBy = req.body.MaNhanVien
-    const CreatedDate = moment().format()
+      const CreatedBy = req.body.MaNhanVien
+      const CreatedDate = moment().format()
 
       const pool = await poolPromise
       const ctPhieuNhapTable = new sql.Table()
-      ctPhieuNhapTable.columns.add('MaSach', sql.VarChar(50));
+      ctPhieuNhapTable.columns.add('MaVatTu', sql.VarChar(50));
       ctPhieuNhapTable.columns.add('SoLuongNhap', sql.Money);
       ctPhieuNhapTable.columns.add('DonGiaNhap', sql.Money);
 
       ctPhieuNhap.forEach(detail => {
         ctPhieuNhapTable.rows.add(
-          detail.MaSach,
+          detail.MaVatTu,
           detail.SoLuongNhap,
           detail.DonGiaNhap
         )
@@ -131,10 +125,8 @@ async function update(req, res) {
       .input('LoaiCt', LoaiCt)
       .input('SoCt', SoCt)
       .input('MaNhanVien', MaNhanVien)
-      .input('MaCoSo', MaCoSo)
-      .input('MaLoaiHinhSach', MaLoaiHinhSach)
+      .input('MaKho', MaKho)
       .input('MaDoiTuong', MaDoiTuong)
-      .input('HTThanhToan', HTThanhToan)
       .input('DienGiai', DienGiai)
       .input('ctPhieuNhap', ctPhieuNhapTable)
       .input('CreatedBy', CreatedBy)

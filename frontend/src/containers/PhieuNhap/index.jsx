@@ -25,19 +25,17 @@ const PhieuNhap = () =>{
   const [viewMode, setViewMode] = useState(false)
   const [dataEdit, setDataEdit] = useState()
   const [dataEditCt, setDataEditCt] = useState()
-  const [dataSach, setDataSach] = useState()
-  const [dataCoSo, setDataCoSo] = useState()
+  const [dataVatTu, setDataVatTu] = useState()
+  const [dataKho, setDataKho] = useState()
   const [dataDoiTuong, setDataDoiTuong] = useState()
   const [dataNhanVien, setDataNhanVien] = useState()
-  const [dataLoaiHinhSach, setDataLoaiHinhSach] = useState()
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(false)
   const [openModalContact, setOpenModalContact] = useState(false)
-  const [optionsSach, setOptionSach] = useState()
+  const [optionsVatTu, setOptionVatTu] = useState()
   const [optionsLoaiHinhSach, setOptionLoaiHinhSach] = useState()
-  const [optionsCoSo, setOptionCoSo] = useState()
+  const [optionsKho, setOptionKho] = useState()
   const [optionsDoiTuong, setOptionDoiTuong] = useState()
-  const [optionsNhanVien, setOptionNhanVien] = useState()
   const [tongSoLuongNhap,setTongSoLuongNhap] = useState(0)
   const [tongThanhTienNhap,setTongThanhTienNhap] = useState(0)
   const [maCt, setMaCt] = useState('')
@@ -104,11 +102,9 @@ const PhieuNhap = () =>{
 
   useEffect(()=>{
     
-    setOptionSach(dataSach?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
-    setOptionCoSo(dataCoSo?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
-    setOptionLoaiHinhSach(dataLoaiHinhSach?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
+    setOptionVatTu(dataVatTu?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
+    setOptionKho(dataKho?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
     setOptionDoiTuong(dataDoiTuong?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
-    setOptionNhanVien(dataNhanVien?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
     
     setTongSoLuongNhap(_?.sumBy(dataEditCt, 'SoLuongNhap'))    
     setTongThanhTienNhap(_?.sumBy(dataEditCt, 'ThanhTienNhap'))
@@ -120,7 +116,6 @@ const PhieuNhap = () =>{
         MaCoSo : dataEdit?.MaCoSo,
         MaDoiTuong: dataEdit?.MaDoiTuong,
         MaNhanVien: cookies.id,
-        HTThanhToan: dataEdit?.HTThanhToan,
         DienGiai: dataEdit?.DienGiai,
         users: dataEditCt
     })
@@ -132,11 +127,9 @@ const PhieuNhap = () =>{
     setViewMode(true)
     setOpenModalContact(!openModalContact)
 
-    setOptionSach(dataSach?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
-    setOptionCoSo(dataCoSo?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
-    setOptionLoaiHinhSach(dataLoaiHinhSach?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
+    setOptionVatTu(dataVatTu?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
+    setOptionKho(dataKho?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
     setOptionDoiTuong(dataDoiTuong?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
-    setOptionNhanVien(dataNhanVien?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
 
     setTongSoLuongNhap(0)
     setTongThanhTienNhap(0)
@@ -146,10 +139,8 @@ const PhieuNhap = () =>{
         SoCt: "",
         MaDoiTuong: "",
         MaNhanVien: "",
-        MaLoaiHinhSach: "",
-        MaCoSo : "",
+        MaKho : "",
         DienGiai : "",
-        HTThanhToan:"",
         users:[]
     })
   }
@@ -164,7 +155,6 @@ const PhieuNhap = () =>{
     setTongSoLuongNhap(_?.sumBy(users, 'SoLuongNhap'))    
     setTongThanhTienNhap(_?.sumBy(users, 'ThanhTienNhap'))
   }
-
   async function loadPhieuNhap(){
     const header = getHeader()
     return await axios
@@ -175,11 +165,9 @@ const PhieuNhap = () =>{
           data: res.data.result.recordsets,
         }
         setData(result.data[0])
-        setDataCoSo(result.data[1])
-        setDataLoaiHinhSach(result.data[2])
-        setDataSach(result.data[3])
-        setDataNhanVien(result.data[4])
-        setDataDoiTuong(result.data[5])
+        setDataKho(result.data[1])
+        setDataVatTu(result.data[2])
+        setDataDoiTuong(result.data[3])
         setLoading(false)
         return(result)
       })
@@ -198,8 +186,7 @@ const PhieuNhap = () =>{
         const result = {
           status: res.status,
           data: res.data.result.recordsets,
-        }
-        
+        }        
         setDataEdit(result.data[0][0])
         setDataEditCt(result.data[1])
         setOpenModalContact(!openModalContact)
@@ -222,9 +209,8 @@ const PhieuNhap = () =>{
         MaCt: maCt,
         LoaiCt: '1',
         SoCt: values.SoCt, 
-        MaLoaiHinhSach: values.MaLoaiHinhSach, 
-        MaCoSo: cookies.MaCoSo, 
-        MaSach: values.MaSach, 
+        MaKho: values.MaKho, 
+        MaVatTu: values.MaVatTu, 
         MaDoiTuong: values.MaDoiTuong,
         MaNhanVien: cookies.id,
         DienGiai: values.DienGiai,
@@ -254,12 +240,10 @@ const PhieuNhap = () =>{
         NgayCt: values.NgayCt.format('YYYY-MM-DD'), 
         SoCt: values.SoCt, 
         MaCt: maCt,
-        MaLoaiHinhSach: values.MaLoaiHinhSach, 
-        MaCoSo: cookies.MaCoSo, 
+        MaKho: values.MaKho, 
         MaDoiTuong: values.MaDoiTuong,
         MaNhanVien: cookies.id,
         DienGiai: values.DienGiai,
-        HTThanhToan: values.HTThanhToan,
         ctPhieuNhap: values.users})
       .then((res) => {
         const result = {
@@ -310,16 +294,6 @@ const PhieuNhap = () =>{
       title: 'Diễn giải',
       dataIndex: 'DienGiai',
       key: 'DienGiai',
-    },
-    {
-      title: 'Người lập',
-      dataIndex: 'TenNhanVien',
-      key: 'TenNhanVien',
-    },
-    {
-      title: 'Cơ sở',
-      dataIndex: 'TenCoSo',
-      key: 'TenCoSo',
     },
     {
       title: 'Đối tượng',
@@ -501,12 +475,12 @@ const PhieuNhap = () =>{
               >
                 <Col className="gutter-row" span={8}>
                   <Form.Item
-                  label="Loại hình sách: "
-                  name="MaLoaiHinhSach"
+                  label="Mã kho: "
+                  name="MaKho"
                   rules={[
                     {
                       required: true,
-                      message: 'Vui lòng chọn loại hình sách!'
+                      message: 'Vui lòng chọn kho!'
                     },
                   ]}
                   >
@@ -520,7 +494,7 @@ const PhieuNhap = () =>{
                       }
 
                       >
-                        {optionsLoaiHinhSach}
+                        {optionsKho}
                       </Select>
                   </Form.Item>
                 </Col>
@@ -597,11 +571,11 @@ const PhieuNhap = () =>{
                       >
                     <Form.Item
                       {...restField}
-                      name={[name, 'MaSach']}
+                      name={[name, 'MaVatTu']}
                       rules={[
                         {
                           required: true,
-                          message: 'Vui lòng chọn tên sách!'
+                          message: 'Vui lòng chọn vật tư!'
                         },
                       ]}
                     >
@@ -610,16 +584,15 @@ const PhieuNhap = () =>{
                        style={{
                         width: 250,
                       }}
-                      placeholder="Chọn sách"
+                      placeholder="Chọn vật tư"
                       showSearch 
                       optionFilterProp="children"
                       filterOption={(input, option) => option?.children?.toLowerCase().includes(input)}  
                       filterSort={(optionA, optionB) =>
                         optionA?.children?.toLowerCase().localeCompare(optionB?.children?.toLowerCase())
                       }
-
                       >
-                        {optionsSach}
+                        {optionsVatTu}
                   </Select>
                   </Form.Item>
                   <Form.Item
