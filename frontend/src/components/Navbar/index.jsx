@@ -65,7 +65,7 @@ const Navbar = (props) =>{
     getItem(<Link to={'/'}>Dashboard</Link>, 'dashboard', <AppstoreOutlined />),
     getItem(<Link to ={'/tondauky'}>Tồn kho vật tư đầu kỳ</Link>, 'tondauky', <HomeOutlined />),
     getItem('Danh mục', 'danhmuc', <PicRightOutlined />, [
-      getItem(<Link to={'/kichthuoc'}>Kích thước</Link>, 'hocky'),
+      // getItem(<Link to={'/kichthuoc'}>Kích thước</Link>, 'hocky'),
       getItem(<Link to={'/nhomdoituong'}>Nhóm đối tượng</Link>, 'nhomdoituong'),
       getItem(<Link to={'/doituong'}>Đối tượng</Link>, 'doituong'), 
       getItem(<Link to={'/nhomvattu'}>Nhóm vật tư</Link>, 'loaisach'), 

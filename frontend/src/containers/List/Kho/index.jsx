@@ -45,7 +45,7 @@ const Kho = () =>{
 
   async function loadKho(){
     return await axios
-      .get('http://localhost:3002/kho')
+      .get('https://testkhaothi.ufm.edu.vn:3002/kho')
       .then((res) => {
         const result = {
           status: res.data.status,
@@ -64,7 +64,7 @@ const Kho = () =>{
   async function GetKhoEdit(MaKho){
     setEditMode(true)
     return await axios
-      .get(`http://localhost:3002/Kho/${MaKho}`)
+      .get(`https://testkhaothi.ufm.edu.vn:3002/Kho/${MaKho}`)
       .then((res) => {
         const result = {
           status: res.status,
@@ -84,7 +84,7 @@ const Kho = () =>{
   async function CreateKho(values){
     
     return await axios
-      .post('http://localhost:3002/Kho/create', {MaKho: values.MaKho, TenKho: values.TenKho, DiaChiKho: values.DiaChiKho})
+      .post('https://testkhaothi.ufm.edu.vn:3002/Kho/create', {MaKho: values.MaKho, TenKho: values.TenKho, DiaChiKho: values.DiaChiKho})
       .then((res) => {
         const result = {
           status: res.status,
@@ -105,7 +105,7 @@ const Kho = () =>{
   async function UpdateKho(values){
     console.log('run update')
     return await axios
-      .post(`http://localhost:3002/Kho/${dataEdit?.MaKho}`, {MaKho: values.MaKho, TenKho: values.TenKho, DiaChiKho: values.DiaChiKho})
+      .post(`https://testkhaothi.ufm.edu.vn:3002/Kho/${dataEdit?.MaKho}`, {MaKho: values.MaKho, TenKho: values.TenKho, DiaChiKho: values.DiaChiKho})
       .then((res) => {
         const result = {
           status: res.status,
@@ -125,7 +125,7 @@ const Kho = () =>{
 
   async function DeleteKho(MaKho){
     return await axios
-      .post(`http://localhost:3002/Kho/delete/${MaKho}`)
+      .post(`https://testkhaothi.ufm.edu.vn:3002/Kho/delete/${MaKho}`)
       .then((res) => {
         const result = {
           status: res.status,

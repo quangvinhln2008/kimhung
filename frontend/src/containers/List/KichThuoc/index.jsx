@@ -45,7 +45,7 @@ useEffect(()=>{
 
   async function loadKichThuoc(){
     return await axios
-      .get('http://localhost:3002/KichThuoc')
+      .get('https://testkhaothi.ufm.edu.vn:3002/KichThuoc')
       .then((res) => {
         const result = {
           status: res.data.status,
@@ -65,7 +65,7 @@ useEffect(()=>{
     
     setEditMode(true)
     return await axios
-      .get(`http://localhost:3002/KichThuoc/${MaKichThuoc}`)
+      .get(`https://testkhaothi.ufm.edu.vn:3002/KichThuoc/${MaKichThuoc}`)
       .then((res) => {
         const result = {
           status: res.status,
@@ -86,7 +86,7 @@ useEffect(()=>{
   async function CreateKichThuoc(values){
     console.log('values', values)
     return await axios
-      .post('http://localhost:3002/KichThuoc/create', {MaKichThuoc: values.MaKichThuoc,TenKichThuoc: values.TenKichThuoc})
+      .post('https://testkhaothi.ufm.edu.vn:3002/KichThuoc/create', {MaKichThuoc: values.MaKichThuoc,TenKichThuoc: values.TenKichThuoc})
       .then((res) => {
         const result = {
           status: res.status,
@@ -107,7 +107,7 @@ useEffect(()=>{
   async function UpdateKichThuoc(values){
     console.log('run update')
     return await axios
-      .post(`http://localhost:3002/KichThuoc/${dataEdit?.id}`, {MaKichThuoc: values.MaKichThuoc, TenKichThuoc: values.TenKichThuoc})
+      .post(`https://testkhaothi.ufm.edu.vn:3002/KichThuoc/${dataEdit?.id}`, {MaKichThuoc: values.MaKichThuoc, TenKichThuoc: values.TenKichThuoc})
       .then((res) => {
         const result = {
           status: res.status,
@@ -127,7 +127,7 @@ useEffect(()=>{
 
   async function DeleteKichThuoc(MaKichThuoc){
     return await axios
-      .post(`http://localhost:3002/KichThuoc/delete/${MaKichThuoc}`)
+      .post(`https://testkhaothi.ufm.edu.vn:3002/KichThuoc/delete/${MaKichThuoc}`)
       .then((res) => {
         const result = {
           status: res.status,

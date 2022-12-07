@@ -188,7 +188,7 @@ const PhieuXuat = () =>{
   async function loadPhieuXuat(){
     const header = getHeader()
     return await axios
-      .get(`http://localhost:3002/PhieuXuat?type=${type}`,{headers:header})
+      .get(`https://testkhaothi.ufm.edu.vn:3002/PhieuXuat?type=${type}`,{headers:header})
       .then((res) => {
         const result = {
           status: res.data.status,
@@ -213,7 +213,7 @@ const PhieuXuat = () =>{
     setEditMode(isEdit)
     setViewMode(isEdit)
     return await axios
-      .get(`http://localhost:3002/PhieuXuat/${MaPhieuXuat}`)
+      .get(`https://testkhaothi.ufm.edu.vn:3002/PhieuXuat/${MaPhieuXuat}`)
       .then((res) => {
         const result = {
           status: res.status,
@@ -235,7 +235,7 @@ const PhieuXuat = () =>{
   async function CreatePhieuXuat(values){
     const header = getHeader()
     return await axios
-      .post('http://localhost:3002/PhieuXuat/create', {
+      .post('https://testkhaothi.ufm.edu.vn:3002/PhieuXuat/create', {
         Ident: Ident,
         NgayCt: values.NgayCt.format("YYYY-MM-DD"),
         MaCt: maCt,
@@ -269,7 +269,7 @@ const PhieuXuat = () =>{
   async function UpdatePhieuXuat(values){
     console.log('run update')
     return await axios
-      .post(`http://localhost:3002/PhieuXuat/${dataEdit?.Ident}`, {
+      .post(`https://testkhaothi.ufm.edu.vn:3002/PhieuXuat/${dataEdit?.Ident}`, {
         NgayCt: values.NgayCt.format('YYYY-MM-DD'), 
         SoCt: values.SoCt, 
         MaCt: maCt,
@@ -299,7 +299,7 @@ const PhieuXuat = () =>{
 
   async function DeletePhieuXuat(MaPhieuXuat){
     return await axios
-      .post(`http://localhost:3002/PhieuXuat/delete/${MaPhieuXuat}`,{
+      .post(`https://testkhaothi.ufm.edu.vn:3002/PhieuXuat/delete/${MaPhieuXuat}`,{
       
           // NgayCt: values.NgayCt.format('YYYY-MM-DD')
       })

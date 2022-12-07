@@ -48,7 +48,7 @@ const NhomVatTu = () =>{
 
   async function loadNhomVatTu(){
     return await axios
-      .get('http://localhost:3002/NhomVatTu')
+      .get('https://testkhaothi.ufm.edu.vn:3002/NhomVatTu')
       .then((res) => {
         const result = {
           status: res.data.status,
@@ -67,7 +67,7 @@ const NhomVatTu = () =>{
   async function GetNhomVatTuEdit(MaNhomVatTu){
     setEditMode(true)
     return await axios
-      .get(`http://localhost:3002/NhomVatTu/${MaNhomVatTu}`)
+      .get(`https://testkhaothi.ufm.edu.vn:3002/NhomVatTu/${MaNhomVatTu}`)
       .then((res) => {
         const result = {
           status: res.status,
@@ -87,7 +87,7 @@ const NhomVatTu = () =>{
   async function CreateNhomVatTu(values){
     
     return await axios
-      .post('http://localhost:3002/NhomVatTu/create', {MaNhomVatTu: values.MaNhomVatTu,TenNhomVatTu: values.TenNhomVatTu, DiaChiNhomVatTu: values.DiaChiNhomVatTu})
+      .post('https://testkhaothi.ufm.edu.vn:3002/NhomVatTu/create', {MaNhomVatTu: values.MaNhomVatTu,TenNhomVatTu: values.TenNhomVatTu, DiaChiNhomVatTu: values.DiaChiNhomVatTu})
       .then((res) => {
         const result = {
           status: res.status,
@@ -108,7 +108,7 @@ const NhomVatTu = () =>{
   async function UpdateNhomVatTu(values){
     console.log('run update')
     return await axios
-      .post(`http://localhost:3002/NhomVatTu/${dataEdit?.MaNhomVatTu}`, {MaNhomVatTu: values.MaNhomVatTu, TenNhomVatTu: values.TenNhomVatTu, DiaChiNhomVatTu: values.DiaChiNhomVatTu})
+      .post(`https://testkhaothi.ufm.edu.vn:3002/NhomVatTu/${dataEdit?.MaNhomVatTu}`, {MaNhomVatTu: values.MaNhomVatTu, TenNhomVatTu: values.TenNhomVatTu, DiaChiNhomVatTu: values.DiaChiNhomVatTu})
       .then((res) => {
         const result = {
           status: res.status,
@@ -128,7 +128,7 @@ const NhomVatTu = () =>{
 
   async function DeleteNhomVatTu(MaNhomVatTu){
     return await axios
-      .post(`http://localhost:3002/NhomVatTu/delete/${MaNhomVatTu}`)
+      .post(`https://testkhaothi.ufm.edu.vn:3002/NhomVatTu/delete/${MaNhomVatTu}`)
       .then((res) => {
         const result = {
           status: res.status,
