@@ -117,7 +117,6 @@ const TonDauKy = () =>{
     return await axios
       .post('https://testkhaothi.ufm.edu.vn:3002/TonDauKy/create', {
         NgayCt: values.NgayCt, 
-        MaKichThuoc: values.MaKichThuoc, 
         MaKho: values.MaKho, 
         MaVatTu: values.MaVatTu, 
         SoLuongTon: values.SoLuongTon, 
@@ -144,7 +143,6 @@ const TonDauKy = () =>{
     return await axios
       .post(`https://testkhaothi.ufm.edu.vn:3002/TonDauKy/${dataEdit?.Id}`, {
         NgayCt: values.NgayCt.format('YYYY-MM-DD'), 
-        MaKichThuoc: values.MaKichThuoc, 
         MaKho: values.MaKho, 
         MaVatTu: values.MaVatTu, 
         SoLuongTon: values.SoLuongTon, 
@@ -197,11 +195,6 @@ const TonDauKy = () =>{
       key: 'TenKho',
     },
     {
-      title: 'Kích thước',
-      dataIndex: 'TenKichThuoc',
-      key: 'TenKichThuoc',
-    },
-    {
       title: 'Tên vật tư',
       dataIndex: 'TenVatTu',
       key: 'TenVatTu',
@@ -218,16 +211,6 @@ const TonDauKy = () =>{
       key: 'DonGiaTon',
       align:'right'
     },
-    // {
-    //   title: 'Tình trạng',
-    //   key: 'STATUS',
-    //   dataIndex: 'STATUS',
-    //   render: (_, { STATUS }) => (                   
-    //       <Tag color={STATUS === 'active' ? 'green' : 'volcano'} key={STATUS}>
-    //         {STATUS.toUpperCase()}
-    //       </Tag>         
-    //   )
-    // },
     {
       title: '',
       key: 'action',
@@ -320,29 +303,7 @@ const TonDauKy = () =>{
               >
                 {optionsKho}
               </Select>
-          </Form.Item>
-          <Form.Item
-            label="Kích thước: "
-            name="MaKichThuoc"
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng chọn Kích thước!'
-              },
-            ]}
-          >
-            <Select 
-              showSearch 
-              optionFilterProp="children"
-              filterOption={(input, option) => option?.children?.toLowerCase().includes(input)}  
-              filterSort={(optionA, optionB) =>
-                optionA?.children?.toLowerCase().localeCompare(optionB?.children?.toLowerCase())
-              }
-
-              >
-                {optionsKichThuoc}
-              </Select>
-          </Form.Item>
+          </Form.Item>          
           <Form.Item
             label="Tên vật tư: "
             name="MaVatTu"
