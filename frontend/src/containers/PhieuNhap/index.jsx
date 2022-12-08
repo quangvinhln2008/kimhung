@@ -24,6 +24,7 @@ const PhieuNhap = () =>{
   const [editMode, setEditMode] = useState(false)
   const [viewMode, setViewMode] = useState(false)
   const [dataEdit, setDataEdit] = useState()
+  const [Stt, setStt] = useState(0)
   const [dataEditCt, setDataEditCt] = useState()
   const [dataVatTu, setDataVatTu] = useState()
   const [dataKho, setDataKho] = useState()
@@ -133,10 +134,11 @@ const PhieuNhap = () =>{
 
     setTongSoLuongNhap(0)
     setTongThanhTienNhap(0)
+    const currentNumber = Stt[0]?.CurrentNumberRecord + 1
 
     form.setFieldsValue({
         NgayCt: moment(),
-        SoCt: "",
+        SoCt: moment().year().toString() + moment().month().toString()+ '-'+ currentNumber.toString(),
         MaDoiTuong: "",
         MaNhanVien: "",
         MaKho : "",
@@ -168,6 +170,7 @@ const PhieuNhap = () =>{
         setDataKho(result.data[1])
         setDataVatTu(result.data[2])
         setDataDoiTuong(result.data[3])
+        setStt(result.data[4])
         setLoading(false)
         return(result)
       })
