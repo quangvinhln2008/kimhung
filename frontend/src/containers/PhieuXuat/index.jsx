@@ -181,6 +181,16 @@ const PhieuXuat = () =>{
     setTongThanhTienXuat(_?.sumBy(users, 'ThanhTienXuat'))
   }
 
+  const onMaVatTuChange = (name) => {
+    
+    const fields = form.getFieldsValue()
+    const { users } = fields
+    const selectedVatTu = dataGiaVatTu.filter(item => item.MaVatTu === fields.users[name].MaVatTu)
+    
+    Object.assign(users[name], { DonGiaXuat: selectedVatTu[0]?.GiaBan})
+    form.setFieldsValue({users})
+  }
+
   async function loadPhieuXuat(){
     const header = getHeader()
     return await axios
@@ -595,7 +605,7 @@ const PhieuXuat = () =>{
                       filterSort={(optionA, optionB) =>
                         optionA?.children?.toLowerCase().localeCompare(optionB?.children?.toLowerCase())
                       }
-
+                      onChange={() =>onMaVatTuChange(name)}
                       >
                         {optionsVatTu}
                   </Select>
