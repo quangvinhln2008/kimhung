@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import {useSearchParams, setSearchParams} from "react-router-dom";
 import axios from 'axios'
 import moment from 'moment'
@@ -9,6 +9,8 @@ import { Divider,Modal, Typography, Button, Select, Space, DatePicker, InputNumb
 import { SearchOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import {VStack, HStack, cookieStorageManager} from  '@chakra-ui/react';
 import { useCookies } from 'react-cookie';
+import ReactToPrint from "react-to-print";
+import { useReactToPrint } from 'react-to-print';
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -23,9 +25,11 @@ const PhieuXuat = () =>{
   const [dataChiTiet, setDataChiTiet] = useState()
   const [editMode, setEditMode] = useState(false)
   const [viewMode, setViewMode] = useState(false)
+  const [printMode, setPrintMode] =useState(false)
   const [dataEdit, setDataEdit] = useState()
   const [Stt, setStt] = useState(0)
   const [dataEditCt, setDataEditCt] = useState()
+  const [dataPrint, setDataPrint] = useState()
   const [dataVatTu, setDataVatTu] = useState()
   const [dataKho, setDataKho] = useState()
   const [dataDoiTuong, setDataDoiTuong] = useState()
@@ -48,6 +52,8 @@ const PhieuXuat = () =>{
   const type = searchParams.get('type')
   const fieldsForm = form.getFieldsValue()
   
+  let componentRef = useRef()
+
   const getHeader = function () {
     const rToken = cookies.rToken
     return {
@@ -238,7 +244,28 @@ const PhieuXuat = () =>{
         toast.error(error?.response)
       })
   };
-
+  const tooglePrintMode = () =>{
+    setPrintMode(true)
+  }
+  async function GetPhieuXuatPrint(MaPhieuXuat){
+    console.log('run print')
+    return await axios
+      .get(`https://testkhaothi.ufm.edu.vn:3002/PhieuXuat/${MaPhieuXuat}`)
+      .then((res) => {
+        const result = {
+          status: res.status,
+          data: res.data.result.recordsets,
+        }
+        
+        setDataPrint(result.data[1])
+        return(result)
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error.response)
+        toast.error(error?.response)
+      })
+  };
   async function CreatePhieuXuat(values){
     const header = getHeader()
     return await axios
@@ -271,6 +298,12 @@ const PhieuXuat = () =>{
         toast.error(error?.response)
       })
   };
+  const reactToPrintTrigger = React.useCallback((Ident)=>{
+    console.log('dataprint', dataPrint)
+    return(
+      <Button>In phiếu</Button>
+    )
+  }, [printMode])
 
   async function UpdatePhieuXuat(values){
     console.log('run update')
@@ -351,23 +384,22 @@ const PhieuXuat = () =>{
       key: 'TongThanhTien',
       align:'right'
     },
-    // {
-    //   title: 'Tình trạng',
-    //   key: 'STATUS',
-    //   dataIndex: 'STATUS',
-    //   render: (_, { STATUS }) => (                   
-    //       <Tag color={STATUS === 'active' ? 'green' : 'volcano'} key={STATUS}>
-    //         {STATUS.toUpperCase()}
-    //       </Tag>         
-    //   )
-    // },
     {
       title: '',
       key: 'action',
       render: (_, record) => (
         <>
           <Space size="middle">
-            {!record.Is_Deleted && <Button key={record.Ident} type="link" onClick= {() =>{GetPhieuXuatEdit(record.Ident, false)}}>Xem</Button>}
+            {!record.Is_Deleted && <div>
+                  <ReactToPrint 
+                    trigger={() => reactToPrintTrigger(record.Ident)}
+                    content={() => componentRef.current}
+                    />
+                    <div style={{ display: "none" }}>
+                      <ComponentToPrint id ={record.Ident} ref= {componentRef} />  
+                </div>                            
+              </div>
+              }
           </Space>
          <Space size="middle">
             {!record.Is_Deleted && <Button key={record.Ident} type="link" onClick= {() =>{GetPhieuXuatEdit(record.Ident, true)}}>Cập nhật</Button>}
@@ -388,7 +420,45 @@ const PhieuXuat = () =>{
       ),
     },
   ];
-  
+  const columnsPrint = [
+    {
+      title: 'STT',
+      dataIndex: 'STT',
+      key: 'STT',
+    },
+    {
+      title: 'Tên vật tư',
+      dataIndex: 'TenVatTu',
+      key: 'TenVatTu',
+    },
+    {
+      title: 'Số lượng xuất',
+      dataIndex: 'SoLuongXuat',
+      key: 'SoLuongXuat',
+    },
+    {
+      title: 'Đơn giá',
+      dataIndex: 'DonGiaXuat',
+      key: 'DonGiaXuat',
+      align:'right'
+    },
+    {
+      title: 'Thành tiên',
+      dataIndex: 'ThanhTienXuat',
+      key: 'ThanhTienXuat',
+      align:'right'
+    }
+  ];
+const ComponentToPrint = React.forwardRef((props, ref) => {
+  useEffect(()=>{
+    // GetPhieuXuatPrint(props.id)
+console.log('props', props)
+  },[ref])
+  return(
+  <Table columns={columnsPrint} ref={ref} dataSource={dataPrint}/>
+  );
+});
+
   return(
     <>
       <Title level={3}>Phiếu {title}</Title>
@@ -495,7 +565,6 @@ const PhieuXuat = () =>{
                       filterSort={(optionA, optionB) =>
                         optionA?.children?.toLowerCase().localeCompare(optionB?.children?.toLowerCase())
                       }
-
                       >
                         {optionsDoiTuong}
                       </Select>
@@ -512,26 +581,7 @@ const PhieuXuat = () =>{
                   lg: 32,
                 }}
               >
-                {/* <Col className="gutter-row" span={8}>
-                  <Form.Item
-                    label="Nhân viên: "
-                    name="MaNhanVien"                    
-                  >
-                  <Select 
-                      disabled = {!viewMode} 
-                      showSearch 
-                      optionFilterProp="children"
-                      filterOption={(input, option) => option?.children?.toLowerCase().includes(input)}  
-                      filterSort={(optionA, optionB) =>
-                        optionA?.children?.toLowerCase().localeCompare(optionB?.children?.toLowerCase())
-                      }
-
-                      >
-                        {optionsNhanVien}
-                      </Select>
-                  </Form.Item>
-                </Col> */}
-                <Col className="gutter-row" span={8}>
+              <Col className="gutter-row" span={8}>
                   <Form.Item
                       label="Kho: "
                       name="MaKho"
@@ -715,19 +765,3 @@ const PhieuXuat = () =>{
 }
 
 export default PhieuXuat;
-// import React from "react";
-// import {
-//   useSearchParams,
-// } from "react-router-dom";
-
-// const PhieuXuat = () =>{
-//   const [searchParams, setSearchParams] = useSearchParams();
-//   console.log('type',searchParams.get('type'))
-
-//   return(
-//     <>
-//       <p>Phieu {searchParams.get('type')}</p>
-//     </>
-//   )
-// }
-// export default PhieuXuat;
