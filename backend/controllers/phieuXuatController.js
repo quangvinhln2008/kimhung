@@ -176,8 +176,8 @@ async function deletePhieuXuat(req, res) {
 function getMaCt (type)
   {
     switch (type.toLowerCase()) {
-      case 'xuatcoso':
-        return "XCS";
+      case 'xuatban':
+        return "XB";
       case 'xuatphathanh':
         return "XPH";
       case 'xuatkygui':

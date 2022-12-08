@@ -25,17 +25,16 @@ const PhieuXuat = () =>{
   const [viewMode, setViewMode] = useState(false)
   const [dataEdit, setDataEdit] = useState()
   const [dataEditCt, setDataEditCt] = useState()
-  const [dataSach, setDataSach] = useState()
-  const [dataCoSo, setDataCoSo] = useState()
+  const [dataVatTu, setDataVatTu] = useState()
+  const [dataKho, setDataKho] = useState()
   const [dataDoiTuong, setDataDoiTuong] = useState()
   const [dataNhanVien, setDataNhanVien] = useState()
-  const [dataLoaiHinhSach, setDataLoaiHinhSach] = useState()
+  const [dataGiaVatTu, setDataGiaVatTu] = useState()
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(false)
   const [openModalContact, setOpenModalContact] = useState(false)
-  const [optionsSach, setOptionSach] = useState()
-  const [optionsLoaiHinhSach, setOptionLoaiHinhSach] = useState()
-  const [optionsCoSo, setOptionCoSo] = useState()
+  const [optionsVatTu, setOptionVatTu] = useState()
+  const [optionsKho, setOptionKho] = useState()
   const [optionsDoiTuong, setOptionDoiTuong] = useState()
   const [optionsNhanVien, setOptionNhanVien] = useState()
   const [tongSoLuongXuat,setTongSoLuongXuat] = useState(0)
@@ -124,9 +123,8 @@ const PhieuXuat = () =>{
 
   useEffect(()=>{
     
-    setOptionSach(dataSach?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
-    setOptionCoSo(dataCoSo?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
-    setOptionLoaiHinhSach(dataLoaiHinhSach?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
+    setOptionVatTu(dataVatTu?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
+    setOptionKho(dataKho?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
     setOptionDoiTuong(dataDoiTuong?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
     setOptionNhanVien(dataNhanVien?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
     
@@ -136,11 +134,9 @@ const PhieuXuat = () =>{
     form.setFieldsValue({
         NgayCt: moment(dataEdit?.NgayCt, 'YYYY/MM/DD'),
         SoCt: dataEdit?.SoCt,
-        MaLoaiHinhSach: dataEdit?.MaLoaiHinhSach,
-        MaCoSo : dataEdit?.MaCoSo,
+        MaKho : dataEdit?.MaKho,
         MaDoiTuong: dataEdit?.MaDoiTuong,
         MaNhanVien: cookies.id,
-        HTThanhToan: dataEdit?.HTThanhToan,
         DienGiai: dataEdit?.DienGiai,
         users: dataEditCt
     })
@@ -152,9 +148,8 @@ const PhieuXuat = () =>{
     setViewMode(true)
     setOpenModalContact(!openModalContact)
 
-    setOptionSach(dataSach?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
-    setOptionCoSo(dataCoSo?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
-    setOptionLoaiHinhSach(dataLoaiHinhSach?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
+    setOptionVatTu(dataVatTu?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
+    setOptionKho(dataKho?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
     setOptionDoiTuong(dataDoiTuong?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
     setOptionNhanVien(dataNhanVien?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
 
@@ -166,10 +161,8 @@ const PhieuXuat = () =>{
         SoCt: "",
         MaDoiTuong: "",
         MaNhanVien: "",
-        MaLoaiHinhSach: "",
-        MaCoSo : "",
+        MaKho : "",
         DienGiai : "",
-        HTThanhToan:"",
         users:[]
     })
   }
@@ -195,9 +188,9 @@ const PhieuXuat = () =>{
           data: res.data.result.recordsets,
         }
         setData(result.data[0])
-        setDataCoSo(result.data[1])
-        setDataLoaiHinhSach(result.data[2])
-        setDataSach(result.data[3])
+        setDataKho(result.data[1])
+        setDataVatTu(result.data[2])
+        setDataGiaVatTu(result.data[3])
         setDataNhanVien(result.data[4])
         setDataDoiTuong(result.data[5])
         setLoading(false)
@@ -241,8 +234,7 @@ const PhieuXuat = () =>{
         MaCt: maCt,
         LoaiCt: '2',
         SoCt: values.SoCt, 
-        MaLoaiHinhSach: values.MaLoaiHinhSach, 
-        MaCoSo: cookies.MaCoSo, 
+        MaKho: values.MaKho, 
         MaSach: values.MaSach, 
         MaDoiTuong: values.MaDoiTuong,
         MaNhanVien: cookies.id,
@@ -273,12 +265,10 @@ const PhieuXuat = () =>{
         NgayCt: values.NgayCt.format('YYYY-MM-DD'), 
         SoCt: values.SoCt, 
         MaCt: maCt,
-        MaLoaiHinhSach: values.MaLoaiHinhSach, 
-        MaCoSo: cookies.MaCoSo, 
+        MaKho: values.MaKho, 
         MaDoiTuong: values.MaDoiTuong,
         MaNhanVien: cookies.id,
         DienGiai: values.DienGiai,
-        HTThanhToan: values.HTThanhToan,
         ctPhieuXuat: values.users})
       .then((res) => {
         const result = {
@@ -329,16 +319,6 @@ const PhieuXuat = () =>{
       title: 'Diễn giải',
       dataIndex: 'DienGiai',
       key: 'DienGiai',
-    },
-    {
-      title: 'Người lập',
-      dataIndex: 'TenNhanVien',
-      key: 'TenNhanVien',
-    },
-    {
-      title: 'Cơ sở',
-      dataIndex: 'TenCoSo',
-      key: 'TenCoSo',
     },
     {
       title: 'Đối tượng',
@@ -518,31 +498,6 @@ const PhieuXuat = () =>{
                   lg: 32,
                 }}
               >
-                <Col className="gutter-row" span={8}>
-                  <Form.Item
-                  label="Loại hình sách: "
-                  name="MaLoaiHinhSach"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng chọn loại hình sách!'
-                    },
-                  ]}
-                  >
-                    <Select 
-                      disabled = {!viewMode} 
-                      showSearch 
-                      optionFilterProp="children"
-                      filterOption={(input, option) => option?.children?.toLowerCase().includes(input)}  
-                      filterSort={(optionA, optionB) =>
-                        optionA?.children?.toLowerCase().localeCompare(optionB?.children?.toLowerCase())
-                      }
-
-                      >
-                        {optionsLoaiHinhSach}
-                      </Select>
-                  </Form.Item>
-                </Col>
                 {/* <Col className="gutter-row" span={8}>
                   <Form.Item
                     label="Nhân viên: "
@@ -562,10 +517,10 @@ const PhieuXuat = () =>{
                       </Select>
                   </Form.Item>
                 </Col> */}
-                {/* <Col className="gutter-row" span={8}>
+                <Col className="gutter-row" span={8}>
                   <Form.Item
-                      label="Cơ sở: "
-                      name="MaCoSo"
+                      label="Kho: "
+                      name="MaKho"
                     >
                     <Select 
                       disabled = {!viewMode} 
@@ -577,10 +532,10 @@ const PhieuXuat = () =>{
                       }
 
                       >
-                        {optionsCoSo}
+                        {optionsKho}
                       </Select>
                   </Form.Item>
-                </Col> */}
+                </Col>
                 <Col className="gutter-row" span={8}>
                   <Form.Item
                   label="Diễn giải: "
@@ -616,11 +571,11 @@ const PhieuXuat = () =>{
                       >
                     <Form.Item
                       {...restField}
-                      name={[name, 'MaSach']}
+                      name={[name, 'MaVatTu']}
                       rules={[
                         {
                           required: true,
-                          message: 'Vui lòng chọn tên sách!'
+                          message: 'Vui lòng chọn vật tư!'
                         },
                       ]}
                     >
@@ -629,7 +584,7 @@ const PhieuXuat = () =>{
                        style={{
                         width: 250,
                       }}
-                      placeholder="Chọn sách"
+                      placeholder="Chọn vật tư"
                       showSearch 
                       optionFilterProp="children"
                       filterOption={(input, option) => option?.children?.toLowerCase().includes(input)}  
@@ -638,7 +593,7 @@ const PhieuXuat = () =>{
                       }
 
                       >
-                        {optionsSach}
+                        {optionsVatTu}
                   </Select>
                   </Form.Item>
                   <Form.Item

@@ -108,7 +108,7 @@ const NhomVatTu = () =>{
   async function UpdateNhomVatTu(values){
     console.log('run update')
     return await axios
-      .post(`https://testkhaothi.ufm.edu.vn:3002/NhomVatTu/${dataEdit?.MaNhomVatTu}`, {MaNhomVatTu: values.MaNhomVatTu, TenNhomVatTu: values.TenNhomVatTu, DiaChiNhomVatTu: values.DiaChiNhomVatTu})
+      .post(`https://testkhaothi.ufm.edu.vn:3002/NhomVatTu/${dataEdit?.id}`, {MaNhomVatTu: values.MaNhomVatTu, TenNhomVatTu: values.TenNhomVatTu, DiaChiNhomVatTu: values.DiaChiNhomVatTu})
       .then((res) => {
         const result = {
           status: res.status,

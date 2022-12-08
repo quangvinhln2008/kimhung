@@ -105,7 +105,7 @@ const Kho = () =>{
   async function UpdateKho(values){
     console.log('run update')
     return await axios
-      .post(`https://testkhaothi.ufm.edu.vn:3002/Kho/${dataEdit?.MaKho}`, {MaKho: values.MaKho, TenKho: values.TenKho, DiaChiKho: values.DiaChiKho})
+      .post(`https://testkhaothi.ufm.edu.vn:3002/Kho/${dataEdit?.id}`, {MaKho: values.MaKho, TenKho: values.TenKho, DiaChiKho: values.DiaChiKho})
       .then((res) => {
         const result = {
           status: res.status,
