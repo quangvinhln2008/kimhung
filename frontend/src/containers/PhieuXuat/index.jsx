@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from "react";
-import {useSearchParams, setSearchParams} from "react-router-dom";
+import {useSearchParams, setSearchParams, useNavigate} from "react-router-dom";
 import axios from 'axios'
 import moment from 'moment'
 import { v4 as uuidv4 } from 'uuid';
@@ -19,7 +19,8 @@ const PhieuXuat = () =>{
   const _ = require("lodash");  
   
   const [cookies, setCookie] = useCookies(['user']);
-  
+  const navigate = useNavigate();
+
   const [form] = Form.useForm();
   const [data, setData] = useState()
   const [dataChiTiet, setDataChiTiet] = useState()
@@ -244,9 +245,7 @@ const PhieuXuat = () =>{
         toast.error(error?.response)
       })
   };
-  const tooglePrintMode = () =>{
-    setPrintMode(true)
-  }
+
   async function GetPhieuXuatPrint(MaPhieuXuat){
     console.log('run print')
     return await axios
@@ -298,12 +297,6 @@ const PhieuXuat = () =>{
         toast.error(error?.response)
       })
   };
-  const reactToPrintTrigger = React.useCallback((Ident)=>{
-    console.log('dataprint', dataPrint)
-    return(
-      <Button>In phiếu</Button>
-    )
-  }, [printMode])
 
   async function UpdatePhieuXuat(values){
     console.log('run update')
@@ -390,16 +383,7 @@ const PhieuXuat = () =>{
       render: (_, record) => (
         <>
           <Space size="middle">
-            {!record.Is_Deleted && <div>
-                  <ReactToPrint 
-                    trigger={() => reactToPrintTrigger(record.Ident)}
-                    content={() => componentRef.current}
-                    />
-                    <div style={{ display: "none" }}>
-                      <ComponentToPrint id ={record.Ident} ref= {componentRef} />  
-                </div>                            
-              </div>
-              }
+            {!record.Is_Deleted && <Button key={record.Ident} type="link" onClick= {() => navigate(`/phieuxuat/print/${record.Ident}`)}>Xem</Button>}
           </Space>
          <Space size="middle">
             {!record.Is_Deleted && <Button key={record.Ident} type="link" onClick= {() =>{GetPhieuXuatEdit(record.Ident, true)}}>Cập nhật</Button>}
