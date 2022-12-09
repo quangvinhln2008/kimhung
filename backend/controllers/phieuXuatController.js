@@ -265,11 +265,32 @@ async function getPhieuXuatById(req, res) {
     res.status(500).send(error.message)
   }
 }
+async function printPhieuXuatById(req, res) {
+  try{
+    const {id} = req.params
+      const pool = await poolPromise
+      await pool.request()
+      .input('Id', id)
+      .execute('sp_GetPhieuXuatPrintById', (err, result)=>{
+        if (err) {
+            res.status(500).send({ message: err });
+            return;
+          }
+
+          return res.status(200).send({
+            result
+          });
+    })
+  }catch(error){
+    res.status(500).send(error.message)
+  }
+}
 
 module.exports = {
   create,
   update,
   deletePhieuXuat,
   getPhieuXuatById,
-  getPhieuXuat
+  getPhieuXuat,
+  printPhieuXuatById
 }

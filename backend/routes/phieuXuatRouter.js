@@ -9,5 +9,6 @@ phieuXuatRouter.get("/:id", phieuXuatController.getPhieuXuatById);
 phieuXuatRouter.post("/create", phieuXuatController.create);
 phieuXuatRouter.post("/:id", phieuXuatController.update);
 phieuXuatRouter.post("/delete/:id", phieuXuatController.deletePhieuXuat);
+phieuXuatRouter.post("/print/:id", phieuXuatController.printPhieuXuatById);
 
 module.exports = phieuXuatRouter;
