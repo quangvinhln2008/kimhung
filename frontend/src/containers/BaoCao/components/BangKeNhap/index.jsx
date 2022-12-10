@@ -45,8 +45,25 @@ const BangKeNhap = () =>{
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  const showModal = () => {
+
+  async function showModal(Ident){
     setIsModalOpen(true);
+    return await axios
+      .get(`https://testkhaothi.ufm.edu.vn:3002/PhieuNhap/${Ident}`)
+      .then((res) => {
+        const result = {
+          status: res.status,
+          data: res.data.result.recordsets,
+        }
+        
+        setDataEditCt(result.data[1])
+        return(result)
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error.response)
+        toast.error(error?.response)
+      })
   };
   
   useEffect(()=>{
@@ -143,11 +160,37 @@ const BangKeNhap = () =>{
       render: (_, record) => (
         <>
           <Space size="middle">
-            {!record.Is_Deleted && <Button key={record.Ident} type="link" onClick= {() =>{showModal()}}>Xem</Button>}
+            {!record.Is_Deleted && <Button key={record.Ident} type="link" onClick= {() =>{showModal(record.Ident)}}>Xem</Button>}
           </Space>         
         </>
       ),
     },
+  ];
+
+  const columnsChiTiet = [
+    {
+      title: 'Tên vật tư',
+      dataIndex: 'TenVatTu',
+      key: 'TenVatTu',
+    },
+    {
+      title: 'Số lượng',
+      dataIndex: 'SoLuongNhap',
+      key: 'SoLuongNhap',
+      align:'right'
+    },    
+    {
+      title: 'Đơn giá',
+      dataIndex: 'DonGiaNhap',
+      key: 'DonGiaNhap',
+      align:'right'
+    },
+    {
+      title: 'Thành tiền',
+      dataIndex: 'ThanhTienNhap',
+      key: 'ThanhTien',
+      align:'right'
+    }
   ];
   
   return(
@@ -252,10 +295,8 @@ const BangKeNhap = () =>{
             :
               <Table columns={columns} dataSource={data} />}
       </VStack>
-      <Modal title="Basic Modal" open={isModalOpen} onOk={handleCancel} onCancel={handleCancel}>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+      <Modal title="Chi tiết phiếu" open={isModalOpen} onOk={handleCancel} onCancel={handleCancel}>
+        <Table pagination={false} columns={columnsChiTiet}  dataSource={dataEditCt}/>
       </Modal>
     </>
   )
