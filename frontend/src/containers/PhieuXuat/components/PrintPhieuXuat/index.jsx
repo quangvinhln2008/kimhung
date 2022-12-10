@@ -70,6 +70,11 @@ const PrintPhieuXuat = (props) =>{
       key: 'TenVatTu',
     },
     {
+      title: 'Đơn vị tính',
+      dataIndex: 'Dvt',
+      key: 'Dvt',
+    },
+    {
       title: 'Số lượng xuất',
       dataIndex: 'SoLuongXuat',
       key: 'SoLuongXuat',
@@ -93,33 +98,80 @@ const PrintPhieuXuat = (props) =>{
   },[])
 
 const ComponentToPrint = React.forwardRef((props, ref) => (
+    
     <VStack marginTop={"10px"} ref={ref}>
-      <VStack alignSelf={"flex-start"} margin={"10px"}>
-        <Heading as ='h6' size='xs' textAlign={'left'}>Cửa hàng Kim Hưng</Heading >
-        <Heading as ='h6' size='xs'>Địa chỉ: Số 514 Phạm Văn Chí, Phường 8, Quận 6, TP.HCM</Heading>
-        <Heading as ='h6' size='xs'>Điện thoại: 0903310291</Heading>
-      </VStack>
-      <Title level={4}>PHIẾU XUẤT KHO</Title>
-      <Heading as ='h6' size='xs'>Ngày: {dataPrint?.NgayCt}</Heading>
-      <Heading as ='h6' size='xs'>Số chứng từ: {dataPrint?.SoCt}</Heading>
-      <SimpleGrid columns={2} spacing={1}>
+      <div></div>
+      <table>
+        <tr>
+          <th>CỬA HÀNG KIM HƯNG</th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th>PHIẾU XUẤT</th>
+        </tr>
+        <tr>
+          <td>514 Phạm Văn Chí P8 Q6</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>Ngày: {dataPrint?.NgayCt}</td>
+        </tr>
+        <tr>
+          <td>Đt: 0903310291</td>
+          <td style={{color: '#fff'}} >Francisco Chang</td>
+          <td style={{color: '#fff'}}>Maria Anders</td>
+          <td style={{color: '#fff'}}>Maria Anders</td>
+          <td style={{color: '#fff'}}>Maria Anders</td>
+          <td >Số chứng từ: {dataPrint?.SoCt}</td>
+        </tr>
+      </table>
+      
+      <SimpleGrid marginBottom={'10px'} columns={2} spacing={1}>
         <Text fontSize='sm'>Khách hàng:</Text>
         <Text fontSize='sm'>{dataPrint?.TenDoiTuong}</Text>
         <Text fontSize='sm'>Diễn Giải:</Text>
         <Text fontSize='sm'>{dataPrint?.DienGiai}</Text>
       </SimpleGrid>
       
-    <Table columns={columnsPrint} pagination={false} dataSource={dataPrintChiTiet}/>
-    <SimpleGrid columns={1} spacing={1}>
-        <Text fontSize='sm'>Tổng số lượng: <b>{dataPrint?.TongSoLuong}</b></Text>
-        <Text fontSize='sm'>Tổng thành tiền: <b>{dataPrint?.TongThanhTien}</b></Text>
-        <Text fontSize='sm'>Bằng chữ: <b>{dataPrint?.DocTien}</b></Text>
-      </SimpleGrid>
-      <SimpleGrid columns={4}>
+    <Table 
+      columns={columnsPrint} 
+      pagination={false} 
+      dataSource={dataPrintChiTiet} 
+      bordered 
+      summary={() => {    
+        return (
+          <>
+            <Table.Summary.Row>
+              <Table.Summary.Cell index={0}></Table.Summary.Cell>
+              <Table.Summary.Cell index={1}>
+                <Text type="danger"></Text>
+              </Table.Summary.Cell>
+              <Table.Summary.Cell index={2}>
+                <Text fontWeight={'bold'} textAlign={'center'}>Tổng cộng</Text>
+              </Table.Summary.Cell>
+              <Table.Summary.Cell index={3}>
+                <Text fontWeight={'bold'} textAlign={'right'}>{dataPrint?.TongSoLuong}</Text>
+              </Table.Summary.Cell>
+              <Table.Summary.Cell index={4}>
+                <Text></Text>
+              </Table.Summary.Cell>
+              <Table.Summary.Cell index={5}>
+                <Text fontWeight={'bold'} textAlign={'right'}>{dataPrint?.TongThanhTien}</Text>
+              </Table.Summary.Cell>
+            </Table.Summary.Row>
+          </>
+        );
+      }}
+      />
+      <SimpleGrid columns={6}>
+        <Text fontSize='sm'>Người mua</Text>
         <Text fontSize='sm'></Text>
         <Text fontSize='sm'></Text>
         <Text fontSize='sm'></Text>
-        <Text fontSize='sm' fontWeight={"bold"}>NGƯỜI LẬP</Text>
+        <Text fontSize='sm'></Text>
+        <Text>Người bán</Text>
       </SimpleGrid>
     </VStack>
 ));
