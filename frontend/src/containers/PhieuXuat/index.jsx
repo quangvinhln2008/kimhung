@@ -192,7 +192,7 @@ const PhieuXuat = () =>{
     
     const fields = form.getFieldsValue()
     const { users } = fields
-    const selectedVatTu = dataGiaVatTu.filter(item => item.MaVatTu === fields.users[name].MaVatTu)
+    const selectedVatTu = dataGiaVatTu.filter(item => item.id === fields.users[name].MaVatTu)
     
     Object.assign(users[name], { DonGiaXuat: selectedVatTu[0]?.GiaBan})
     form.setFieldsValue({users})
