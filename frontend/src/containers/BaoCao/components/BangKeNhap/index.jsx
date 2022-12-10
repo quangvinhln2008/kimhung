@@ -34,14 +34,20 @@ const BangKeNhap = () =>{
   const navigate = useNavigate();
 
   const fieldsForm = form.getFieldsValue()
-  
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const getHeader = function () {
     const rToken = cookies.rToken
     return {
       Authorization: 'Bearer ' + rToken,
     }
   }
-  
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
   
   useEffect(()=>{
     loadList()
@@ -120,31 +126,15 @@ const BangKeNhap = () =>{
       key: 'TenDoiTuong',
     },
     {
-      title: 'Mã vật tư',
-      dataIndex: 'MaVatTu_Ma',
-      key: 'MaVatTu_Ma'
-    },    
-    {
-      title: 'Tên Vật Tư',
-      dataIndex: 'TenVatTu',
-      key: 'TenVatTu'
-    },
-    {
-      title: 'Số lượng nhập',
-      dataIndex: 'SoLuong',
-      key: 'SoLuong',
+      title: 'Tổng số lượng',
+      dataIndex: 'TongSoLuong',
+      key: 'TongSoLuong',
       align:'right'
     },
     {
-      title: 'Đơn giá nhập',
-      dataIndex: 'DonGia',
-      key: 'DonGia',
-      align:'right'
-    },
-    {
-      title: 'Thành tiền nhập',
-      dataIndex: 'ThanhTien',
-      key: 'ThanhTien',
+      title: 'Tổng thành tiền',
+      dataIndex: 'TongThanhTien',
+      key: 'TongThanhTien',
       align:'right'
     },
     {
@@ -153,7 +143,7 @@ const BangKeNhap = () =>{
       render: (_, record) => (
         <>
           <Space size="middle">
-            {!record.Is_Deleted && <Button key={record.Ident} type="link" onClick= {() =>{navigate(`/phieuxuat/${record.Ident}`)}}>Xem</Button>}
+            {!record.Is_Deleted && <Button key={record.Ident} type="link" onClick= {() =>{showModal()}}>Xem</Button>}
           </Space>         
         </>
       ),
@@ -262,7 +252,11 @@ const BangKeNhap = () =>{
             :
               <Table columns={columns} dataSource={data} />}
       </VStack>
-
+      <Modal title="Basic Modal" open={isModalOpen} onOk={handleCancel} onCancel={handleCancel}>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Modal>
     </>
   )
 }

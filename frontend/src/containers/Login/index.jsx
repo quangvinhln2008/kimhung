@@ -105,7 +105,7 @@ const Login = () =>{
             target="_blank"
             rel="noopener noreferrer"
           >
-            Coppyright by:{' '} © 2022 Trung tâm học liệu - Trường Đại học Tài chính-Marketing
+            Copyright {' '} © 2022 Công ty TNHH Kim Hưng
           </a>
       </div>
       </div>
