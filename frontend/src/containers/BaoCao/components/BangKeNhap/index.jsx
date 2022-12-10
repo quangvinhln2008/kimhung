@@ -90,8 +90,6 @@ const BangKeNhap = () =>{
           data: res.data.result.recordsets,
         }
         setData(result.data[0])
-        setDataVatTu(result.data[2])
-        setDataDoiTuong(result.data[3])
         return(result)
       })
       .catch(function (error) {

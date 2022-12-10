@@ -89,9 +89,7 @@ const BangKeXuat = () =>{
           status: res.data.status,
           data: res.data.result.recordsets,
         }
-        setData(result.data[0])
-        setDataVatTu(result.data[2])
-        setDataDoiTuong(result.data[3])
+        setData(result.data[0])        
         return(result)
       })
       .catch(function (error) {
