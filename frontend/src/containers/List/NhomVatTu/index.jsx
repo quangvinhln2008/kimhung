@@ -10,17 +10,29 @@ const NhomVatTu = () =>{
 
   const [form] = Form.useForm();
   const [data, setData] = useState()
+  const [dataFilter, setDataFilter] = useState()
   const [editMode, setEditMode] = useState(false)
   const [dataEdit, setDataEdit] = useState()
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(false)
   const [openModalContact, setOpenModalContact] = useState(false)
+  const [filteredInfo, setFilteredInfo] = useState({});
 
   function toogleModalFormContact(){
     setOpenModalContact(!openModalContact)
   }
 
- 
+  const handleChange = (pagination, filters, sorter) => {
+    console.log('Various parameters', pagination, filters, sorter);
+    setFilteredInfo(filters);
+  };
+  const clearFilters = () => {
+    setFilteredInfo({});
+  };
+  const clearAll = () => {
+    setFilteredInfo({});
+  };
+
   useEffect(()=>{
     loadNhomVatTu()
   },[refresh])
@@ -52,9 +64,10 @@ const NhomVatTu = () =>{
       .then((res) => {
         const result = {
           status: res.data.status,
-          data: res.data.result.recordset,
+          data: res.data.result.recordsets,
         }
-        setData(res.data.result.recordset)
+        setData(result.data[0])
+        setDataFilter(result.data[1])
         setLoading(false)
         return(result)
       })
@@ -150,6 +163,10 @@ const NhomVatTu = () =>{
       title: 'Mã nhóm vật tư',
       dataIndex: 'MaNhomVatTu',
       key: 'MaNhomVatTu',
+      filters: dataFilter,
+      filteredValue: filteredInfo.MaNhomVatTu || null,
+      onFilter: (value, record) => record.MaNhomVatTu.includes(value),    
+      ellipsis: true,
     },
     {
       title: 'Tên nhóm vật tư',
@@ -214,7 +231,7 @@ const NhomVatTu = () =>{
               </Spin>
             </> 
             :
-              <Table columns={columns} dataSource={data} />}
+              <Table onChange={handleChange} columns={columns} dataSource={data} />}
       </VStack>
 
       {/* Modal thêm mới */}
