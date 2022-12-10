@@ -79,9 +79,9 @@ const Navbar = (props) =>{
       // getItem(<Link to={'/phieuxuat?type=xuatkhac'}>Xuất khác</Link>, 'xuatkhac'),
     ]),
     getItem('Báo cáo-Thống kê', 'baocao', <PieChartOutlined />, [
-      getItem(<Link to={'/bangkenhap'}>Bảng kê nhập</Link>, 'bangkenhap'),
-      getItem(<Link to={'/bangkexuat'}>Bảng kê xuất</Link>, 'bangkexuat'),
-      getItem(<Link to={'/baocao-nhapxuatton'}>Báo cáo Nhập-Xuất-Tồn</Link>, 'baocao-nhapxuatton'),
+      getItem(<Link to={'/baocao/bangkenhap'}>Bảng kê nhập</Link>, 'bangkenhap'),
+      getItem(<Link to={'/baocao/bangkexuat'}>Bảng kê xuất</Link>, 'bangkexuat'),
+      getItem(<Link to={'/baocao/nhapxuatton'}>Báo cáo Nhập-Xuất-Tồn</Link>, 'baocao-nhapxuatton'),
     ]),
     getItem(<Link to ={'/login'}>Đăng xuất</Link>, 'dangxuat', <LogoutOutlined />),
 

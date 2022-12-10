@@ -33,6 +33,8 @@ import NhanVien from './containers/List/NhanVien';
 import PhieuNhap from './containers/PhieuNhap';
 import PhieuXuat from './containers/PhieuXuat';
 import PrintPhieuXuat from './containers/PhieuXuat/components/PrintPhieuXuat';
+import BangKeNhap from "./containers/BaoCao/components/BangKeNhap";
+import BangKeXuat from "./containers/BaoCao/components/BangKeXuat";
 
 const App = (props) => {
   return (
@@ -52,6 +54,8 @@ const App = (props) => {
           <Route path='phieunhap' element ={<LayoutApp component ={<PhieuNhap />} />} />
           <Route path='phieuxuat' element ={<LayoutApp component ={<PhieuXuat />} />} />
           <Route path='/phieuxuat/print/:Ident' element ={<LayoutApp component ={<PrintPhieuXuat />} />} />
+          <Route path='/baocao/bangkenhap/' element ={<LayoutApp component ={<BangKeNhap />} />} />
+          <Route path='/baocao/bangkexuat/' element ={<LayoutApp component ={<BangKeXuat />} />} />
         </Routes>
       </Router>
       <ToastContainer autoClose={1000} theme="colored" />
