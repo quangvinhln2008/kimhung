@@ -1,7 +1,8 @@
 import React,  { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
-  Link
+  Link,
+  useNavigate
 } from "react-router-dom";
 
 import {
@@ -11,7 +12,7 @@ import {
   LogoutOutlined
 } from '@ant-design/icons';
 
-import { Layout, Breadcrumb, Menu  } from 'antd';
+import { Layout, Breadcrumb, Menu, Button  } from 'antd';
 import styles from './index.module.css'
 
 import { useCookies } from 'react-cookie';
@@ -20,16 +21,13 @@ const { Header } = Layout;
 
 const HeaderApp = (props) => {
   
-  const [cookies, setCookie] = useCookies(['user']);
+  const [cookies, removeCookie] = useCookies(['user']);
 
   const {collapsed, onClickHandle} = props
-  const [userName, setUserName] = useState('')
-  const pathname = window.location.pathname;
-
-  useEffect(()=>{
-    setUserName(window.localStorage.getItem('fullNameTracuu'))
-  }, [])
   
+  const navigate = useNavigate();
+
+  const pathname = window.location.pathname;
 
   function getItem(label, key, icon, children) {
     return {
@@ -39,23 +37,14 @@ const HeaderApp = (props) => {
       label,
     };
   }
+
   function logout(){
-    const isRememberMe = window.localStorage.getItem('rememberTracuu')
-    if (isRememberMe === 'true') {
-      window.localStorage.removeItem('passwordTracuu')
-      window.localStorage.removeItem('emailTracuu')
-      window.localStorage.removeItem('fullNameTracuu')
-      window.localStorage.removeItem('emailTracuu')
-      window.localStorage.removeItem('rTokenTracuu')
-    } else {
-      window.localStorage.clear()
-    }
-    // router.push('/login')
+    navigate('/login')
   }
   const items = [
     getItem(`Xin chào, ${cookies.TenNhanVien}`, 'sub1',null, [
-      getItem(<Link href={'/profile'}><a >Trang cá nhân</a></Link>, '1', <UserOutlined />),
-      getItem(<Link to to={'/login'}>Đăng xuất</Link>, '2', <LogoutOutlined />),
+      getItem(<Link href={'/profile'}>Trang cá nhân</Link>, '1', <UserOutlined />),
+      getItem(<Button type="link" onClick={logout}>Đăng xuất</Button>, '2', <LogoutOutlined />),
     ])
   ];
   
