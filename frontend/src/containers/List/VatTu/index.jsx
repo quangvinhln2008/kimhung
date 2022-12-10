@@ -13,6 +13,8 @@ const VatTu = () =>{
   
   const [form] = Form.useForm();
   const [data, setData] = useState()
+  const [dataNhomVtFilter, setDataNhomVtFilter] = useState()
+  const [dataVatTuFilter, setDataVatTuFilter] = useState()
   const [editMode, setEditMode] = useState(false)
   const [dataEdit, setDataEdit] = useState()
   const [dataDoiTuong, setDataDoiTuong] = useState()
@@ -20,11 +22,18 @@ const VatTu = () =>{
   const [refresh, setRefresh] = useState(false)
   const [openModalContact, setOpenModalContact] = useState(false)
   const [options, setOption] = useState()
+  const [filterVt, setFilterVt] = useState({});
 
   function toogleModalFormContact(){
     setOpenModalContact(!openModalContact)
   }
   
+  const onChange = (pagination, filters, sorter, extra) => {
+    // const filterNhom = dataVatTuFilter.filters(item => item.TenNhomVatTu === filters?.TenNhomVatTu[0])
+    // setFilterVt(filterNhom)
+    console.log('params', pagination, filters, sorter, extra);
+  };
+
   useEffect(()=>{
     loadVatTu()
   },[refresh])
@@ -68,6 +77,8 @@ const VatTu = () =>{
         }
         setData(result.data[0])
         setDataDoiTuong(result.data[1])
+        setDataNhomVtFilter(result.data[2])
+        setDataVatTuFilter(result.data[3])
         
         setLoading(false)
         return(result)
@@ -174,11 +185,18 @@ const VatTu = () =>{
       title: 'Nhóm vật tư',
       dataIndex: 'TenNhomVatTu',
       key: 'TenNhomVatTu',
+      filters: dataNhomVtFilter,
+      filterMode: 'tree',
+      onFilter: (value, record) => record.TenNhomVatTu.includes(value),
+      ellipsis: true,
     },
     {
       title: 'Mã vật tư',
       dataIndex: 'MaVatTu',
       key: 'MaVatTu',
+      filters: dataVatTuFilter,
+      onFilter: (value, record) => record.MaVatTu.includes(value),
+      filterSearch: true,
     },
     {
       title: 'Tên vật tư',
@@ -252,7 +270,7 @@ const VatTu = () =>{
               </Spin>
             </> 
             :
-              <Table columns={columns} dataSource={data} />}
+              <Table columns={columns} dataSource={data} onChange={onChange}/>}
       </VStack>
 
       {/* Modal thêm mới */}
