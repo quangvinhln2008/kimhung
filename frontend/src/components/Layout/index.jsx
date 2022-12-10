@@ -1,9 +1,11 @@
 import React, {Component, useEffect, useState} from 'react'
 import {
-  matchRoutes
+  useNavigate
 } from "react-router-dom";
 
-import { Button, Result, Spin   } from 'antd';
+import { useCookies } from 'react-cookie';
+
+import { Button, Result, Spin } from 'antd';
 import HeaderApp from '../Header'
 import Navbar from "../Navbar";
 import Footer from "../Footer";
@@ -20,23 +22,41 @@ const LayoutApp = (props) => {
   const [isLogin, setIsLogin] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   
-  useEffect(()=>{
-    setTimeout(() => {
-      setIsLogin(window.localStorage.getItem('rTokenTracuu') !== null ? true : false)
-      setIsLoading(false)
-      }, 500);
-    }, []);
+  const [cookies, setCookie] = useCookies(['user']);
+  const navigate = useNavigate();
 
-  
-  function onClickLogin(){
-    // router.push('/login')
-  }
+  useEffect(()=>{
+    
+    setTimeout(() => {
+      setIsLogin(cookies?.TenNhanVien !== undefined ? true : false)
+      setIsLoading(false)
+      }, 1000);
+    }, []);
 
   function toogleMenu(){
     setCollapsed(!collapsed)
   }
-  // if(isLogin){
-  return ( 
+  if(!isLogin){
+    return (
+      <div>        
+        {isLoading && <>
+          <Spin  size="large"/>
+          <Result
+            status="success"
+            title= {'Kiểm tra tình trạng đăng nhập'}            
+          />
+        </>}
+        {!isLoading && <Result
+          status="403"
+          title=""
+          subTitle="Phiên đăng nhập đã hết. Vui lòng đăng nhập lại"
+          extra={<Button onClick={()=>navigate('/login')} type="primary">Đăng nhập</Button>}
+        /> }
+      </div>
+    )} 
+  return (
+    <>
+    {isLoading ? <Spin  size="large"/> :
       <Layout style={{height: "100%"}} >
       <Navbar collapsed ={collapsed} />
       <Layout className="site-layout" style={{width: "auto", minHeight:"667px"}} >
@@ -54,21 +74,10 @@ const LayoutApp = (props) => {
           </Content>
         <Footer />
       </Layout>
-    </Layout> 
-  //  )}
-  //  return(
-  //   <>
+      </Layout>
+      }
+    </>
       
-  //     {isLoading ? <Spin  size="large"/> :
-      
-  //     <Result
-  //       status="403"
-  //       title=""
-  //       subTitle="Bạn chưa đăng nhập. Vui lòng đăng nhập"
-  //       extra={<Button onClick={onClickLogin} type="primary">Đăng nhập</Button>}
-  //     />  
-  //     }
-  //   </>
   );
 }
 

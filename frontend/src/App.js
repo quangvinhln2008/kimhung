@@ -1,3 +1,4 @@
+import React,  { useEffect, useState } from "react";
 import { ChakraProvider } from '@chakra-ui/react';
 import { theme } from '@chakra-ui/react';
 import 'antd/dist/antd.min.css';
@@ -10,6 +11,7 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
+  useNavigate
 } from "react-router-dom";
 
 import RoutesApp from './routes';
@@ -33,8 +35,6 @@ import PhieuXuat from './containers/PhieuXuat';
 import PrintPhieuXuat from './containers/PhieuXuat/components/PrintPhieuXuat';
 
 const App = (props) => {
-  
-  console.log('RoutesApp',RoutesApp['admin'])
   return (
     <ChakraProvider theme={theme}>
       <Router>        
@@ -51,26 +51,7 @@ const App = (props) => {
           <Route path='tondauky' element ={<LayoutApp component ={<TonDauKy />} />}/>
           <Route path='phieunhap' element ={<LayoutApp component ={<PhieuNhap />} />} />
           <Route path='phieuxuat' element ={<LayoutApp component ={<PhieuXuat />} />} />
-          {/* <Route path='phieuxuat'>
-            <Route path='/' element ={<LayoutApp component ={<PhieuXuat />} />} />
-          </Route> */}
           <Route path='/phieuxuat/print/:Ident' element ={<LayoutApp component ={<PrintPhieuXuat />} />} />
-        {/* {RoutesApp['admin'].map((item) =>(
-          <Route 
-            key ={item.key}
-            path = {item.key}
-            element = {<LayoutApp component = {item.component} />}
-            // render = {(props)=(
-              
-            //   <LayoutApp 
-            //     component ={item.component}
-            //     {...props}
-            //   />
-              
-            // )}
-          />
-        ))
-        } */}
         </Routes>
       </Router>
       <ToastContainer autoClose={1000} theme="colored" />

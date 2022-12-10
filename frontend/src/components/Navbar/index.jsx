@@ -2,7 +2,8 @@ import React, {useState, useEffect} from "react";
 import {Text} from '@chakra-ui/react'
 import {
   BrowserRouter as Router,
-  Link
+  Link,
+  useNavigate
 } from "react-router-dom";
 import {
   ContainerOutlined,
@@ -11,7 +12,8 @@ import {
   SettingOutlined,
   HomeOutlined,
   BarChartOutlined,
-  PieChartOutlined
+  PieChartOutlined,
+  LogoutOutlined
 } from '@ant-design/icons';
 import { Divider, Layout, Menu } from 'antd';
 import styles from './index.module.css'
@@ -27,20 +29,6 @@ const Navbar = (props) =>{
   useEffect(()=>{
     setRole(window.localStorage.getItem('rolesTracuu'))
     }, []);
-
-  function logout(){
-    const isRememberMe = window.localStorage.getItem('rememberTracuu')
-    if (isRememberMe === 'true') {
-      window.localStorage.removeItem('passwordTracuu')
-      window.localStorage.removeItem('emailTracuu')
-      window.localStorage.removeItem('fullNameTracuu')
-      window.localStorage.removeItem('emailTracuu')
-      window.localStorage.removeItem('rTokenTracuu')
-      window.localStorage.removeItem('rolesTracuu')
-    } else {
-      window.localStorage.clear()
-    }
-  }
 
   function getItem(label, key, icon, children) {
     return {
@@ -94,16 +82,17 @@ const Navbar = (props) =>{
       getItem(<Link to={'/bangkenhap'}>Bảng kê nhập</Link>, 'bangkenhap'),
       getItem(<Link to={'/bangkexuat'}>Bảng kê xuất</Link>, 'bangkexuat'),
       getItem(<Link to={'/baocao-nhapxuatton'}>Báo cáo Nhập-Xuất-Tồn</Link>, 'baocao-nhapxuatton'),
-      getItem(<Link to={'/baocao-phanphoichenhlech'}>Bảng phân phối chênh lệch</Link>, 'baocao-phanphoichenhlech'),
     ]),
-    getItem('Quản trị', 'quantri', <BarChartOutlined />, [
-      getItem(<Link to={'/member'}>Người dùng</Link>, 'member'),
-      getItem(<Link to={'/permission'}>Phân quyền</Link>, 'permission'),
-    ]), 
-    getItem('Cài đặt', 'caidat', <SettingOutlined />, [
-      getItem(<Link to={'/profile'}>Tài khoản</Link>, 'profile'),
-      getItem(<Link to={'/logout'}>Đăng xuất</Link>, '6'), 
-    ]), 
+    getItem(<Link to ={'/login'}>Đăng xuất</Link>, 'dangxuat', <LogoutOutlined />),
+
+    // getItem('Quản trị', 'quantri', <BarChartOutlined />, [
+    //   getItem(<Link to={'/member'}>Người dùng</Link>, 'member'),
+    //   getItem(<Link to={'/permission'}>Phân quyền</Link>, 'permission'),
+    // ]), 
+    // getItem('Cài đặt', 'caidat', <SettingOutlined />, [
+    //   getItem(<Link to={'/profile'}>Tài khoản</Link>, 'profile'),
+    //   getItem(<Link to={'/logout'}>Đăng xuất</Link>, '6'), 
+    // ]), 
   ];
 
   return(
