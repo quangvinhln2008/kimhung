@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { Divider, Typography, Button, Select, Modal, Space, Input, InputNumber, Table, Form, Tag, Popconfirm , Alert, Spin} from 'antd';
-import { SearchOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { SearchOutlined, PlusCircleOutlined, ImportOutlined } from '@ant-design/icons';
 import {VStack, HStack} from  '@chakra-ui/react';
 
 const { Title } = Typography;
@@ -254,8 +254,11 @@ const VatTu = () =>{
           <Button  onClick={openCreateMode}  type="primary" icon={<PlusCircleOutlined />}>
               Thêm mới
           </Button>
-          <Button  onClick={toogleModalFormContact} icon={<SearchOutlined />}>
-              Tìm kiếm
+          <Button  icon={<ImportOutlined />}>
+              Thêm mới vật tư bằng file Excel
+          </Button>
+          <Button   icon={<ImportOutlined />}>
+              Cập nhật giá vật tư bằng file Excel
           </Button>
         </Space>
         <Divider />

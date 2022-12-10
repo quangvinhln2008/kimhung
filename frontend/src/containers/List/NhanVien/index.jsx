@@ -230,9 +230,9 @@ const NhanVien = () =>{
           <Button  onClick={openCreateMode}  type="primary" icon={<PlusCircleOutlined />}>
               Thêm mới
           </Button>
-          <Button  onClick={toogleModalFormContact} icon={<SearchOutlined />}>
+          {/* <Button  onClick={toogleModalFormContact} icon={<SearchOutlined />}>
               Tìm kiếm
-          </Button>
+          </Button> */}
         </Space>
         <Divider />
         {loading ? 
