@@ -19,10 +19,8 @@ const BangKeNhap = () =>{
   const [cookies, setCookie] = useCookies(['user']);
   
   const [form] = Form.useForm();
-  const [data, setData] = useState()
-  const [dataChiTiet, setDataChiTiet] = useState()
-  const [dataEdit, setDataEdit] = useState()
-  const [Stt, setStt] = useState(0)
+  const [data, setData] = useState()  
+  const [soCt, setSoCt] = useState()
   const [dataEditCt, setDataEditCt] = useState()
   const [dataVatTu, setDataVatTu] = useState()
   const [dataDoiTuong, setDataDoiTuong] = useState()
@@ -46,7 +44,7 @@ const BangKeNhap = () =>{
     setIsModalOpen(false);
   };
 
-  async function showModal(Ident){
+  async function showModal(Ident, SoCt){
     setIsModalOpen(true);
     return await axios
       .get(`https://testkhaothi.ufm.edu.vn:3002/PhieuNhap/${Ident}`)
@@ -54,9 +52,9 @@ const BangKeNhap = () =>{
         const result = {
           status: res.status,
           data: res.data.result.recordsets,
-        }
-        
+        }        
         setDataEditCt(result.data[1])
+        setSoCt(SoCt)
         return(result)
       })
       .catch(function (error) {
@@ -160,7 +158,7 @@ const BangKeNhap = () =>{
       render: (_, record) => (
         <>
           <Space size="middle">
-            {!record.Is_Deleted && <Button key={record.Ident} type="link" onClick= {() =>{showModal(record.Ident)}}>Xem</Button>}
+            {!record.Is_Deleted && <Button key={record.Ident} type="link" onClick= {() =>{showModal(record.Ident, record.SoCt)}}>Xem</Button>}
           </Space>         
         </>
       ),
@@ -175,19 +173,19 @@ const BangKeNhap = () =>{
     },
     {
       title: 'Số lượng',
-      dataIndex: 'SoLuongNhap',
-      key: 'SoLuongNhap',
+      dataIndex: 'SoLuong',
+      key: 'SoLuong',
       align:'right'
     },    
     {
       title: 'Đơn giá',
-      dataIndex: 'DonGiaNhap',
-      key: 'DonGiaNhap',
+      dataIndex: 'DonGia',
+      key: 'DonGia',
       align:'right'
     },
     {
       title: 'Thành tiền',
-      dataIndex: 'ThanhTienNhap',
+      dataIndex: 'ThanhTien',
       key: 'ThanhTien',
       align:'right'
     }
@@ -295,7 +293,7 @@ const BangKeNhap = () =>{
             :
               <Table columns={columns} dataSource={data} />}
       </VStack>
-      <Modal title="Chi tiết phiếu" open={isModalOpen} onOk={handleCancel} onCancel={handleCancel}>
+      <Modal title={`Chi tiết phiếu ${soCt}`} open={isModalOpen} onOk={handleCancel} onCancel={handleCancel}>
         <Table pagination={false} columns={columnsChiTiet}  dataSource={dataEditCt}/>
       </Modal>
     </>
