@@ -217,7 +217,13 @@ const BangKeNhap = () =>{
                 <Col span={12}>
                   <Form.Item
                     label="Từ ngày: "
-                    name="NgayCt0"                    
+                    name="NgayCt0"  
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Vui lòng nhập chọn ngày!'
+                      },
+                    ]}                     
                   >
                   <DatePicker  format={"DD-MM-YYYY"} />
                   </Form.Item>
@@ -225,7 +231,13 @@ const BangKeNhap = () =>{
                 <Col span={12}>
                   <Form.Item
                     label="Đến ngày: "
-                    name="NgayCt1"                    
+                    name="NgayCt1"   
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Vui lòng nhập chọn ngày!'
+                      },
+                    ]}                    
                   >
                   <DatePicker  format={"DD-MM-YYYY"}/>
                   </Form.Item>
@@ -239,13 +251,14 @@ const BangKeNhap = () =>{
                   lg: 32,
                 }}
               >                
-                <Col  span={12}>
+                <Col  span={24}>
                   <Form.Item
                     label={"Đối tượng: "}
                     name={"MaDoiTuong"}                    
                   >
                     <Select 
                       showSearch 
+                      allowClear
                       optionFilterProp="children"
                       filterOption={(input, option) => option?.children?.toLowerCase().includes(input)}  
                       filterSort={(optionA, optionB) =>
@@ -257,13 +270,14 @@ const BangKeNhap = () =>{
                       </Select>
                   </Form.Item>
                 </Col>
-                <Col  span={12}>
+                <Col  span={24}>
                   <Form.Item
                     label={"Vật tư: "}
                     name={"MaVatTu"}                    
                   >
                     <Select 
                       showSearch 
+                      allowClear
                       optionFilterProp="children"
                       filterOption={(input, option) => option?.children?.toLowerCase().includes(input)}  
                       filterSort={(optionA, optionB) =>

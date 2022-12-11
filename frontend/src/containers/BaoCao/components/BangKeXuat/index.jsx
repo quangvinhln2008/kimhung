@@ -20,6 +20,7 @@ const BangKeXuat = () =>{
   
   const [form] = Form.useForm();
   const [data, setData] = useState()
+  const [soCt, setSoCt] = useState()
   const [dataChiTiet, setDataChiTiet] = useState()
   const [dataEdit, setDataEdit] = useState()
   const [Stt, setStt] = useState(0)
@@ -34,6 +35,7 @@ const BangKeXuat = () =>{
   const navigate = useNavigate();
 
   const fieldsForm = form.getFieldsValue()
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
   const getHeader = function () {
     const rToken = cookies.rToken
@@ -41,8 +43,31 @@ const BangKeXuat = () =>{
       Authorization: 'Bearer ' + rToken,
     }
   }
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   
-  
+  async function showModal(Ident, SoCt){
+    setIsModalOpen(true);
+    return await axios
+      .get(`https://testkhaothi.ufm.edu.vn:3002/PhieuXuat/${Ident}`)
+      .then((res) => {
+        const result = {
+          status: res.status,
+          data: res.data.result.recordsets,
+        }        
+        setDataEditCt(result.data[1])
+        setSoCt(SoCt)
+        return(result)
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error.response)
+        toast.error(error?.response)
+      })
+  };
+
   useEffect(()=>{
     loadList()
   },[])
@@ -120,31 +145,15 @@ const BangKeXuat = () =>{
       key: 'TenDoiTuong',
     },
     {
-      title: 'Mã vật tư',
-      dataIndex: 'MaVatTu_Ma',
-      key: 'MaVatTu_Ma'
-    },    
-    {
-      title: 'Tên Vật Tư',
-      dataIndex: 'TenVatTu',
-      key: 'TenVatTu'
-    },
-    {
-      title: 'Số lượng xuất',
-      dataIndex: 'SoLuong',
-      key: 'SoLuong',
+      title: 'Tổng số lượng',
+      dataIndex: 'TongSoLuong',
+      key: 'TongSoLuong',
       align:'right'
     },
     {
-      title: 'Đơn giá xuất',
-      dataIndex: 'DonGia',
-      key: 'DonGia',
-      align:'right'
-    },
-    {
-      title: 'Thành tiền xuất',
-      dataIndex: 'ThanhTien',
-      key: 'ThanhTien',
+      title: 'Tổng thành tiền',
+      dataIndex: 'TongThanhTien',
+      key: 'TongThanhTien',
       align:'right'
     },
     {
@@ -153,11 +162,37 @@ const BangKeXuat = () =>{
       render: (_, record) => (
         <>
           <Space size="middle">
-            {!record.Is_Deleted && <Button key={record.Ident} type="link" onClick= {() =>{navigate(`/phieuxuat/${record.Ident}`)}}>Xem</Button>}
+            {!record.Is_Deleted && <Button key={record.Ident} type="link" onClick= {() =>{showModal(record.Ident, record.SoCt)}}>Xem</Button>}
           </Space>         
         </>
       ),
     },
+  ];
+
+  const columnsChiTiet = [
+    {
+      title: 'Tên vật tư',
+      dataIndex: 'TenVatTu',
+      key: 'TenVatTu',
+    },
+    {
+      title: 'Số lượng',
+      dataIndex: 'SoLuong',
+      key: 'SoLuong',
+      align:'right'
+    },    
+    {
+      title: 'Đơn giá',
+      dataIndex: 'DonGia',
+      key: 'DonGia',
+      align:'right'
+    },
+    {
+      title: 'Thành tiền',
+      dataIndex: 'ThanhTien',
+      key: 'ThanhTien',
+      align:'right'
+    }
   ];
   
   return(
@@ -166,12 +201,12 @@ const BangKeXuat = () =>{
       <Divider />
       <VStack justifyContent={"start"} alignItems="start">
       <Form form={form} 
-              name="dynamic_form_nest_item" 
+              name="basic" 
               labelCol={{
                 span: 8,
               }}
               wrapperCol={{
-                span: 20,
+                span: 32,
               }}
               onFinish={loadBangKePhieuNhap}
             >
@@ -186,7 +221,13 @@ const BangKeXuat = () =>{
                 <Col span={12}>
                   <Form.Item
                     label="Từ ngày: "
-                    name="NgayCt0"                    
+                    name="NgayCt0" 
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Vui lòng nhập chọn ngày!'
+                      },
+                    ]}                   
                   >
                   <DatePicker  format={"DD-MM-YYYY"} />
                   </Form.Item>
@@ -194,7 +235,13 @@ const BangKeXuat = () =>{
                 <Col span={12}>
                   <Form.Item
                     label="Đến ngày: "
-                    name="NgayCt1"                    
+                    name="NgayCt1" 
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Vui lòng nhập chọn ngày!'
+                      },
+                    ]}                      
                   >
                   <DatePicker  format={"DD-MM-YYYY"}/>
                   </Form.Item>
@@ -203,18 +250,19 @@ const BangKeXuat = () =>{
               <Row
                 gutter={{
                   xs: 8,
-                  sm: 16,
-                  md: 24,
+                  sm: 12,
+                  md: 16,
                   lg: 32,
                 }}
               >                
-                <Col  span={12}>
+                <Col  span={24}>
                   <Form.Item
                     label={"Đối tượng: "}
                     name={"MaDoiTuong"}                    
                   >
                     <Select 
-                      showSearch 
+                      showSearch
+                      allowClear
                       optionFilterProp="children"
                       filterOption={(input, option) => option?.children?.toLowerCase().includes(input)}  
                       filterSort={(optionA, optionB) =>
@@ -226,13 +274,14 @@ const BangKeXuat = () =>{
                       </Select>
                   </Form.Item>
                 </Col>
-                <Col  span={12}>
+                <Col  span={24}>
                   <Form.Item
                     label={"Vật tư: "}
                     name={"MaVatTu"}                    
                   >
-                    <Select 
+                    <Select                     
                       showSearch 
+                      allowClear
                       optionFilterProp="children"
                       filterOption={(input, option) => option?.children?.toLowerCase().includes(input)}  
                       filterSort={(optionA, optionB) =>
@@ -262,7 +311,9 @@ const BangKeXuat = () =>{
             :
               <Table columns={columns} dataSource={data} />}
       </VStack>
-
+      <Modal title={`Chi tiết phiếu ${soCt}`} open={isModalOpen} onOk={handleCancel} onCancel={handleCancel}>
+        <Table pagination={false} columns={columnsChiTiet}  dataSource={dataEditCt}/>
+      </Modal>
     </>
   )
 }
