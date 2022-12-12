@@ -45,6 +45,7 @@ const VatTu = () =>{
     form.setFieldsValue({
       MaVatTu: dataEdit?.MaVatTu,  
       TenVatTu: dataEdit?.TenVatTu,
+      Dvt: dataEdit?.Dvt,
       MaNhomVatTu: dataEdit?.MaNhomVatTu,
       GiaBan : dataEdit?.GiaBan
     })
@@ -113,7 +114,8 @@ const VatTu = () =>{
     return await axios
       .post('https://testkhaothi.ufm.edu.vn:3002/VatTu/create', {
         MaVatTu: values.MaVatTu,
-        TenVatTu: values.TenVatTu, 
+        TenVatTu: values.TenVatTu,
+        Dvt: values.Dvt, 
         MaNhomVatTu: values.MaNhomVatTu, 
         GiaBan: values.GiaBan
       })
@@ -140,6 +142,7 @@ const VatTu = () =>{
       .post(`https://testkhaothi.ufm.edu.vn:3002/vattu/${dataEdit?.Id}`, {
         MaVatTu: values.MaVatTu,
         TenVatTu: values.TenVatTu, 
+        Dvt: values.Dvt,
         MaNhomVatTu: values.MaNhomVatTu, 
         GiaBan: values.GiaBan
       })
@@ -202,6 +205,11 @@ const VatTu = () =>{
       title: 'Tên vật tư',
       dataIndex: 'TenVatTu',
       key: 'TenVatTu',
+    },
+    {
+      title: 'Đơn vị tính',
+      dataIndex: 'Dvt',
+      key: 'Dvt',
     },
     {
       title: 'Giá bán',
@@ -336,6 +344,18 @@ const VatTu = () =>{
               {
                 required: true,
                 message: 'Vui lòng nhập tên vật tư!'
+              },
+            ]}
+          >
+          <Input  />
+          </Form.Item>
+          <Form.Item
+            label="Đơn vị tính: "
+            name="Dvt"
+            rules={[
+              {
+                required: true,
+                message: 'Vui lòng nhập đơn vị tính!'
               },
             ]}
           >
