@@ -201,12 +201,12 @@ const BangKeXuat = () =>{
       <Divider />
       <VStack justifyContent={"start"} alignItems="start">
       <Form form={form} 
-              name="basic" 
+              name="dynamic_form_nest_item" 
               labelCol={{
-                span: 8,
+                span: 12,
               }}
               wrapperCol={{
-                span: 32,
+                span: 24,
               }}
               onFinish={loadBangKePhieuNhap}
             >

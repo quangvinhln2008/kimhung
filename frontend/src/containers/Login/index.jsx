@@ -101,7 +101,7 @@ const Login = () =>{
       </div>
       <div className={style.footer}>
         <a
-            href="https://thuvien.ufm.edu.vn/"
+            href="#"
             target="_blank"
             rel="noopener noreferrer"
           >

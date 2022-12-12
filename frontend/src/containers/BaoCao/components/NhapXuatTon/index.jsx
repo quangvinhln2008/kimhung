@@ -13,41 +13,54 @@ import { useCookies } from 'react-cookie';
 const { Title } = Typography;
 const { Option } = Select;
 
-const BangKeNhap = () =>{
+const NhapXuatTon = () =>{
   const _ = require("lodash");  
   
   const [cookies, setCookie] = useCookies(['user']);
   
   const [form] = Form.useForm();
-  const [data, setData] = useState()  
+  const [data, setData] = useState()
   const [soCt, setSoCt] = useState()
+  const [dataChiTiet, setDataChiTiet] = useState()
+  const [dataEdit, setDataEdit] = useState()
+  const [Stt, setStt] = useState(0)
   const [dataEditCt, setDataEditCt] = useState()
   const [dataVatTu, setDataVatTu] = useState()
+  const [dataKho, setDataKho] = useState()
   const [dataDoiTuong, setDataDoiTuong] = useState()
+  const [dataNhomVatTuFilter, setDataNhomVatTuFilter] = useState()
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(false)
   const [optionsVatTu, setOptionVatTu] = useState()
   const [optionsDoiTuong, setOptionDoiTuong] = useState()
+  const [optionsKho, setOptionKho] = useState()
   
   const navigate = useNavigate();
 
   const fieldsForm = form.getFieldsValue()
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  
   const getHeader = function () {
     const rToken = cookies.rToken
     return {
       Authorization: 'Bearer ' + rToken,
     }
   }
+
+  const onChange = (pagination, filters, sorter, extra) => {
+    // const filterNhom = dataVatTuFilter.filters(item => item.TenNhomVatTu === filters?.TenNhomVatTu[0])
+    // setFilterVt(filterNhom)
+    console.log('params', pagination, filters, sorter, extra);
+  };
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-
+  
   async function showModal(Ident, SoCt){
     setIsModalOpen(true);
     return await axios
-      .get(`https://testkhaothi.ufm.edu.vn:3002/PhieuNhap/${Ident}`)
+      .get(`https://testkhaothi.ufm.edu.vn:3002/PhieuXuat/${Ident}`)
       .then((res) => {
         const result = {
           status: res.status,
@@ -63,7 +76,7 @@ const BangKeNhap = () =>{
         toast.error(error?.response)
       })
   };
-  
+
   useEffect(()=>{
     loadList()
   },[])
@@ -71,7 +84,8 @@ const BangKeNhap = () =>{
   useEffect(()=>{
     
     setOptionVatTu(dataVatTu?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
-    setOptionDoiTuong(dataDoiTuong?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
+    // setOptionDoiTuong(dataDoiTuong?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
+    setOptionKho(dataKho?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
     
   }, [dataVatTu, dataDoiTuong])
 
@@ -86,6 +100,7 @@ const BangKeNhap = () =>{
         }
         setDataVatTu(result.data[0])
         setDataDoiTuong(result.data[1])
+        setDataKho(result.data[2])
         setLoading(false)
         return(result)
       })
@@ -95,22 +110,22 @@ const BangKeNhap = () =>{
       })
   }
 
-  async function loadBangKePhieuNhap(values){
+  async function loadNhapXuatTon(values){
     const header = getHeader()
     return await axios
-      .post(`https://testkhaothi.ufm.edu.vn:3002/baocao/bangkenhap`, {
+      .post(`https://testkhaothi.ufm.edu.vn:3002/baocao/nhapxuatton`, {
         NgayCt0: values.NgayCt0.format("YYYYMMDD"),
-        NgayCt1: values.NgayCt1.format("YYYYMMDD"),        
-        LoaiCt: '1',        
+        NgayCt1: values.NgayCt1.format("YYYYMMDD"),      
         MaVatTu: values.MaVatTu, 
-        MaDoiTuong: values.MaDoiTuong,
+        MaKho: values.MaKho,
       }, {headers:header})
       .then((res) => {
         const result = {
           status: res.data.status,
           data: res.data.result.recordsets,
         }
-        setData(result.data[0])
+        setData(result.data[0])      
+        setDataNhomVatTuFilter(result.data[1])  
         return(result)
       })
       .catch(function (error) {
@@ -121,48 +136,66 @@ const BangKeNhap = () =>{
 
   const columns = [
     {
-      title: 'Ngày phiếu',
-      dataIndex: 'NgayCt',
-      key: 'NgayCt',
+      title: 'Nhóm vật tư',
+      dataIndex: 'TenNhomVatTu',
+      key: 'TenNhomVatTu',
+      filters: dataNhomVatTuFilter,
+      onFilter: (value, record) => record.TenNhomVatTu.includes(value),
+      filterSearch: true,
     },
     {
-      title: 'Số chứng từ',
-      dataIndex: 'SoCt',
-      key: 'SoCt',
+      title: 'Tên vật tư',
+      dataIndex: 'TenVatTu',
+      key: 'TenVatTu',
     },
     {
-      title: 'Diễn giải',
-      dataIndex: 'DienGiai',
-      key: 'DienGiai',
-    },
+      title: 'Tồn đầu kỳ',
+      dataIndex: 'Ton_Dau',
+      key: 'Ton_Dau',
+      align:'right'
+    },    
     {
-      title: 'Đối tượng',
-      dataIndex: 'TenDoiTuong',
-      key: 'TenDoiTuong',
-    },
-    {
-      title: 'Tổng số lượng',
-      dataIndex: 'TongSoLuong',
-      key: 'TongSoLuong',
+      title: 'Giá trị tồn đầu',
+      dataIndex: 'Du_Dau',
+      key: 'Du_Dau',
       align:'right'
     },
     {
-      title: 'Tổng thành tiền',
-      dataIndex: 'TongThanhTien',
-      key: 'TongThanhTien',
+      title: 'Số lượng nhập',
+      dataIndex: 'Sl_Nhap',
+      key: 'Sl_Nhap',
+      align:'right'
+    },    
+    {
+      title: 'Giá trị nhập',
+      dataIndex: 'Tien_Nhap',
+      key: 'Tien_Nhap',
       align:'right'
     },
     {
-      title: '',
-      key: 'action',
-      render: (_, record) => (
-        <>
-          <Space size="middle">
-            {!record.Is_Deleted && <Button key={record.Ident} type="link" onClick= {() =>{showModal(record.Ident, record.SoCt)}}>Xem</Button>}
-          </Space>         
-        </>
-      ),
+      title: 'Số lượng xuất',
+      dataIndex: 'Sl_Xuat',
+      key: 'Sl_Xuat',
+      align:'right'
+    },    
+    {
+      title: 'Giá trị xuất',
+      dataIndex: 'Tien_Xuat',
+      key: 'Tien_Xuat',
+      align:'right'
     },
+    {
+      title: 'Tồn cuối kỳ',
+      dataIndex: 'Ton_Cuoi',
+      key: 'Ton_Cuoi',
+      align:'right'
+    },    
+    {
+      title: 'Giá trị tồn cuối',
+      dataIndex: 'Du_Cuoi',
+      key: 'Du_Cuoi',
+      align:'right'
+    }
   ];
 
   const columnsChiTiet = [
@@ -193,7 +226,7 @@ const BangKeNhap = () =>{
   
   return(
     <>
-      <Title level={3}>Bảng kê phiếu nhập</Title>
+      <Title level={3}>Báo cáo nhập xuất tồn kho</Title>
       <Divider />
       <VStack justifyContent={"start"} alignItems="start">
       <Form form={form} 
@@ -204,7 +237,7 @@ const BangKeNhap = () =>{
               wrapperCol={{
                 span: 24,
               }}
-              onFinish={loadBangKePhieuNhap}
+              onFinish={loadNhapXuatTon}
             >
               <Row
                 gutter={{
@@ -217,13 +250,13 @@ const BangKeNhap = () =>{
                 <Col span={12}>
                   <Form.Item
                     label="Từ ngày: "
-                    name="NgayCt0"  
+                    name="NgayCt0" 
                     rules={[
                       {
                         required: true,
                         message: 'Vui lòng nhập chọn ngày!'
                       },
-                    ]}                     
+                    ]}                   
                   >
                   <DatePicker  format={"DD-MM-YYYY"} />
                   </Form.Item>
@@ -231,13 +264,13 @@ const BangKeNhap = () =>{
                 <Col span={12}>
                   <Form.Item
                     label="Đến ngày: "
-                    name="NgayCt1"   
+                    name="NgayCt1" 
                     rules={[
                       {
                         required: true,
                         message: 'Vui lòng nhập chọn ngày!'
                       },
-                    ]}                    
+                    ]}                      
                   >
                   <DatePicker  format={"DD-MM-YYYY"}/>
                   </Form.Item>
@@ -246,18 +279,18 @@ const BangKeNhap = () =>{
               <Row
                 gutter={{
                   xs: 8,
-                  sm: 16,
-                  md: 24,
+                  sm: 12,
+                  md: 16,
                   lg: 32,
                 }}
               >                
                 <Col  span={24}>
                   <Form.Item
-                    label={"Đối tượng: "}
-                    name={"MaDoiTuong"}                    
+                    label={"Chọn kho: "}
+                    name={"MaKho"}                    
                   >
                     <Select 
-                      showSearch 
+                      showSearch
                       allowClear
                       optionFilterProp="children"
                       filterOption={(input, option) => option?.children?.toLowerCase().includes(input)}  
@@ -266,7 +299,7 @@ const BangKeNhap = () =>{
                       }
 
                       >
-                        {optionsDoiTuong}
+                        {optionsKho}
                       </Select>
                   </Form.Item>
                 </Col>
@@ -275,7 +308,7 @@ const BangKeNhap = () =>{
                     label={"Vật tư: "}
                     name={"MaVatTu"}                    
                   >
-                    <Select 
+                    <Select                     
                       showSearch 
                       allowClear
                       optionFilterProp="children"
@@ -305,13 +338,10 @@ const BangKeNhap = () =>{
               </Spin>
             </> 
             :
-              <Table columns={columns} dataSource={data} />}
+              <Table pagination={false} columns={columns} dataSource={data} onChange={onChange} />}
       </VStack>
-      <Modal title={`Chi tiết phiếu ${soCt}`} open={isModalOpen} onOk={handleCancel} onCancel={handleCancel}>
-        <Table pagination={false} columns={columnsChiTiet}  dataSource={dataEditCt}/>
-      </Modal>
     </>
   )
 }
 
-export default BangKeNhap;
+export default NhapXuatTon;

@@ -43,6 +43,64 @@ async function bangKeNhap(req, res) {
     res.status(500).send(error.message)
   }
 }
+async function bangKeXuat(req, res) {
+  try{
+      const NgayCt0 = req.body.NgayCt0
+      const NgayCt1 = req.body.NgayCt1
+      const MaDoiTuong = req.body.MaDoiTuong
+      const MaVatTu = req.body.MaVatTu
+
+      const pool = await poolPromise
+      
+      await pool.request()
+      .input('LoaiCt', '2')
+      .input('Ngay_Ct1', NgayCt0)
+      .input('Ngay_Ct2', NgayCt1)
+      .input('MaDoiTuong', MaDoiTuong)
+      .input('MaVatTu', MaVatTu)
+      .execute('sp_rptTKC01', (err, result)=>{
+        if (err) {
+            res.status(500).send({ message: err });
+            return;
+          }
+
+          return res.status(200).send({
+            result
+          });
+    })
+  }catch(error){
+    res.status(500).send(error.message)
+  }
+}
+
+async function nhapXuatTon(req, res) {
+  try{
+      const NgayCt0 = req.body.NgayCt0
+      const NgayCt1 = req.body.NgayCt1
+      const MaKho = req.body.MaKho
+      const MaVatTu = req.body.MaVatTu
+
+      const pool = await poolPromise
+      
+      await pool.request()
+      .input('Ngay_Ct1', NgayCt0)
+      .input('Ngay_Ct2', NgayCt1)
+      .input('MaKho', MaKho)
+      .input('MaVatTu', MaVatTu)
+      .execute('sp_rptTKT01', (err, result)=>{
+        if (err) {
+            res.status(500).send({ message: err });
+            return;
+          }
+
+          return res.status(200).send({
+            result
+          });
+    })
+  }catch(error){
+    res.status(500).send(error.message)
+  }
+}
 
 async function getList(req, res) {
   try{
@@ -68,5 +126,7 @@ async function getList(req, res) {
 
 module.exports = {
   bangKeNhap,
+  bangKeXuat,
+  nhapXuatTon,
   getList
 }
