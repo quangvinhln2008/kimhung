@@ -26,6 +26,7 @@ const NhapXuatTon = () =>{
   const [Stt, setStt] = useState(0)
   const [dataEditCt, setDataEditCt] = useState()
   const [dataVatTu, setDataVatTu] = useState()
+  const [dataVatTuFilter, setDataVatTuFilter] = useState()
   const [dataKho, setDataKho] = useState()
   const [dataDoiTuong, setDataDoiTuong] = useState()
   const [dataNhomVatTuFilter, setDataNhomVatTuFilter] = useState()
@@ -126,6 +127,7 @@ const NhapXuatTon = () =>{
         }
         setData(result.data[0])      
         setDataNhomVatTuFilter(result.data[1])  
+        setDataVatTuFilter(result.data[2])  
         return(result)
       })
       .catch(function (error) {
@@ -147,6 +149,9 @@ const NhapXuatTon = () =>{
       title: 'Tên vật tư',
       dataIndex: 'TenVatTu',
       key: 'TenVatTu',
+      filters: dataVatTuFilter,
+      onFilter: (value, record) => record.TenVatTu.includes(value),
+      filterSearch: true,
     },
     {
       title: 'Tồn đầu kỳ',

@@ -24,6 +24,8 @@ const TonDauKy = () =>{
   const [optionsVatTu, setOptionVatTu] = useState()
   const [optionsKichThuoc, setOptionKichThuoc] = useState()
   const [optionsKho, setOptionKho] = useState()
+  const [dataNhomVtFilter, setDataNhomVtFilter] = useState()
+  const [dataVatTuFilter, setDataVatTuFilter] = useState()
 
   function toogleModalFormContact(){
     setOpenModalContact(!openModalContact)
@@ -83,6 +85,8 @@ const TonDauKy = () =>{
         setDataKho(result.data[1])
         setDataKichThuoc(result.data[2])
         setDataVatTu(result.data[3])
+        setDataNhomVtFilter(result.data[4])
+        setDataVatTuFilter(result.data[5])
         setLoading(false)
         return(result)
       })
@@ -182,7 +186,12 @@ const TonDauKy = () =>{
         toast.error(error?.response)
       })
   };
-  
+
+  const onChange = (pagination, filters, sorter, extra) => {
+    // const filterNhom = dataVatTuFilter.filters(item => item.TenNhomVatTu === filters?.TenNhomVatTu[0])
+    // setFilterVt(filterNhom)
+    console.log('params', pagination, filters, sorter, extra);
+  };
   const columns = [
     {
       title: 'Ngày tồn',
@@ -193,6 +202,21 @@ const TonDauKy = () =>{
       title: 'Kho',
       dataIndex: 'TenKho',
       key: 'TenKho',
+    },
+    {
+      title: 'Nhóm vật tư',
+      dataIndex: 'TenNhomVatTu',
+      key: 'TenNhomVatTu',filters: dataNhomVtFilter,
+      filterMode: 'tree',
+      onFilter: (value, record) => record.TenNhomVatTu.includes(value),
+      ellipsis: true,
+    },{
+      title: 'Mã vật tư',
+      dataIndex: 'MaVT',
+      key: 'MaVT',
+      filters: dataVatTuFilter,
+      onFilter: (value, record) => record.MaVT.includes(value),
+      filterSearch: true,
     },
     {
       title: 'Tên vật tư',
@@ -249,7 +273,7 @@ const TonDauKy = () =>{
               </Spin>
             </> 
             :
-              <Table columns={columns} dataSource={data} />}
+              <Table columns={columns} dataSource={data}  onChange={onChange}/>}
       </VStack>
 
       {/* Modal thêm mới */}

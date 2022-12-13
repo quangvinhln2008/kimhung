@@ -83,7 +83,7 @@ const VatTu = () =>{
   useEffect(()=>{
     setTimeout(() => {
       loadVatTu()
-    }, 1000);
+    }, 500);
     
   },[refresh])
 
@@ -122,7 +122,7 @@ const VatTu = () =>{
 
     setTimeout(() => {
       loadVatTu()
-    }, 1000);
+    }, 500);
   }
   async function loadVatTu(){
     return await axios
