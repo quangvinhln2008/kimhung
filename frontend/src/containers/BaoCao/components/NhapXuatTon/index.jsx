@@ -155,23 +155,11 @@ const NhapXuatTon = () =>{
       align:'right'
     },    
     {
-      title: 'Giá trị tồn đầu',
-      dataIndex: 'Du_Dau',
-      key: 'Du_Dau',
-      align:'right'
-    },
-    {
       title: 'Số lượng nhập',
       dataIndex: 'Sl_Nhap',
       key: 'Sl_Nhap',
       align:'right'
     },    
-    {
-      title: 'Giá trị nhập',
-      dataIndex: 'Tien_Nhap',
-      key: 'Tien_Nhap',
-      align:'right'
-    },
     {
       title: 'Số lượng xuất',
       dataIndex: 'Sl_Xuat',
@@ -179,23 +167,11 @@ const NhapXuatTon = () =>{
       align:'right'
     },    
     {
-      title: 'Giá trị xuất',
-      dataIndex: 'Tien_Xuat',
-      key: 'Tien_Xuat',
-      align:'right'
-    },
-    {
       title: 'Tồn cuối kỳ',
       dataIndex: 'Ton_Cuoi',
       key: 'Ton_Cuoi',
       align:'right'
     },    
-    {
-      title: 'Giá trị tồn cuối',
-      dataIndex: 'Du_Cuoi',
-      key: 'Du_Cuoi',
-      align:'right'
-    }
   ];
 
   const columnsChiTiet = [
