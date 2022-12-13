@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from "react";
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Divider, Typography, Button, Select, Modal, Space, Input, InputNumber, Table, Form, Tag, Popconfirm , Alert, Spin, Upload, message} from 'antd';
-import { SearchOutlined, PlusCircleOutlined, ImportOutlined, UploadOutlined } from '@ant-design/icons';
+import { Divider, Typography, Tabs, Button, Select, Modal, Space, Input, InputNumber, Table, Form, Tag, Popconfirm , Alert, Spin, Upload, message} from 'antd';
+import { SearchOutlined, PlusCircleOutlined, ImportOutlined, ReloadOutlined } from '@ant-design/icons';
 import {VStack, HStack} from  '@chakra-ui/react';
 import { read, utils, writeFile } from 'xlsx';
 
@@ -13,12 +13,15 @@ const { TextArea } = Input;
 const VatTu = () =>{
   
   const [form] = Form.useForm();
+  const [formImport] = Form.useForm();
   const [data, setData] = useState()
   const [dataNhomVtFilter, setDataNhomVtFilter] = useState()
   const [dataVatTuFilter, setDataVatTuFilter] = useState()
   const [editMode, setEditMode] = useState(false)
   const [dataEdit, setDataEdit] = useState()
   const [dataImportVatTu, setDataImportVatTu] = useState()
+  const [dataCheckNhomVatTu, setDataCheckNhomVatTu] = useState()
+  const [dataCheckVatTu, setDataCheckVatTu] = useState()
   const [dataDoiTuong, setDataDoiTuong] = useState()
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(false)
@@ -58,6 +61,7 @@ const VatTu = () =>{
             if (sheets.length) {
                 const rows = utils.sheet_to_json(wb.Sheets[sheets[0]]);
                 setDataImportVatTu(rows)
+                setDataCheckNhomVatTu(null)
             }
         }
         reader.readAsArrayBuffer(file);
@@ -77,7 +81,10 @@ const VatTu = () =>{
   // };
 
   useEffect(()=>{
-    loadVatTu()
+    setTimeout(() => {
+      loadVatTu()
+    }, 1000);
+    
   },[refresh])
 
   useEffect(()=>{
@@ -109,7 +116,14 @@ const VatTu = () =>{
       GiaBan : 0
     })
   }
+  function refreshData()
+  {
+    setLoading(true)
 
+    setTimeout(() => {
+      loadVatTu()
+    }, 1000);
+  }
   async function loadVatTu(){
     return await axios
       .get('https://testkhaothi.ufm.edu.vn:3002/vattu')
@@ -224,6 +238,27 @@ const VatTu = () =>{
       })
   };
   
+  async function importVatTu(){
+    return await axios
+      .post('https://testkhaothi.ufm.edu.vn:3002/import/vattu', {
+        DataImportVatTu: dataImportVatTu
+      })
+      .then((res) => {
+        const result = {
+          status: res.status,
+          data: res.data.result.recordsets,
+        }
+        setDataCheckNhomVatTu(result?.data[1])
+        result?.data[0][0].status === 200 ? toast.success(result?.data[0][0].message): toast.error(result?.data[0][0].message)
+        return(result)
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error.response)
+        toast.error(error?.response)
+      })
+  };
+
 
   const columns = [
     {
@@ -337,6 +372,9 @@ const VatTu = () =>{
           </Button>
           <Button   icon={<ImportOutlined />}>
               Cập nhật giá vật tư bằng file Excel
+          </Button>
+          <Button  onClick={refreshData}  type="default" icon={<ReloadOutlined />}>
+              Refresh dữ liệu
           </Button>
         </Space>
         <Divider />
@@ -462,38 +500,55 @@ const VatTu = () =>{
       <Modal 
         open={openModalImportVatTu}
         title={"Thêm mới vật tư bằng file Excel"}
-        // onOk={submitChangeEmail}
         onCancel={toogleModalFormImportVatTu}
         footer={null}
         width={1000}
       >
-      <Form form={form} 
-          name="control-hooks"
+      <Form form={formImport} 
           labelCol={{
             span: 8,
           }}
           wrapperCol={{
             span: 20,
           }}
-          // onFinish={!editMode? CreateVatTu: UpdateVatTu}
+          // onFinish={importVatTu}
         >          
           <Form.Item
             name="upload"
             label="Chọn file"
           >
-            {/* <Upload name="file" onChange={handleImportVatTu}>
-              <Button icon={<UploadOutlined />}>Chọn file Excel</Button>
-            </Upload> */}
             <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required onChange={handleImportVatTu}
                 accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
             <label className="custom-file-label" htmlFor="inputGroupFile">Chọn file import</label>           
+            
           </Form.Item>
-          <Table columns={columnsImportVatTu} dataSource={dataImportVatTu} />
-          <HStack justifyContent="end">
-            <Button key="back" onClick={toogleModalFormImportVatTu}>Thoát</Button>
-            <Button key="save" type="primary"  htmlType="submit">Import vật tư mới</Button>
-          </HStack>
+          <Tabs
+            defaultActiveKey="1"
+            onChange={onChange}
+            items={[
+              {
+                label: `Dữ liệu import`,
+                key: '1',
+                children: (<>
+                  <Table columns={columnsImportVatTu} dataSource={dataImportVatTu} />
+                </>),
+              },
+              {
+                label: `Lỗi`,
+                key: '2',
+                children: (<>
+                  <Table columns={columnsImportVatTu} dataSource={dataCheckNhomVatTu} />
+                </>),
+              }
+            ]}
+          />
+          
         </Form>
+        
+        <HStack justifyContent="end">
+            <Button key="back" onClick={toogleModalFormImportVatTu}>Thoát</Button>
+            <Button key="save" type="primary"  onClick={importVatTu}>Import vật tư mới</Button>
+          </HStack>
       </Modal>
     </>
   )
