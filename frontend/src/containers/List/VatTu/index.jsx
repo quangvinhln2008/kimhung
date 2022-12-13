@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from "react";
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Divider, Typography, Button, Select, Modal, Space, Input, InputNumber, Table, Form, Tag, Popconfirm , Alert, Spin} from 'antd';
-import { SearchOutlined, PlusCircleOutlined, ImportOutlined } from '@ant-design/icons';
+import { Divider, Typography, Button, Select, Modal, Space, Input, InputNumber, Table, Form, Tag, Popconfirm , Alert, Spin, Upload, message} from 'antd';
+import { SearchOutlined, PlusCircleOutlined, ImportOutlined, UploadOutlined } from '@ant-design/icons';
 import {VStack, HStack} from  '@chakra-ui/react';
+import { read, utils, writeFile } from 'xlsx';
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -17,15 +18,26 @@ const VatTu = () =>{
   const [dataVatTuFilter, setDataVatTuFilter] = useState()
   const [editMode, setEditMode] = useState(false)
   const [dataEdit, setDataEdit] = useState()
+  const [dataImportVatTu, setDataImportVatTu] = useState()
   const [dataDoiTuong, setDataDoiTuong] = useState()
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(false)
   const [openModalContact, setOpenModalContact] = useState(false)
+  const [openModalImportVatTu, setOpenModalImportVatTu] = useState(false)
+  const [openModalImportGiaVatTu, setOpenModalImportGiaVatTu] = useState(false)
   const [options, setOption] = useState()
   const [filterVt, setFilterVt] = useState({});
 
   function toogleModalFormContact(){
     setOpenModalContact(!openModalContact)
+  }
+
+  function toogleModalFormImportVatTu(){
+    setOpenModalImportVatTu(!openModalImportVatTu)
+  }
+
+  function toogleModalFormGiaVatTu(){
+    setOpenModalImportGiaVatTu(!openModalImportGiaVatTu)
   }
   
   const onChange = (pagination, filters, sorter, extra) => {
@@ -33,6 +45,36 @@ const VatTu = () =>{
     // setFilterVt(filterNhom)
     console.log('params', pagination, filters, sorter, extra);
   };
+
+  const handleImportVatTu = ($event) => {
+    const files = $event.target.files;
+    if (files.length) {
+        const file = files[0];
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const wb = read(event.target.result);
+            const sheets = wb.SheetNames;
+
+            if (sheets.length) {
+                const rows = utils.sheet_to_json(wb.Sheets[sheets[0]]);
+                setDataImportVatTu(rows)
+            }
+        }
+        reader.readAsArrayBuffer(file);
+    }
+}
+  // const propsImportVatTu = {
+  //   onChange(info) {
+  //     if (info.file.status !== 'uploading') {
+  //       console.log(info.file, info.fileList);
+  //     }
+  //     if (info.file.status === 'done') {
+  //       message.success(`${info.file.name} file uploaded successfully`);
+  //     } else if (info.file.status === 'error') {
+  //       message.error(`${info.file.name} file upload failed.`);
+  //     }
+  //   },
+  // };
 
   useEffect(()=>{
     loadVatTu()
@@ -252,6 +294,34 @@ const VatTu = () =>{
       ),
     },
   ];
+  const columnsImportVatTu = [
+    {
+      title: 'Nhóm vật tư',
+      dataIndex: 'MaNhomVatTu',
+      key: 'MaNhomVatTu',      
+    },
+    {
+      title: 'Mã vật tư',
+      dataIndex: 'MaVatTu',
+      key: 'MaVatTu',
+    },
+    {
+      title: 'Tên vật tư',
+      dataIndex: 'TenVatTu',
+      key: 'TenVatTu',
+    },
+    {
+      title: 'Đơn vị tính',
+      dataIndex: 'Dvt',
+      key: 'Dvt',
+    },
+    {
+      title: 'Giá bán',
+      dataIndex: 'GiaBan',
+      align:'right',
+      key: 'GiaBan',
+    }
+  ];
 
   return(
     <>
@@ -262,7 +332,7 @@ const VatTu = () =>{
           <Button  onClick={openCreateMode}  type="primary" icon={<PlusCircleOutlined />}>
               Thêm mới
           </Button>
-          <Button  icon={<ImportOutlined />}>
+          <Button onClick={toogleModalFormImportVatTu} icon={<ImportOutlined />}>
               Thêm mới vật tư bằng file Excel
           </Button>
           <Button   icon={<ImportOutlined />}>
@@ -384,6 +454,44 @@ const VatTu = () =>{
           <HStack justifyContent="end">
             <Button key="back" onClick={toogleModalFormContact}>Thoát</Button>
             <Button key="save" type="primary"  htmlType="submit">Lưu</Button>
+          </HStack>
+        </Form>
+      </Modal>
+
+      {/* Modal thêm mới bằng file excel */}
+      <Modal 
+        open={openModalImportVatTu}
+        title={"Thêm mới vật tư bằng file Excel"}
+        // onOk={submitChangeEmail}
+        onCancel={toogleModalFormImportVatTu}
+        footer={null}
+        width={1000}
+      >
+      <Form form={form} 
+          name="control-hooks"
+          labelCol={{
+            span: 8,
+          }}
+          wrapperCol={{
+            span: 20,
+          }}
+          // onFinish={!editMode? CreateVatTu: UpdateVatTu}
+        >          
+          <Form.Item
+            name="upload"
+            label="Chọn file"
+          >
+            {/* <Upload name="file" onChange={handleImportVatTu}>
+              <Button icon={<UploadOutlined />}>Chọn file Excel</Button>
+            </Upload> */}
+            <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required onChange={handleImportVatTu}
+                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
+            <label className="custom-file-label" htmlFor="inputGroupFile">Chọn file import</label>           
+          </Form.Item>
+          <Table columns={columnsImportVatTu} dataSource={dataImportVatTu} />
+          <HStack justifyContent="end">
+            <Button key="back" onClick={toogleModalFormImportVatTu}>Thoát</Button>
+            <Button key="save" type="primary"  htmlType="submit">Import vật tư mới</Button>
           </HStack>
         </Form>
       </Modal>
