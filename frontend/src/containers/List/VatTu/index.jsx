@@ -14,20 +14,21 @@ const VatTu = () =>{
   
   const [form] = Form.useForm();
   const [formImport] = Form.useForm();
+  const [formUpdateGia] = Form.useForm();
   const [data, setData] = useState()
   const [dataNhomVtFilter, setDataNhomVtFilter] = useState()
   const [dataVatTuFilter, setDataVatTuFilter] = useState()
   const [editMode, setEditMode] = useState(false)
   const [dataEdit, setDataEdit] = useState()
   const [dataImportVatTu, setDataImportVatTu] = useState()
+  const [dataUpdateGiaVatTu, setDataUpdateGiaVatTu] = useState()
   const [dataCheckNhomVatTu, setDataCheckNhomVatTu] = useState()
-  const [dataCheckVatTu, setDataCheckVatTu] = useState()
   const [dataDoiTuong, setDataDoiTuong] = useState()
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(false)
   const [openModalContact, setOpenModalContact] = useState(false)
   const [openModalImportVatTu, setOpenModalImportVatTu] = useState(false)
-  const [openModalImportGiaVatTu, setOpenModalImportGiaVatTu] = useState(false)
+  const [openModalUpdateGiaVatTu, setOpenModalUpdatetGiaVatTu] = useState(false)
   const [options, setOption] = useState()
   const [filterVt, setFilterVt] = useState({});
 
@@ -40,8 +41,9 @@ const VatTu = () =>{
   }
 
   function toogleModalFormGiaVatTu(){
-    setOpenModalImportGiaVatTu(!openModalImportGiaVatTu)
+    setOpenModalUpdatetGiaVatTu(!openModalUpdateGiaVatTu)
   }
+
   
   const onChange = (pagination, filters, sorter, extra) => {
     // const filterNhom = dataVatTuFilter.filters(item => item.TenNhomVatTu === filters?.TenNhomVatTu[0])
@@ -67,18 +69,25 @@ const VatTu = () =>{
         reader.readAsArrayBuffer(file);
     }
 }
-  // const propsImportVatTu = {
-  //   onChange(info) {
-  //     if (info.file.status !== 'uploading') {
-  //       console.log(info.file, info.fileList);
-  //     }
-  //     if (info.file.status === 'done') {
-  //       message.success(`${info.file.name} file uploaded successfully`);
-  //     } else if (info.file.status === 'error') {
-  //       message.error(`${info.file.name} file upload failed.`);
-  //     }
-  //   },
-  // };
+
+const handleUpdateGiaVatTu = ($event) => {
+  const files = $event.target.files;
+  if (files.length) {
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onload = (event) => {
+          const wb = read(event.target.result);
+          const sheets = wb.SheetNames;
+
+          if (sheets.length) {
+              const rows = utils.sheet_to_json(wb.Sheets[sheets[0]]);
+              setDataUpdateGiaVatTu(rows)
+              setDataCheckNhomVatTu(null)
+          }
+      }
+      reader.readAsArrayBuffer(file);
+  }
+}
 
   useEffect(()=>{
     setTimeout(() => {
@@ -258,7 +267,26 @@ const VatTu = () =>{
         toast.error(error?.response)
       })
   };
-
+  async function updateGiaVatTu(){
+    return await axios
+      .post('https://testkhaothi.ufm.edu.vn:3002/import/giavattu', {
+        DataImportVatTu: dataUpdateGiaVatTu
+      })
+      .then((res) => {
+        const result = {
+          status: res.status,
+          data: res.data.result.recordsets,
+        }
+        setDataCheckNhomVatTu(result?.data[1])
+        result?.data[0][0].status === 200 ? toast.success(result?.data[0][0].message): toast.error(result?.data[0][0].message)
+        return(result)
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error.response)
+        toast.error(error?.response)
+      })
+  };
 
   const columns = [
     {
@@ -370,7 +398,7 @@ const VatTu = () =>{
           <Button onClick={toogleModalFormImportVatTu} icon={<ImportOutlined />}>
               Thêm mới vật tư bằng file Excel
           </Button>
-          <Button   icon={<ImportOutlined />}>
+          <Button  onClick={toogleModalFormGiaVatTu} icon={<ImportOutlined />}>
               Cập nhật giá vật tư bằng file Excel
           </Button>
           <Button  onClick={refreshData}  type="default" icon={<ReloadOutlined />}>
@@ -547,7 +575,62 @@ const VatTu = () =>{
         
         <HStack justifyContent="end">
             <Button key="back" onClick={toogleModalFormImportVatTu}>Thoát</Button>
-            <Button key="save" type="primary"  onClick={importVatTu}>Import vật tư mới</Button>
+            <Button key="save" type="primary"  onClick={importVatTu}>Import vật tư</Button>
+          </HStack>
+      </Modal>
+
+      {/* Modal update gia vat tu bằng file excel */}
+      <Modal 
+        open={openModalUpdateGiaVatTu}
+        title={"Cập nhật giá vật tư bằng file Excel"}
+        onCancel={toogleModalFormGiaVatTu}
+        footer={null}
+        width={1000}
+      >
+      <Form form={formUpdateGia} 
+          labelCol={{
+            span: 8,
+          }}
+          wrapperCol={{
+            span: 20,
+          }}
+          // onFinish={importVatTu}
+        >          
+          <Form.Item
+            name="upload"
+            label="Chọn file"
+          >
+            <input type="file" name="file" className="custom-file-input" id="inputGroupFile" required onChange={handleUpdateGiaVatTu}
+                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
+            <label className="custom-file-label" htmlFor="inputGroupFile">Chọn file excel để cập nhật giá</label>           
+            
+          </Form.Item>
+          <Tabs
+            defaultActiveKey="1"
+            onChange={onChange}
+            items={[
+              {
+                label: `Dữ liệu cập nhật`,
+                key: '1',
+                children: (<>
+                  <Table columns={columnsImportVatTu} dataSource={dataUpdateGiaVatTu} />
+                </>),
+              },
+              {
+                label: `Lỗi`,
+                key: '2',
+                children: (<>
+                  <Table columns={columnsImportVatTu} dataSource={dataCheckNhomVatTu} />
+                </>),
+              }
+            ]}
+          />
+          
+        </Form>
+        
+        <HStack justifyContent="end">
+            <Button key="back" onClick={toogleModalFormGiaVatTu}>Thoát</Button>
+            <Button key="save" type="primary"  onClick={updateGiaVatTu}>Cập nhật giá</Button>
           </HStack>
       </Modal>
     </>
