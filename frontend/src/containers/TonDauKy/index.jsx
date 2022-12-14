@@ -3,7 +3,7 @@ import axios from 'axios'
 import moment from 'moment'
 import { toast } from 'react-toastify'
 import { Divider, Typography, Tabs, Button, Select, Modal, Space, DatePicker, InputNumber, Input, Table, Form, Tag, Popconfirm , Alert, Spin} from 'antd';
-import { ImportOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { ImportOutlined, PlusCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import {VStack, HStack} from  '@chakra-ui/react';
 import { read, utils, writeFile } from 'xlsx';
 
@@ -58,8 +58,12 @@ const TonDauKy = () =>{
     }
 }
   useEffect(()=>{
+    setTimeout(() => {      
     loadTonDauKy()
+    }, 500);
+    
   },[refresh])
+
 
   useEffect(()=>{
     
@@ -79,6 +83,15 @@ const TonDauKy = () =>{
 
   function toogleModalFormContact(){
     setOpenModalContact(!openModalContact)
+  }
+
+  function refreshData()
+  {
+    setLoading(true)
+
+    setTimeout(() => {
+      loadTonDauKy()
+    }, 500);
   }
 
   function openCreateMode(){
@@ -224,6 +237,7 @@ const TonDauKy = () =>{
           data: res.data.result.recordsets,
         }
         setDataCheckNhomVatTu(result?.data[1])
+        setRefresh(!refresh)
         result?.data[0][0].status === 200 ? toast.success(result?.data[0][0].message): toast.error(result?.data[0][0].message)
         return(result)
       })
@@ -330,7 +344,10 @@ const TonDauKy = () =>{
               Thêm mới
           </Button>
           <Button onClick={toogleModalFormImportTonDauKy} icon={<ImportOutlined />}>
-              Thêm mới vật tư bằng file Excel
+              Thêm mới tồn kho vật tư bằng file Excel
+          </Button>
+          <Button  onClick={refreshData}  type="default" icon={<ReloadOutlined />}>
+              Refresh dữ liệu
           </Button>
         </Space>
         <Divider />
