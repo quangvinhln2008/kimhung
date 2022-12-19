@@ -7,10 +7,11 @@ import { toast } from 'react-toastify'
 import { Divider,Modal, Typography, Button, Select, Space, DatePicker, InputNumber, Input, Table, Form, Tag, Popconfirm , Alert, Spin, Col, Row} from 'antd';
 // import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter  } from "@chakra-ui/react";
 import { SearchOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import {VStack, HStack, Text , Heading, SimpleGrid } from  '@chakra-ui/react';
+import {VStack, HStack, Text , Heading, SimpleGrid, Stack } from  '@chakra-ui/react';
 import { useCookies } from 'react-cookie';
 import ReactToPrint from "react-to-print";
 import { useReactToPrint } from 'react-to-print';
+import TablePrint from "./components/TablePrint";
 
 const { Title } = Typography;
 
@@ -129,13 +130,40 @@ const ComponentToPrint = React.forwardRef((props, ref) => (
       </table>
       
       <SimpleGrid marginBottom={'10px'} columns={2} spacing={1}>
-        <Text fontSize='sm'>Khách hàng:</Text>
-        <Text fontSize='sm'>{dataPrint?.TenDoiTuong}</Text>
+        <Text fontSize='lg' fontWeight={'bold'}>Khách hàng:</Text>
+        <Text fontSize='lg' fontWeight={'bold'}>{dataPrint?.TenDoiTuong}</Text>
         <Text fontSize='sm'>Diễn Giải:</Text>
         <Text fontSize='sm'>{dataPrint?.DienGiai}</Text>
       </SimpleGrid>
+      <Stack>
+        <table style={{border: '1px solid #000', fontSize:'13pt', padding: '10px'}}>
+          <thead style={{border: '1px solid #000', fontSize:'13pt', padding: '5px'}}>
+            <tr style={{border: '1px solid #000', fontSize:'13pt', padding: '5px'}}>
+              <th style={{border: '1px solid #000', fontSize:'13pt', padding: '0px 10px'}} >Stt</th>
+              <th tyle={{border: '1px solid #000', fontSize:'13pt', padding: '0px 30px'}}>Tên vật tư</th>
+              <th style={{border: '1px solid #000', fontSize:'13pt', padding: '0px 30px'}}>Đvt</th>
+              <th style={{border: '1px solid #000', fontSize:'13pt', padding: '0px 10px'}}>Số lượng xuất</th>
+              <th style={{border: '1px solid #000', fontSize:'13pt', padding: '0px 20px'}}>Đơn giá</th>
+              <th style={{border: '1px solid #000', fontSize:'13pt', padding: '0px 30px'}}>Thành tiền</th>
+            </tr>
+          </thead>
+          <tbody>          
+            <TablePrint dataChiTiet = {dataPrintChiTiet}/>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td style={{border: '1px solid #000', fontSize:'13pt', padding: '5px'}}></td>
+              <td style={{border: '1px solid #000', fontSize:'13pt', padding: '5px'}}></td>            
+              <td style={{border: '1px solid #000', fontSize:'13pt', padding: '5px', fontWeight:'bold'}}>Tổng cộng</td>
+              <td style={{border: '1px solid #000', fontSize:'13pt', padding: '5px'}}></td>
+              <td style={{border: '1px solid #000', fontSize:'13pt', padding: '5px'}}></td>
+              <td style={{border: '1px solid #000', fontSize:'13pt', padding: '5px',fontWeight:'bold', textAlign:'right'}}>{dataPrint?.TongThanhTien}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </Stack>
       
-    <Table 
+    {/* <Table 
       columns={columnsPrint} 
       pagination={false} 
       dataSource={dataPrintChiTiet} 
@@ -164,14 +192,14 @@ const ComponentToPrint = React.forwardRef((props, ref) => (
           </>
         );
       }}
-      />
+      /> */}
       <SimpleGrid columns={6}>
-        <Text fontSize='sm'>Người mua</Text>
+        <Text fontSize='lg'>Người mua</Text>
         <Text fontSize='sm'></Text>
         <Text fontSize='sm'></Text>
         <Text fontSize='sm'></Text>
         <Text fontSize='sm'></Text>
-        <Text>Người bán</Text>
+        <Text fontSize='lg'>Người bán</Text>
       </SimpleGrid>
     </VStack>
 ));
