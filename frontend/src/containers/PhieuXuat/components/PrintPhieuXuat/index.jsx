@@ -22,7 +22,7 @@ const PrintPhieuXuat = (props) =>{
   const [dataPrint, setDataPrint] = useState()
   const [dataPrintChiTiet, setDataPrintChiTiet] = useState()
   const [loading, setLoading] = useState(true);
-  
+  const [pageStyle, setPageStyle] = useState("")
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -59,6 +59,28 @@ const PrintPhieuXuat = (props) =>{
       })
   };
 
+  async function lockPhieu(){
+    const header = getHeader()
+    console.log('run lock')
+    return await axios
+    .post(`https://testkhaothi.ufm.edu.vn:3002/PhieuXuat/lock/${Ident}`, {
+        Ident: Ident,
+      },{header})
+      .then((res) => {
+        const result = {
+          status: res.status,
+          data: res.data.result.recordset,
+        }
+        result?.data[0].status === 200 ? toast.success(result?.data[0].message): toast.error(result?.data[0].message)
+        navigate(`/phieuxuat?type=xuatban`)
+        return(result)
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error.response)
+        toast.error(error?.response)
+      })
+  };
   const columnsPrint = [
     {
       title: 'STT',
@@ -104,27 +126,27 @@ const ComponentToPrint = React.forwardRef((props, ref) => (
       <div></div>
       <table>
         <tr>
-          <th>CỬA HÀNG KIM HƯNG</th>
+          <th  style={{width: '50px', textAlign:'left'}}>CỬA HÀNG KIM HƯNG</th>
+          {/* <th></th>
           <th></th>
           <th></th>
-          <th></th>
-          <th></th>
+          <th></th> */}
           <th>PHIẾU XUẤT</th>
         </tr>
         <tr>
-          <td>514 Phạm Văn Chí P8 Q6</td>
+          <td style={{width: '450px'}}>514 Phạm Văn Chí P8 Q6</td>
+          {/* <td></td>
           <td></td>
           <td></td>
-          <td></td>
-          <td></td>
+          <td></td> */}
           <td>Ngày: {dataPrint?.NgayCt}</td>
         </tr>
         <tr>
-          <td>Đt: 0903310291</td>
-          <td style={{color: '#fff'}} >Francisco Chang</td>
+          <td style={{width: '450px'}}>Đt: 0903310291</td>
+          {/* <td style={{color: '#fff'}} >Francisco Chang</td>
           <td style={{color: '#fff'}}>Maria Anders</td>
           <td style={{color: '#fff'}}>Maria Anders</td>
-          <td style={{color: '#fff'}}>Maria Anders</td>
+          <td style={{color: '#fff'}}>Maria Anders</td> */}
           <td >Số chứng từ: {dataPrint?.SoCt}</td>
         </tr>
       </table>
@@ -209,13 +231,15 @@ const ComponentToPrint = React.forwardRef((props, ref) => (
       <div>
       <Space align="left" style={{ marginBottom: 16 }}>
         <ReactToPrint 
+            pageStyle={pageStyle}
             trigger={() => <Button>In phiếu</Button>}
             content={() => componentRef.current}
             />
             <Button onClick= {() => navigate(`/phieuxuat?type=xuatban`)}>Trở về danh sách</Button>
+            <Button type="primary" onClick= {lockPhieu}>Hoàn thành</Button>
+        </Space>                          
                       
-              <ComponentToPrint ref= {componentRef} />  
-        </Space>                                 
+        <ComponentToPrint ref= {componentRef} />                
       </div>
     </>
   )

@@ -378,18 +378,28 @@ const PhieuXuat = () =>{
       align:'right'
     },
     {
+      title: 'Tình trạng',
+      key: 'Is_Locked',
+      dataIndex: 'Is_Locked',
+      render: (_, record) => (                   
+          <Tag color={record.TinhTrang ? 'green' :'volcano'} key={record.Ident}>
+            {record.TinhTrang ? 'HOÀN THÀNH': ''}
+          </Tag>         
+      )
+    },
+    {
       title: '',
       key: 'action',
       render: (_, record) => (
         <>
           <Space size="middle">
-            {!record.Is_Deleted && <Button key={record.Ident} type="link" onClick= {() => navigate(`/phieuxuat/print/${record.Ident}`)}>Xem</Button>}
+            {<Button key={record.Ident} type="link" onClick= {() => navigate(`/phieuxuat/print/${record.Ident}`)}>Xem</Button>}
           </Space>
          <Space size="middle">
-            {!record.Is_Deleted && <Button key={record.Ident} type="link" onClick= {() =>{GetPhieuXuatEdit(record.Ident, true)}}>Cập nhật</Button>}
+            {!record.TinhTrang && <Button key={record.Ident} type="link" onClick= {() =>{GetPhieuXuatEdit(record.Ident, true)}}>Cập nhật</Button>}
           </Space>
           <Space size="middle">
-          {!record.Is_Deleted && <>
+          {!record.TinhTrang && <>
               <Popconfirm
                 title="Bạn có chắc xóa phiếu không?"
                 onConfirm={()=>{DeletePhieuXuat(record.Ident)}}
