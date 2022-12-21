@@ -198,6 +198,7 @@ const PhieuXuat = () =>{
     const selectedVatTu = dataGiaVatTu.filter(item => item.id === fields.users[name].MaVatTu)
     
     Object.assign(users[name], { DonGiaXuat: selectedVatTu[0]?.GiaBan})
+    Object.assign(users[name], { Dvt: selectedVatTu[0]?.Dvt})
     form.setFieldsValue({users})
   }
 
@@ -752,6 +753,20 @@ console.log('props', props)
                       >
                         {optionsVatTu}
                   </Select>
+                  </Form.Item>
+                  <Form.Item
+                    {...restField}
+                    name={[name, 'Dvt']}
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Dvt',
+                      },
+                    ]}
+                  >
+                  <Input  style={{
+                        width: 80,
+                      }}/>
                   </Form.Item>
                   <Form.Item
                     {...restField}
