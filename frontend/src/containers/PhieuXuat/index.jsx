@@ -3,10 +3,11 @@ import {useSearchParams, setSearchParams, useNavigate} from "react-router-dom";
 import axios from 'axios'
 import moment from 'moment'
 import { v4 as uuidv4 } from 'uuid';
+import dayjs from 'dayjs';
 import { toast } from 'react-toastify'
 import { Divider,Modal, Typography, Button, Select, Space, DatePicker, InputNumber, Input, Table, Form, Tag, Popconfirm , Alert, Spin, Col, Row} from 'antd';
 // import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter  } from "@chakra-ui/react";
-import { SearchOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { SearchOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusOutlined,ReloadOutlined } from '@ant-design/icons';
 import {VStack, HStack, cookieStorageManager} from  '@chakra-ui/react';
 import { useCookies } from 'react-cookie';
 import ReactToPrint from "react-to-print";
@@ -14,6 +15,7 @@ import { useReactToPrint } from 'react-to-print';
 
 const { Title } = Typography;
 const { Option } = Select;
+const { RangePicker } = DatePicker;
 
 const PhieuXuat = () =>{
   const _ = require("lodash");  
@@ -22,6 +24,7 @@ const PhieuXuat = () =>{
   const navigate = useNavigate();
 
   const [form] = Form.useForm();
+  const [formFilter] = Form.useForm();
   const [data, setData] = useState()
   const [dataChiTiet, setDataChiTiet] = useState()
   const [editMode, setEditMode] = useState(false)
@@ -126,7 +129,7 @@ const PhieuXuat = () =>{
   
 
   useEffect(()=>{
-    loadPhieuXuat()
+    loadPhieuXuat()    
   },[refresh])
 
   useEffect(()=>{
@@ -221,6 +224,7 @@ const PhieuXuat = () =>{
         // handle error
         console.log(error.response)
       })
+      
   }
 
   async function GetPhieuXuatEdit(MaPhieuXuat, isEdit){
@@ -348,7 +352,56 @@ const PhieuXuat = () =>{
         toast.error(error?.response)
       })
   };
-  
+  async function filterPhieuXuat(values){
+    console.log('values filter', values)
+    const header = getHeader()
+    return await axios
+      .post('https://testkhaothi.ufm.edu.vn:3002/PhieuXuat/filter', {
+        NgayCt1: values.ngayPhieu[0].format("YYYY-MM-DD"),
+        NgayCt2: values.ngayPhieu[1].format("YYYY-MM-DD") ,
+        MaCt: 'XB',
+        MaNhanVien: cookies.id,      
+      },{header})
+      .then((res) => {
+        const result = {
+          status: res.status,
+          data: res.data?.result?.recordset,
+        }
+        result?.data[0].status === 200 ? toast.success(result?.data[0].message): toast.error(result?.data[0].message)
+        setData(result.data[0])
+        setDataKho(result.data[1])
+        setDataVatTu(result.data[2])
+        setDataGiaVatTu(result.data[3])
+        setDataNhanVien(result.data[4])
+        setDataDoiTuong(result.data[5])
+        setStt(result.data[6])
+        setLoading(false)
+        return(result)
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error.response)
+        toast.error(error?.response)
+      })
+  };
+  const rangePresets = [
+    {
+      label: 'Last 7 Days',
+      value: [dayjs().add(-7, 'd'), dayjs()],
+    },
+    {
+      label: 'Last 14 Days',
+      value: [dayjs().add(-14, 'd'), dayjs()],
+    },
+    {
+      label: 'Last 30 Days',
+      value: [dayjs().add(-30, 'd'), dayjs()],
+    },
+    {
+      label: 'Last 90 Days',
+      value: [dayjs().add(-90, 'd'), dayjs()],
+    },
+  ];
   const columns = [
     {
       title: 'Ngày phiếu',
@@ -458,13 +511,51 @@ console.log('props', props)
       <Title level={3}>Phiếu {title}</Title>
       <Divider />
       <VStack justifyContent={"start"} alignItems="start">
+      <Form 
+        form={formFilter} 
+        name="horizontal" 
+        layout="inline" 
+        onFinish={filterPhieuXuat}>
+        <Form.Item
+          name="ngayPhieu" 
+          label="Ngày phiếu"         
+        >
+          <RangePicker format="DD/MM/YYYY"/>
+        </Form.Item>
+        {/* <Form.Item
+          label={"Đối tượng: "}
+          name= {"MaDoiTuong"}
+          style={{
+            width: 250,
+          }}
+        >
+          <Select             
+            showSearch
+            allowClear
+            optionFilterProp="children"
+            filterOption={(input, option) => option?.children?.toLowerCase().includes(input)}  
+            filterSort={(optionA, optionB) =>
+              optionA?.children?.toLowerCase().localeCompare(optionB?.children?.toLowerCase())
+            }
+            >
+              {optionsDoiTuong}
+            </Select>
+        </Form.Item>    */}
+        <HStack>
+          <Button htmlType="submit" icon={<SearchOutlined />}>
+                Tìm kiếm
+          </Button> 
+          <Button type="default" onClick={loadPhieuXuat} icon={<ReloadOutlined />}>
+                Reset
+          </Button>
+        </HStack>
+             
+      </Form>
         <Space align="left" style={{ marginBottom: 16 }}>
           <Button  onClick={openCreateMode}  type="primary" icon={<PlusCircleOutlined />}>
               Thêm mới
           </Button>
-          <Button  onClick={toogleModalFormContact} icon={<SearchOutlined />}>
-              Tìm kiếm
-          </Button>
+          
         </Space>
         <Divider />
         {loading ? 
