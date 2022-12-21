@@ -221,7 +221,7 @@ const PhieuXuat = () =>{
         setStt(result.data[6])
         setTimeout(() => {      
           setLoading(false)
-        }, 1000);
+        }, 500);
         return(result)
       })
       .catch(function (error) {
@@ -384,7 +384,7 @@ const PhieuXuat = () =>{
         setStt(result.data[6])
         setTimeout(() => {      
           setLoading(false)
-        }, 1000);
+        }, 500);
         return(result)
       })
       .catch(function (error) {
