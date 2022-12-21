@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { Divider, Typography, Tabs, Button, Select, Modal, Space, Input, InputNumber, Table, Form, Tag, Popconfirm , Alert, Spin, Upload, message} from 'antd';
+import { Divider, Typography, Tabs, Button, Select, Modal, Space, Switch, Input, InputNumber, Table, Form, Tag, Popconfirm , Alert, Spin, Upload, message} from 'antd';
 import { SearchOutlined, PlusCircleOutlined, ImportOutlined, ReloadOutlined } from '@ant-design/icons';
 import {VStack, HStack} from  '@chakra-ui/react';
 import { read, utils, writeFile } from 'xlsx';
@@ -26,6 +26,7 @@ const VatTu = () =>{
   const [dataDoiTuong, setDataDoiTuong] = useState()
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(false)
+  const [quyDoi, setQuyDoi] = useState(false)
   const [openModalContact, setOpenModalContact] = useState(false)
   const [openModalImportVatTu, setOpenModalImportVatTu] = useState(false)
   const [openModalUpdateGiaVatTu, setOpenModalUpdatetGiaVatTu] = useState(false)
@@ -43,8 +44,11 @@ const VatTu = () =>{
   function toogleModalFormGiaVatTu(){
     setOpenModalUpdatetGiaVatTu(!openModalUpdateGiaVatTu)
   }
-
   
+  function toogleQuyDoiDvt(){
+    setQuyDoi(!quyDoi)
+  }
+
   const onChange = (pagination, filters, sorter, extra) => {
     // const filterNhom = dataVatTuFilter.filters(item => item.TenNhomVatTu === filters?.TenNhomVatTu[0])
     // setFilterVt(filterNhom)
@@ -182,7 +186,10 @@ const handleUpdateGiaVatTu = ($event) => {
         TenVatTu: values.TenVatTu,
         Dvt: values.Dvt, 
         MaNhomVatTu: values.MaNhomVatTu, 
-        GiaBan: values.GiaBan
+        GiaBan: values.GiaBan,
+        Is_QDoi: values.Is_QDoi,
+        Dvt_QDoi: values.Dvt_QDoi,
+        HSo_QDoi: values.HSo_QDoi
       })
       .then((res) => {
         const result = {
@@ -209,7 +216,10 @@ const handleUpdateGiaVatTu = ($event) => {
         TenVatTu: values.TenVatTu, 
         Dvt: values.Dvt,
         MaNhomVatTu: values.MaNhomVatTu, 
-        GiaBan: values.GiaBan
+        GiaBan: values.GiaBan,
+        Is_QDoi: values.Is_QDoi,
+        Dvt_QDoi: values.Dvt_QDoi,
+        HSo_QDoi: values.HSo_QDoi
       })
       .then((res) => {
         const result = {
@@ -516,7 +526,44 @@ const handleUpdateGiaVatTu = ($event) => {
             min={0}  
             defaultValue={0} />
           </Form.Item>
-
+          <Form.Item
+            label="Quy đổi:"
+            name="Is_QDoi"            
+          >
+          <Switch onChange={toogleQuyDoiDvt} />
+          </Form.Item>
+          <Form.Item
+            label="Đơn vị tính quy đổi: "
+            name="Dvt_QDoi"
+            rules={[
+              {
+                required: quyDoi,
+                message: 'Vui lòng nhập đơn vị tính!'
+              },
+            ]}
+          >
+          <Input disabled ={!quyDoi} />
+          </Form.Item>
+          <Form.Item
+            label="Hệ số quy đổi:"
+            name="HSo_QDoi"
+            rules={[
+              {
+                required: quyDoi,
+                message: 'Vui lòng nhập hệ số!'
+              },
+            ]}
+          >
+          <InputNumber 
+            style={{
+              width: 150,
+            }}
+            formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+            min={0}  
+            defaultValue={0}
+            disabled ={!quyDoi} />
+          </Form.Item>
           <HStack justifyContent="end">
             <Button key="back" onClick={toogleModalFormContact}>Thoát</Button>
             <Button key="save" type="primary"  htmlType="submit">Lưu</Button>

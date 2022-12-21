@@ -3,10 +3,11 @@ import {useSearchParams, setSearchParams, useNavigate} from "react-router-dom";
 import axios from 'axios'
 import moment from 'moment'
 import { v4 as uuidv4 } from 'uuid';
+import dayjs from 'dayjs';
 import { toast } from 'react-toastify'
 import { Divider,Modal, Typography, Button, Select, Space, DatePicker, InputNumber, Input, Table, Form, Tag, Popconfirm , Alert, Spin, Col, Row} from 'antd';
 // import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter  } from "@chakra-ui/react";
-import { SearchOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { SearchOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusOutlined,ReloadOutlined } from '@ant-design/icons';
 import {VStack, HStack, cookieStorageManager} from  '@chakra-ui/react';
 import { useCookies } from 'react-cookie';
 import ReactToPrint from "react-to-print";
@@ -14,6 +15,7 @@ import { useReactToPrint } from 'react-to-print';
 
 const { Title } = Typography;
 const { Option } = Select;
+const { RangePicker } = DatePicker;
 
 const PhieuXuat = () =>{
   const _ = require("lodash");  
@@ -22,6 +24,7 @@ const PhieuXuat = () =>{
   const navigate = useNavigate();
 
   const [form] = Form.useForm();
+  const [formFilter] = Form.useForm();
   const [data, setData] = useState()
   const [dataChiTiet, setDataChiTiet] = useState()
   const [editMode, setEditMode] = useState(false)
@@ -126,7 +129,7 @@ const PhieuXuat = () =>{
   
 
   useEffect(()=>{
-    loadPhieuXuat()
+    loadPhieuXuat()    
   },[refresh])
 
   useEffect(()=>{
@@ -195,11 +198,13 @@ const PhieuXuat = () =>{
     const selectedVatTu = dataGiaVatTu.filter(item => item.id === fields.users[name].MaVatTu)
     
     Object.assign(users[name], { DonGiaXuat: selectedVatTu[0]?.GiaBan})
+    Object.assign(users[name], { Dvt: selectedVatTu[0]?.Dvt})
     form.setFieldsValue({users})
   }
 
   async function loadPhieuXuat(){
     const header = getHeader()
+    setLoading(true)
     return await axios
       .get(`https://testkhaothi.ufm.edu.vn:3002/PhieuXuat?type=${type}`,{headers:header})
       .then((res) => {
@@ -214,13 +219,16 @@ const PhieuXuat = () =>{
         setDataNhanVien(result.data[4])
         setDataDoiTuong(result.data[5])
         setStt(result.data[6])
-        setLoading(false)
+        setTimeout(() => {      
+          setLoading(false)
+        }, 500);
         return(result)
       })
       .catch(function (error) {
         // handle error
         console.log(error.response)
       })
+      
   }
 
   async function GetPhieuXuatEdit(MaPhieuXuat, isEdit){
@@ -348,7 +356,61 @@ const PhieuXuat = () =>{
         toast.error(error?.response)
       })
   };
-  
+
+  async function filterPhieuXuat(values){
+    const header = getHeader()
+    
+    console.log('value filter', values)
+    setLoading(true)
+    return await axios
+      .post('https://testkhaothi.ufm.edu.vn:3002/baocao/filter', {
+        NgayCt1: values?.ngayPhieu === undefined || values?.ngayPhieu === null ? '' : values?.ngayPhieu[0].format("YYYY-MM-DD"),
+        NgayCt2: values?.ngayPhieu === undefined || values?.ngayPhieu === null ? '' :values?.ngayPhieu[1].format("YYYY-MM-DD") ,
+        MaCt: 'XB',
+        MaNhanVien: cookies.id,      
+      },{header})
+      .then((res) => {
+        const result = {
+          status: res.status,
+          data: res.data?.result?.recordsets,
+        }
+        result?.data[0].status === 200 ? toast.success(result?.data[0].message): toast.error(result?.data[0].message)
+        setData(result.data[0])
+        setDataKho(result.data[1])
+        setDataVatTu(result.data[2])
+        setDataGiaVatTu(result.data[3])
+        setDataNhanVien(result.data[4])
+        setDataDoiTuong(result.data[5])
+        setStt(result.data[6])
+        setTimeout(() => {      
+          setLoading(false)
+        }, 500);
+        return(result)
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error.response)
+        toast.error(error?.response)
+      })
+  };
+  const rangePresets = [
+    {
+      label: 'Last 7 Days',
+      value: [dayjs().add(-7, 'd'), dayjs()],
+    },
+    {
+      label: 'Last 14 Days',
+      value: [dayjs().add(-14, 'd'), dayjs()],
+    },
+    {
+      label: 'Last 30 Days',
+      value: [dayjs().add(-30, 'd'), dayjs()],
+    },
+    {
+      label: 'Last 90 Days',
+      value: [dayjs().add(-90, 'd'), dayjs()],
+    },
+  ];
   const columns = [
     {
       title: 'Ngày phiếu',
@@ -378,18 +440,28 @@ const PhieuXuat = () =>{
       align:'right'
     },
     {
+      title: 'Tình trạng',
+      key: 'Is_Locked',
+      dataIndex: 'Is_Locked',
+      render: (_, record) => (                   
+          <Tag color={record.TinhTrang ? 'green' :'volcano'} key={record.Ident}>
+            {record.TinhTrang ? 'HOÀN THÀNH': ''}
+          </Tag>         
+      )
+    },
+    {
       title: '',
       key: 'action',
       render: (_, record) => (
         <>
           <Space size="middle">
-            {!record.Is_Deleted && <Button key={record.Ident} type="link" onClick= {() => navigate(`/phieuxuat/print/${record.Ident}`)}>Xem</Button>}
+            {<Button key={record.Ident} type="link" onClick= {() => navigate(`/phieuxuat/print/${record.Ident}`)}>Xem</Button>}
           </Space>
          <Space size="middle">
-            {!record.Is_Deleted && <Button key={record.Ident} type="link" onClick= {() =>{GetPhieuXuatEdit(record.Ident, true)}}>Cập nhật</Button>}
+            {!record.TinhTrang && <Button key={record.Ident} type="link" onClick= {() =>{GetPhieuXuatEdit(record.Ident, true)}}>Cập nhật</Button>}
           </Space>
           <Space size="middle">
-          {!record.Is_Deleted && <>
+          {!record.TinhTrang && <>
               <Popconfirm
                 title="Bạn có chắc xóa phiếu không?"
                 onConfirm={()=>{DeletePhieuXuat(record.Ident)}}
@@ -448,13 +520,51 @@ console.log('props', props)
       <Title level={3}>Phiếu {title}</Title>
       <Divider />
       <VStack justifyContent={"start"} alignItems="start">
+      <Form 
+        form={formFilter} 
+        name="horizontal" 
+        layout="inline" 
+        onFinish={filterPhieuXuat}>
+        <Form.Item
+          name="ngayPhieu" 
+          label="Ngày phiếu"         
+        >
+          <RangePicker format="DD/MM/YYYY"/>
+        </Form.Item>
+        {/* <Form.Item
+          label={"Đối tượng: "}
+          name= {"MaDoiTuong"}
+          style={{
+            width: 250,
+          }}
+        >
+          <Select             
+            showSearch
+            allowClear
+            optionFilterProp="children"
+            filterOption={(input, option) => option?.children?.toLowerCase().includes(input)}  
+            filterSort={(optionA, optionB) =>
+              optionA?.children?.toLowerCase().localeCompare(optionB?.children?.toLowerCase())
+            }
+            >
+              {optionsDoiTuong}
+            </Select>
+        </Form.Item>    */}
+        <HStack>
+          <Button htmlType="submit" icon={<SearchOutlined />}>
+                Tìm kiếm
+          </Button> 
+          <Button type="default" onClick={loadPhieuXuat} icon={<ReloadOutlined />}>
+                Reset
+          </Button>
+        </HStack>
+             
+      </Form>
         <Space align="left" style={{ marginBottom: 16 }}>
           <Button  onClick={openCreateMode}  type="primary" icon={<PlusCircleOutlined />}>
               Thêm mới
           </Button>
-          <Button  onClick={toogleModalFormContact} icon={<SearchOutlined />}>
-              Tìm kiếm
-          </Button>
+          
         </Space>
         <Divider />
         {loading ? 
@@ -643,6 +753,20 @@ console.log('props', props)
                       >
                         {optionsVatTu}
                   </Select>
+                  </Form.Item>
+                  <Form.Item
+                    {...restField}
+                    name={[name, 'Dvt']}
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Dvt',
+                      },
+                    ]}
+                  >
+                  <Input  style={{
+                        width: 80,
+                      }}/>
                   </Form.Item>
                   <Form.Item
                     {...restField}
