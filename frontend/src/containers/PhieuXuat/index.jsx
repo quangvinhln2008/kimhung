@@ -352,20 +352,21 @@ const PhieuXuat = () =>{
         toast.error(error?.response)
       })
   };
+
   async function filterPhieuXuat(values){
     console.log('values filter', values)
     const header = getHeader()
     return await axios
-      .post('https://testkhaothi.ufm.edu.vn:3002/PhieuXuat/filter', {
-        NgayCt1: values.ngayPhieu[0].format("YYYY-MM-DD"),
-        NgayCt2: values.ngayPhieu[1].format("YYYY-MM-DD") ,
+      .post('https://testkhaothi.ufm.edu.vn:3002/baocao/filter', {
+        NgayCt1: values.ngayPhieu === undefined ? '' : values?.ngayPhieu[0].format("YYYY-MM-DD"),
+        NgayCt2: values.ngayPhieu === undefined ? '' :values?.ngayPhieu[1].format("YYYY-MM-DD") ,
         MaCt: 'XB',
         MaNhanVien: cookies.id,      
       },{header})
       .then((res) => {
         const result = {
           status: res.status,
-          data: res.data?.result?.recordset,
+          data: res.data?.result?.recordsets,
         }
         result?.data[0].status === 200 ? toast.success(result?.data[0].message): toast.error(result?.data[0].message)
         setData(result.data[0])
