@@ -203,6 +203,7 @@ const PhieuXuat = () =>{
 
   async function loadPhieuXuat(){
     const header = getHeader()
+    setLoading(true)
     return await axios
       .get(`https://testkhaothi.ufm.edu.vn:3002/PhieuXuat?type=${type}`,{headers:header})
       .then((res) => {
@@ -217,7 +218,9 @@ const PhieuXuat = () =>{
         setDataNhanVien(result.data[4])
         setDataDoiTuong(result.data[5])
         setStt(result.data[6])
-        setLoading(false)
+        setTimeout(() => {      
+          setLoading(false)
+        }, 1000);
         return(result)
       })
       .catch(function (error) {
@@ -354,12 +357,14 @@ const PhieuXuat = () =>{
   };
 
   async function filterPhieuXuat(values){
-    console.log('values filter', values)
     const header = getHeader()
+    
+    console.log('value filter', values)
+    setLoading(true)
     return await axios
       .post('https://testkhaothi.ufm.edu.vn:3002/baocao/filter', {
-        NgayCt1: values.ngayPhieu === undefined ? '' : values?.ngayPhieu[0].format("YYYY-MM-DD"),
-        NgayCt2: values.ngayPhieu === undefined ? '' :values?.ngayPhieu[1].format("YYYY-MM-DD") ,
+        NgayCt1: values?.ngayPhieu === undefined || values?.ngayPhieu === null ? '' : values?.ngayPhieu[0].format("YYYY-MM-DD"),
+        NgayCt2: values?.ngayPhieu === undefined || values?.ngayPhieu === null ? '' :values?.ngayPhieu[1].format("YYYY-MM-DD") ,
         MaCt: 'XB',
         MaNhanVien: cookies.id,      
       },{header})
@@ -376,7 +381,9 @@ const PhieuXuat = () =>{
         setDataNhanVien(result.data[4])
         setDataDoiTuong(result.data[5])
         setStt(result.data[6])
-        setLoading(false)
+        setTimeout(() => {      
+          setLoading(false)
+        }, 1000);
         return(result)
       })
       .catch(function (error) {
