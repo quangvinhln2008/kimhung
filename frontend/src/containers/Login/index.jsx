@@ -34,7 +34,7 @@ const Login = () =>{
         setCookie('id', res.data.id, {expires})
         setCookie('TenNhanVien', res.data.userName, {expires})
         setCookie('rToken', res.data.accessToken, {expires})
-        navigate('/')
+        navigate('/phieuxuat?type=xuatban')
       })
       .catch(function (error) {
         // handle error
