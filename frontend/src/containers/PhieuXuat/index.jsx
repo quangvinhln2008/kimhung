@@ -254,25 +254,6 @@ const PhieuXuat = () =>{
       })
   };
 
-  async function GetPhieuXuatPrint(MaPhieuXuat){
-    console.log('run print')
-    return await axios
-      .get(`https://testkhaothi.ufm.edu.vn:3002/PhieuXuat/${MaPhieuXuat}`)
-      .then((res) => {
-        const result = {
-          status: res.status,
-          data: res.data.result.recordsets,
-        }
-        
-        setDataPrint(result.data[1])
-        return(result)
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error.response)
-        toast.error(error?.response)
-      })
-  };
   async function CreatePhieuXuat(values){
     const header = getHeader()
     return await axios

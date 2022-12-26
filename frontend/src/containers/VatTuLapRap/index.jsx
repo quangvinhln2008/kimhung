@@ -15,42 +15,23 @@ import { useReactToPrint } from 'react-to-print';
 
 const { Title } = Typography;
 const { Option } = Select;
-const { RangePicker } = DatePicker;
 
 const VatTuLapRap = () =>{
   const _ = require("lodash");  
   
-  const [cookies, setCookie] = useCookies(['user']);
-  const navigate = useNavigate();
-
   const [form] = Form.useForm();
-  const [formFilter] = Form.useForm();
   const [data, setData] = useState()
-  const [dataChiTiet, setDataChiTiet] = useState()
   const [editMode, setEditMode] = useState(false)
+  const [dataVatTuFilter, setDataVatTuFilter] = useState()
   const [viewMode, setViewMode] = useState(false)
-  const [printMode, setPrintMode] =useState(false)
   const [dataEdit, setDataEdit] = useState()
-  const [Stt, setStt] = useState(0)
   const [dataEditCt, setDataEditCt] = useState()
-  const [dataPrint, setDataPrint] = useState()
   const [dataVatTu, setDataVatTu] = useState()
-  const [dataKho, setDataKho] = useState()
-  const [dataDoiTuong, setDataDoiTuong] = useState()
-  const [dataNhanVien, setDataNhanVien] = useState()
   const [dataGiaVatTu, setDataGiaVatTu] = useState()
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(false)
   const [openModalContact, setOpenModalContact] = useState(false)
   const [optionsVatTu, setOptionVatTu] = useState()
-  const [optionsKho, setOptionKho] = useState()
-  const [optionsDoiTuong, setOptionDoiTuong] = useState()
-  const [optionsNhanVien, setOptionNhanVien] = useState()
-  const [tongSoLuongXuat,setTongSoLuongXuat] = useState(0)
-  const [tongThanhTienXuat,setTongThanhTienXuat] = useState(0)
-  const [maCt, setMaCt] = useState('')
-  const [title, setTitle] = useState('')
-  const [searchParams, setSearchParams] = useSearchParams();
   
   const Ident = uuidv4()
   const fieldsForm = form.getFieldsValue() 
@@ -60,30 +41,19 @@ const VatTuLapRap = () =>{
   }
   
   useEffect(()=>{
-    loadPhieuXuat()
+    loadVatTuLR()
   },[])  
 
   useEffect(()=>{
-    loadPhieuXuat()    
+    loadVatTuLR()    
   },[refresh])
 
   useEffect(()=>{
     
     setOptionVatTu(dataVatTu?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
-    setOptionKho(dataKho?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
-    setOptionDoiTuong(dataDoiTuong?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
-    setOptionNhanVien(dataNhanVien?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
-    
-    setTongSoLuongXuat(_?.sumBy(dataEditCt, 'SoLuongXuat'))    
-    setTongThanhTienXuat(_?.sumBy(dataEditCt, 'ThanhTienXuat'))
 
     form.setFieldsValue({
-        NgayCt: moment(dataEdit?.NgayCt, 'YYYY/MM/DD'),
-        SoCt: dataEdit?.SoCt,
-        MaKho : dataEdit?.MaKho,
-        MaDoiTuong: dataEdit?.MaDoiTuong,
-        MaNhanVien: cookies.id,
-        DienGiai: dataEdit?.DienGiai,
+        MaVatTu: dataEdit?.MaVatTu,
         users: dataEditCt
     })
   }, [dataEdit])
@@ -95,49 +65,41 @@ const VatTuLapRap = () =>{
     setOpenModalContact(!openModalContact)
 
     setOptionVatTu(dataVatTu?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
-    setOptionKho(dataKho?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
-    setOptionDoiTuong(dataDoiTuong?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
-    setOptionNhanVien(dataNhanVien?.map((d) => <Option key={d?.value}>{d?.label}</Option>));
-
-    const currentNumber = Stt[0]?.CurrentNumberRecord + 1
 
     form.setFieldsValue({
-        NgayCt: moment(),
-        SoCt: moment().year().toString() + moment().month().toString()+ '-'+ currentNumber.toString(),
-        MaDoiTuong: "",
-        MaNhanVien: "",
-        MaKho : "",
-        DienGiai : "",
+        MaVatTu: "",
         users:[]
     })
   }
+  const onChange = (pagination, filters, sorter, extra) => {
+    // const filterNhom = dataVatTuFilter.filters(item => item.TenNhomVatTu === filters?.TenNhomVatTu[0])
+    // setFilterVt(filterNhom)
+    console.log('params', pagination, filters, sorter, extra);
+  };
 
   const onMaVatTuChange = (name) => {
     
     const fields = form.getFieldsValue()
     const { users } = fields
-    const selectedVatTu = dataGiaVatTu.filter(item => item.id === fields.users[name].MaVatTu)
+    const selectedVatTu = dataGiaVatTu.filter(item => item.id === fields.users[name].MaVatTuLR)
     
     Object.assign(users[name], { Dvt: selectedVatTu[0]?.Dvt})
     form.setFieldsValue({users})
   }
 
-  async function loadPhieuXuat(){
+  async function loadVatTuLR(){
     setLoading(true)
     return await axios
-      .get(`https://testkhaothi.ufm.edu.vn:3002/PhieuXuat?type=${type}`)
+      .get(`https://testkhaothi.ufm.edu.vn:3002/vattulaprap`)
       .then((res) => {
         const result = {
           status: res.data.status,
           data: res.data.result.recordsets,
         }
         setData(result.data[0])
-        setDataKho(result.data[1])
-        setDataVatTu(result.data[2])
-        setDataGiaVatTu(result.data[3])
-        setDataNhanVien(result.data[4])
-        setDataDoiTuong(result.data[5])
-        setStt(result.data[6])
+        setDataVatTu(result.data[1])
+        setDataGiaVatTu(result.data[2])
+        setDataVatTuFilter(result.data[3])
         setTimeout(() => {      
           setLoading(false)
         }, 500);
@@ -150,11 +112,11 @@ const VatTuLapRap = () =>{
       
   }
 
-  async function GetPhieuXuatEdit(MaPhieuXuat, isEdit){
+  async function GetVatTuLREdit(MaPhieuXuat, isEdit){
     setEditMode(isEdit)
     setViewMode(isEdit)
     return await axios
-      .get(`https://testkhaothi.ufm.edu.vn:3002/PhieuXuat/${MaPhieuXuat}`)
+      .get(`https://testkhaothi.ufm.edu.vn:3002/vattulaprap/${MaPhieuXuat}`)
       .then((res) => {
         const result = {
           status: res.status,
@@ -173,20 +135,13 @@ const VatTuLapRap = () =>{
       })
   };
 
-  async function CreatePhieuXuat(values){
+  async function CreateVatTuLR(values){
+    console.log('run create')
     return await axios
-      .post('https://testkhaothi.ufm.edu.vn:3002/PhieuXuat/create', {
+      .post('https://testkhaothi.ufm.edu.vn:3002/vattulaprap/create', {
         Ident: Ident,
-        NgayCt: values.NgayCt.format("YYYY-MM-DD"),
-        MaCt: maCt,
-        LoaiCt: '2',
-        SoCt: values.SoCt, 
-        MaKho: values.MaKho, 
-        MaSach: values.MaSach, 
-        MaDoiTuong: values.MaDoiTuong,
-        MaNhanVien: cookies.id,
-        DienGiai: values.DienGiai,
-        ctPhieuXuat: values.users  
+        MaVatTu: values.MaVatTu,
+        ctVatTuLR: values.users  
       })
       .then((res) => {
         const result = {
@@ -205,18 +160,13 @@ const VatTuLapRap = () =>{
       })
   };
 
-  async function UpdatePhieuXuat(values){
+  async function UpdateVatTuLR(values){
     console.log('run update')
     return await axios
-      .post(`https://testkhaothi.ufm.edu.vn:3002/PhieuXuat/${dataEdit?.Ident}`, {
-        NgayCt: values.NgayCt.format('YYYY-MM-DD'), 
-        SoCt: values.SoCt, 
-        MaCt: maCt,
-        MaKho: values.MaKho, 
-        MaDoiTuong: values.MaDoiTuong,
-        MaNhanVien: cookies.id,
-        DienGiai: values.DienGiai,
-        ctPhieuXuat: values.users})
+      .post(`https://testkhaothi.ufm.edu.vn:3002/vattulaprap/${dataEdit?.Ident}`, {
+        MaVatTu: values.MaVatTu,
+        ctVatTuLR: values.users  
+      })
       .then((res) => {
         const result = {
           status: res.status,
@@ -234,9 +184,9 @@ const VatTuLapRap = () =>{
       })
   };
 
-  async function DeletePhieuXuat(MaPhieuXuat){
+  async function DeleteVatTuLR(MaPhieuXuat){
     return await axios
-      .post(`https://testkhaothi.ufm.edu.vn:3002/PhieuXuat/delete/${MaPhieuXuat}`)
+      .post(`https://testkhaothi.ufm.edu.vn:3002/vattulaprap/delete/${MaPhieuXuat}`)
       .then((res) => {
         const result = {
           status: res.status,
@@ -255,65 +205,27 @@ const VatTuLapRap = () =>{
   
   const columns = [
     {
-      title: 'Ngày phiếu',
-      dataIndex: 'NgayCt',
-      key: 'NgayCt',
+      title: 'Vật tư',
+      dataIndex: 'MaVatTu',
+      key: 'MaVatTu',      
+      width: '300px',filters: dataVatTuFilter,
+      onFilter: (value, record) => record.MaVatTu.includes(value),
+      filterSearch: true,
     },
     {
-      title: 'Diễn giải',
-      dataIndex: 'DienGiai',
-      key: 'DienGiai',
-    },
-    {
-      title: 'Đối tượng',
-      dataIndex: 'TenDoiTuong',
-      key: 'TenDoiTuong',
-    },
-    {
-      title: 'Tổng số lượng',
-      dataIndex: 'TongSoLuong',
-      key: 'TongSoLuong',
-      align:'right'
-    },
-    {
-      title: 'Tổng thành tiên',
-      dataIndex: 'TongThanhTien',
-      key: 'TongThanhTien',
-      align:'right'
-    },
-    {
-      title: 'Tình trạng',
-      key: 'Is_Locked',
-      dataIndex: 'Is_Locked',
-      render: (_, record) => (                   
-          <Tag color={record.TinhTrang ? 'green' :'volcano'} key={record.Ident}>
-            {record.TinhTrang ? 'HOÀN THÀNH': ''}
-          </Tag>         
-      )
+      title: 'Tên vật tư',
+      dataIndex: 'TenVatTu',
+      key: 'TenVatTu',      
+      width: '500px'
     },
     {
       title: '',
       key: 'action',
       render: (_, record) => (
         <>
-          <Space size="middle">
-            {<Button key={record.Ident} type="link" onClick= {() => navigate(`/phieuxuat/print/${record.Ident}`)}>Xem</Button>}
-          </Space>
          <Space size="middle">
-            {!record.TinhTrang && <Button key={record.Ident} type="link" onClick= {() =>{GetPhieuXuatEdit(record.Ident, true)}}>Cập nhật</Button>}
-          </Space>
-          <Space size="middle">
-          {!record.TinhTrang && <>
-              <Popconfirm
-                title="Bạn có chắc xóa không?"
-                onConfirm={()=>{DeletePhieuXuat(record.Ident)}}
-                okText="Yes"
-                cancelText="No"
-              >
-                <Button key={record.Id} type="link" danger >Xóa</Button>
-              </Popconfirm>
-            </>}
-          </Space>
+            {!record.TinhTrang && <Button key={record.Ident} type="link" onClick= {() =>{GetVatTuLREdit(record.Ident, true)}}>Cập nhật</Button>}
+          </Space>          
         </>
       ),
     },
@@ -366,7 +278,7 @@ const VatTuLapRap = () =>{
               wrapperCol={{
                 span: 20,
               }}
-              onFinish={!editMode? CreatePhieuXuat: UpdatePhieuXuat}
+              onFinish={!editMode? CreateVatTuLR: UpdateVatTuLR}
             >
               <Row
                 gutter={{
@@ -378,12 +290,12 @@ const VatTuLapRap = () =>{
               >                
                 <Col  span={8}>
                   <Form.Item
-                    label={"Đối tượng: "}
-                    name= {"MaDoiTuong"}
+                    label={"Vật tư: "}
+                    name= {"MaVatTu"}
                     rules={[
                       {
                         required: true,
-                        message: 'Vui lòng chọn đối tượng!'
+                        message: 'Vui lòng chọn vật tư!'
                       },
                     ]}
                   >
@@ -396,7 +308,7 @@ const VatTuLapRap = () =>{
                         optionA?.children?.toLowerCase().localeCompare(optionB?.children?.toLowerCase())
                       }
                       >
-                        {optionsDoiTuong}
+                        {optionsVatTu}
                       </Select>
                   </Form.Item>
                 </Col>
@@ -424,7 +336,7 @@ const VatTuLapRap = () =>{
                       >
                     <Form.Item
                       {...restField}
-                      name={[name, 'MaVatTu']}
+                      name={[name, 'MaVatTuLR']}
                       rules={[
                         {
                           required: true,
@@ -465,26 +377,24 @@ const VatTuLapRap = () =>{
                   </Form.Item>
                   <Form.Item
                     {...restField}
-                    name={[name, 'SoLuongXuat']}
+                    name={[name, 'HeSo']}
                     rules={[
                       {
                         required: true,
-                        message: 'Nhập số lượng',
+                        message: 'Nhập hệ số',
                       },
                     ]}
                   >
                   <InputNumber 
                     readOnly = {!viewMode} 
-                    placeholder="Số lượng"
+                    placeholder="Hệ số"
                       style={{
                         width: 80,
                       }}
                       formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                       parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
                       min={0} />
-                  </Form.Item>                
-                  
-                  
+                  </Form.Item>
                   {viewMode && <MinusCircleOutlined onClick={() => deleteRow()} />}
                 </Space>
                     )})}
