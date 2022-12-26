@@ -36,6 +36,7 @@ import PrintPhieuXuat from './containers/PhieuXuat/components/PrintPhieuXuat';
 import BangKeNhap from "./containers/BaoCao/components/BangKeNhap";
 import BangKeXuat from "./containers/BaoCao/components/BangKeXuat";
 import NhapXuatTon from "./containers/BaoCao/components/NhapXuatTon";
+import VatTuLapRap from "./containers/VatTuLapRap";
 
 const App = (props) => {
   return (
@@ -50,6 +51,7 @@ const App = (props) => {
           <Route path='kichthuoc' element ={<LayoutApp component ={<KichThuoc />} />}/>
           <Route path='doituong' element ={<LayoutApp component ={<DoiTuong />} />}/>
           <Route path='vattu' element ={<LayoutApp component ={<VatTu />} />}/>
+          <Route path='vattulaprap' element ={<LayoutApp component ={<VatTuLapRap />} />}/>
           <Route path='nhanvien' element ={<LayoutApp component ={<NhanVien />} />}/>
           <Route path='tondauky' element ={<LayoutApp component ={<TonDauKy />} />}/>
           <Route path='phieunhap' element ={<LayoutApp component ={<PhieuNhap />} />} />

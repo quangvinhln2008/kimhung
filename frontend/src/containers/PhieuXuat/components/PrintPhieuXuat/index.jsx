@@ -122,7 +122,7 @@ const PrintPhieuXuat = (props) =>{
 
 const ComponentToPrint = React.forwardRef((props, ref) => (
     
-    <VStack marginTop={"10px"} ref={ref}>
+    <VStack  ref={ref}>
       <div></div>
       <table>
         <tr>
@@ -151,22 +151,22 @@ const ComponentToPrint = React.forwardRef((props, ref) => (
         </tr>
       </table>
       
-      <SimpleGrid marginBottom={'10px'} columns={2} spacing={1}>
-        <Text fontSize='lg' fontWeight={'bold'}>Khách hàng:</Text>
-        <Text fontSize='lg' fontWeight={'bold'}>{dataPrint?.TenDoiTuong}</Text>
-        <Text fontSize='sm'>Diễn Giải:</Text>
-        <Text fontSize='sm'>{dataPrint?.DienGiai}</Text>
+      <SimpleGrid marginBottom={'10px'} columns={2} >
+        <Text textAlign={'right'} fontSize='sm' fontWeight={'bold'}>Khách hàng:</Text>
+        <Text fontSize='sm' marginLeft={'5px'} fontWeight={'bold'}>{dataPrint?.TenDoiTuong}</Text>
+        <Text textAlign={'right'} fontSize='sm'>Diễn Giải:</Text>
+        <Text fontSize='sm' marginLeft={'5px'}>{dataPrint?.DienGiai}</Text>
       </SimpleGrid>
       <Stack>
-        <table style={{border: '1px solid #000', fontSize:'13pt', padding: '10px'}}>
-          <thead style={{border: '1px solid #000', fontSize:'13pt', padding: '5px'}}>
-            <tr style={{border: '1px solid #000', fontSize:'13pt', padding: '5px'}}>
-              <th style={{border: '1px solid #000', fontSize:'13pt', padding: '0px 10px'}} >Stt</th>
-              <th tyle={{border: '1px solid #000', fontSize:'13pt', padding: '0px 30px'}}>Tên vật tư</th>
-              <th style={{border: '1px solid #000', fontSize:'13pt', padding: '0px 30px'}}>Đvt</th>
-              <th style={{border: '1px solid #000', fontSize:'13pt', padding: '0px 10px'}}>Số lượng xuất</th>
-              <th style={{border: '1px solid #000', fontSize:'13pt', padding: '0px 20px'}}>Đơn giá</th>
-              <th style={{border: '1px solid #000', fontSize:'13pt', padding: '0px 30px'}}>Thành tiền</th>
+        <table style={{border: '1px solid #000', fontSize:'13pt', padding: '1px'}}>
+          <thead style={{border: '1px solid #000', fontSize:'13pt', padding: '1px'}}>
+            <tr style={{border: '1px solid #000', fontSize:'13pt', padding: '1px'}}>
+              <th style={{border: '1px solid #000', fontSize:'13pt', padding: '0px 1px'}} >Stt</th>
+              <th tyle={{border: '1px solid #000', fontSize:'13pt', padding: '0px 1px'}}>Tên vật tư</th>
+              <th style={{border: '1px solid #000', fontSize:'13pt', padding: '0px 1px'}}>Đvt</th>
+              <th style={{border: '1px solid #000', fontSize:'13pt', padding: '0px 1px'}}>SL</th>
+              <th style={{border: '1px solid #000', fontSize:'13pt', padding: '0px 1px'}}>Đơn giá</th>
+              <th style={{border: '1px solid #000', fontSize:'13pt', padding: '0px 1px'}}>Thành tiền</th>
             </tr>
           </thead>
           <tbody>          
@@ -174,12 +174,12 @@ const ComponentToPrint = React.forwardRef((props, ref) => (
           </tbody>
           <tfoot>
             <tr>
-              <td style={{border: '1px solid #000', fontSize:'13pt', padding: '5px'}}></td>
-              <td style={{border: '1px solid #000', fontSize:'13pt', padding: '5px'}}></td>            
-              <td style={{border: '1px solid #000', fontSize:'13pt', padding: '5px', fontWeight:'bold'}}>Tổng cộng</td>
-              <td style={{border: '1px solid #000', fontSize:'13pt', padding: '5px'}}></td>
-              <td style={{border: '1px solid #000', fontSize:'13pt', padding: '5px'}}></td>
-              <td style={{border: '1px solid #000', fontSize:'13pt', padding: '5px',fontWeight:'bold', textAlign:'right'}}>{dataPrint?.TongThanhTien}</td>
+              <td style={{border: '1px solid #000', fontSize:'12pt', padding: '1px'}}></td>
+              <td style={{border: '1px solid #000', fontSize:'12pt', padding: '1px'}}></td>            
+              <td style={{border: '1px solid #000', fontSize:'12pt', padding: '2px', fontWeight:'bold'}}>Tổng cộng</td>
+              <td style={{border: '1px solid #000', fontSize:'12pt', padding: '1px'}}></td>
+              <td style={{border: '1px solid #000', fontSize:'12pt', padding: '1px'}}></td>
+              <td style={{border: '1px solid #000', fontSize:'12pt', padding: '1px',fontWeight:'bold', textAlign:'right'}}>{dataPrint?.TongThanhTien}</td>
             </tr>
           </tfoot>
         </table>

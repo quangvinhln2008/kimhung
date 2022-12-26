@@ -58,6 +58,7 @@ const Navbar = (props) =>{
       getItem(<Link to={'/doituong'}>Đối tượng</Link>, 'doituong'), 
       getItem(<Link to={'/nhomvattu'}>Nhóm vật tư</Link>, 'loaisach'), 
       getItem(<Link to={'/vattu'}>Vật tư</Link>, 'sach'), 
+      getItem(<Link to={'/vattulaprap'}>Vật tư lắp ráp</Link>, 'vattulaprap'), 
       getItem(<Link to={'/nhanvien'}>Nhân viên</Link>, 'nhanvien'), 
       getItem(<Link to={'/kho'}>Kho</Link>, 'coso'), 
     ]),
