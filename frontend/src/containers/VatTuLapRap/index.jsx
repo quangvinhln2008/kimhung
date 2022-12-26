@@ -222,10 +222,22 @@ const VatTuLapRap = () =>{
       title: '',
       key: 'action',
       render: (_, record) => (
-        <>
+        <>  
          <Space size="middle">
             {!record.TinhTrang && <Button key={record.Ident} type="link" onClick= {() =>{GetVatTuLREdit(record.Ident, true)}}>Cập nhật</Button>}
-          </Space>          
+          </Space>                    
+          <Space size="middle">
+          {!record.Is_Deleted && <>
+              <Popconfirm
+                title="Bạn có chắc xóa vật tư không?"
+                onConfirm={()=>{DeleteVatTuLR(record.Ident)}}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button key={record.Id} type="link" danger >Xóa</Button>
+              </Popconfirm>
+            </>}
+          </Space>
         </>
       ),
     },
